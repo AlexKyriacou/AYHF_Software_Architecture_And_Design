@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v7.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v7.0": {
+      "AYHF_Software_Architecture_And_Design/1.0.0": {
+        "runtime": {
+          "AYHF_Software_Architecture_And_Design.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "AYHF_Software_Architecture_And_Design/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
