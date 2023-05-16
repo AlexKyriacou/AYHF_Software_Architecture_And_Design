@@ -8,10 +8,4 @@
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'https' " />
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
-  <ItemGroup>
-    <PackageReference Include="System.Data.SQLite" Version="1.0.117" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Entities\Model\" />
-  </ItemGroup>
 </Project>
