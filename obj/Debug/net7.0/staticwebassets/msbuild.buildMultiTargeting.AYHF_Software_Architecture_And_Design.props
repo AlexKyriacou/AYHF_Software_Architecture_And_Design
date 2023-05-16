@@ -1,3 +1,3 @@
 ﻿<Project>
-  <Import Project="..\build\AYHF_Software_Architecture_And_Design.props" />
+  <Import Project="../build/AYHF_Software_Architecture_And_Design.props" />
 </Project>
