@@ -1,7 +1,24 @@
-.Header {
-    background-color: #F2F2F2;
-    height: 100px;
+.App {
+    text-align: center;
+}
+
+.navbar {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    background-color: #333;
+    color: white;
+    padding: 20px;
+}
+
+.App-header {
+    background-color: #282c34;
+    padding: 20px;
+    color: white;
+    text-decoration: none;
+    background-color: transparent;
+}
+
+.login-button {
+    color: white;
+    text-decoration: none;
 }
