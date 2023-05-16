@@ -24,3 +24,6 @@
 /Users/Julian.Codespoti/Desktop/Uni/AYHF_Software_Architecture_And_Design/obj/Debug/net7.0/AYHF_Software_Architecture_And_Design.pdb
 /Users/Julian.Codespoti/Desktop/Uni/AYHF_Software_Architecture_And_Design/obj/Debug/net7.0/AYHF_Software_Architecture_And_Design.genruntimeconfig.cache
 /Users/Julian.Codespoti/Desktop/Uni/AYHF_Software_Architecture_And_Design/obj/Debug/net7.0/ref/AYHF_Software_Architecture_And_Design.dll
+/Users/Julian.Codespoti/Desktop/Uni/AYHF_Software_Architecture_And_Design/bin/Debug/net7.0/WebUI/all-your-healthy-foods/package-lock.json
+/Users/Julian.Codespoti/Desktop/Uni/AYHF_Software_Architecture_And_Design/bin/Debug/net7.0/WebUI/all-your-healthy-foods/package.json
+/Users/Julian.Codespoti/Desktop/Uni/AYHF_Software_Architecture_And_Design/bin/Debug/net7.0/WebUI/all-your-healthy-foods/public/manifest.json

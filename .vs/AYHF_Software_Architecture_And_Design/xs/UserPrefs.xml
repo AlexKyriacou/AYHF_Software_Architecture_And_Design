@@ -1,0 +1,30 @@
+﻿<Properties StartupConfiguration="{47784BEA-718E-41E7-9CBB-E4A88AAEA043}|https">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.ItemProperties.AYHF__Software__Architecture__And__Design PreferredExecutionTarget="/Applications/Google Chrome.app" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.Workbench ActiveDocument="Entities/Controller/PageManager.cs">
+    <Files>
+      <File FileName="src/WebUI/LoginPage.cs" Line="1" Column="1" />
+      <File FileName="Entities/Controller/PageManager.cs" Line="5" Column="5" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="AYHF_Software_Architecture_And_Design" expanded="True">
+            <Node name="AYHF_Software_Architecture_And_Design" expanded="True">
+              <Node name="Entities" expanded="True">
+                <Node name="Controller" expanded="True">
+                  <Node name="PageManager.cs" selected="True" />
+                </Node>
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+</Properties>
