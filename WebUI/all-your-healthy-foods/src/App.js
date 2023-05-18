@@ -1,6 +1,7 @@
 import React from 'react';
-import {BrowserRouter as Router, Link, Route, Routes} from 'react-router-dom';
-import LoginPage from './Pages/LoginPage';
+import { BrowserRouter as Router, Link, Route, Routes } from 'react-router-dom';
+import LoginPage from './Pages/Login/LoginPage';
+import SignupPage from './Pages/Login/SignupPage';
 import './App.css';
 
 function App() {
@@ -8,11 +9,14 @@ function App() {
         <Router>
             <div className="App">
                 <nav className="navbar">
-                    <a href='/' className="App-header">All Your Healthy Foods</a>
+                    <span class="fa fa-pagelines"><a href='/' className="App-header"> All Your Healthy Foods</a></span>
                     <Link className="login-button" to="/login">Login</Link>
                 </nav>
                 <Routes>
-                    <Route path="/login" element={<LoginPage/>}/>
+                    <Route path="/login" element={<LoginPage />}>
+                    </Route>
+                    <Route path="/signup" element={<SignupPage />}>
+                    </Route>
                 </Routes>
             </div>
         </Router>
