@@ -1,25 +1,26 @@
+@import '/src/colors.css';
+
 .App {
     text-align: center;
 }
 
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    background-color: #379e48;
-    color: white;
-    padding: 20px;
-    align-items: center;
-}
-
 .App-header {
     font-family: 'Bungee Inline', cursive;font-family: 'Bungee Inline', cursive;
-    background-color: #282c34;
-    color: white;
+    color: var(--text-color);
     text-decoration: none;
     background-color: transparent;
 }
 
-.login-button {
-    color: white;
-    text-decoration: none;
+.App-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--lightest-shade);
+    text-align: center;
+    padding: 1rem 0;
+}
+
+.blur {
+    filter: blur(5px);
 }

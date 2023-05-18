@@ -1,0 +1,36 @@
+@import '/src/colors.css';
+
+.navbar {
+    display: flex;
+    background-color: var(--primary-color);
+    color: var(--light-shade);
+    padding: 20px;
+    align-items: baseline;
+    justify-content: space-evenly;
+}
+
+.icons {
+    display: flex;
+    align-items: center;
+}
+
+.shopping-cart, .login-icon {
+    font-size: x-large;
+    color: var(--text-color);
+    margin-bottom: 10px;
+}
+
+.login-link {
+    text-decoration: none;
+    font-weight: bold;
+    font-size: large;
+    color: var(--text-color);
+    display: flex;
+    align-items: flex-start;
+}
+
+.login-button {
+    color: white;
+    text-decoration: none;
+}
+  
