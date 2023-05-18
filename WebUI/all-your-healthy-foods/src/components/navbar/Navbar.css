@@ -11,7 +11,6 @@
 
 .icons {
     display: flex;
-    align-items: center;
 }
 
 .shopping-cart, .login-icon, .shopping-list {
