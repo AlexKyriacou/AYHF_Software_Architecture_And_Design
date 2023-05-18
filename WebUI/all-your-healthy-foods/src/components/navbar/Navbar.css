@@ -14,7 +14,7 @@
     align-items: center;
 }
 
-.shopping-cart, .login-icon {
+.shopping-cart, .login-icon, .shopping-list {
     font-size: x-large;
     color: var(--text-color);
     margin-bottom: 10px;

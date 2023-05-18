@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom';
 import Search from '../search/Search'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPagelines } from "@fortawesome/free-brands-svg-icons";
-import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
-import { faSignInAlt } from '@fortawesome/free-solid-svg-icons';
+import { faShoppingCart, faClipboardList, faSignInAlt } from '@fortawesome/free-solid-svg-icons';
 import './Navbar.css';
 
 function Navbar() {
@@ -19,6 +18,10 @@ function Navbar() {
                 <Link className='login-link' to="/login">
                     <FontAwesomeIcon className="login-icon" icon={faSignInAlt} />
                     <span className="input-space"></span>Login
+                </Link>
+                <span className="input-space"></span>
+                <Link className='shopping-list-link' to="/list">
+                    <FontAwesomeIcon className='shopping-list' icon={faClipboardList} />
                 </Link>
                 <span className="input-space"></span>
                 <Link className='shopping-cart-link' to="/cart">
