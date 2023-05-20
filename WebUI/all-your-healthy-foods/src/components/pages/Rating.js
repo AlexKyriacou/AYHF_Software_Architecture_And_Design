@@ -1,5 +1,6 @@
 import React from "react";
 import { FaStar } from "react-icons/fa";
+import './Rating.css';
 
 const Rating = ({ rate }) => {
     return (
@@ -14,6 +15,7 @@ const Rating = ({ rate }) => {
                             value={givenRating}
                         />
                         <FaStar
+                            className="star"
                             color={
                                 givenRating < rate || givenRating === rate
                                     ? "000"

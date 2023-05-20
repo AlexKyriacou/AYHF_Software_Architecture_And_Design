@@ -4,7 +4,7 @@ import { faClipboardList } from '@fortawesome/free-solid-svg-icons';
 import Rating from './Rating'
 import './Product.css';
 
-function Product({ product }) {
+function ProductCard({ product }) {
     return (
         <div className='product-container'>
             <div className='product-card'>
@@ -20,4 +20,4 @@ function Product({ product }) {
     );
 }
 
-export default Product;
+export default ProductCard;

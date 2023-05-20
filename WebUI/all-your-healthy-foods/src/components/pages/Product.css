@@ -1,6 +1,7 @@
 .product-container {
     display: flex;
     justify-content: center;
+    margin: 10px;
 }
 
 .product-card {
@@ -25,6 +26,7 @@
     color: #7a7a7a;
     text-align: center;
     margin: 10px 0 0 0;
+    height: 40px;
 }
 
 .product-rating {
@@ -56,6 +58,10 @@
     margin: 10px 0 10px 0;
 }
 
+.add-to-cart-button:hover {
+    background-color: var(--primary-color-darker);
+}
+
 .save-to-list-button {
     background-color: transparent;
     display: flex;
@@ -63,8 +69,23 @@
     align-items: center;
 }
 
+.save-to-list-button:hover {
+    border-radius: 7px;
+    color: white;
+    background-color: var(--primary-color);
+}
+
+.save-to-list-button:hover .shopping-list {
+    color: white;
+}
+
 .shopping-list {
     margin-right: 5px;
     margin-bottom: 0px;
 }
-  
+
+img {
+    height: 160px;
+    width: 160px;
+    object-fit: contain;
+}
