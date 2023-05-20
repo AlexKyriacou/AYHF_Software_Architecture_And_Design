@@ -5,10 +5,11 @@
 }
 
 .App-header {
-    font-family: 'Bungee Inline', cursive;font-family: 'Bungee Inline', cursive;
+    font-family: 'Fruktur', cursive;
     color: var(--text-color);
     text-decoration: none;
     background-color: transparent;
+    font-size: x-large;
 }
 
 .App-footer {
