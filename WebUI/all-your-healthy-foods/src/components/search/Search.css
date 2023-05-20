@@ -1,0 +1,20 @@
+@import '/src/colors.css';
+
+.search-form {
+    border-radius: 50px;
+    padding: 16px;
+    background-color: var(--lighter-shade);
+}
+
+.search-form input {
+    border: 0px;
+    font-size: large;
+    background-color: transparent;
+    width: 30vw;
+}
+
+.search-form input:focus {
+    outline: none;
+    border: none;
+    box-shadow: none;
+}
