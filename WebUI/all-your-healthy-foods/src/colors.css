@@ -1,6 +1,7 @@
 /* colors.css */
 :root {
     --primary-color: #4CAF50;
+    --primary-color-darker: #2c682e;
     --secondary-color: #F9A825;
     --accent-color: #FF5722;
     --dark-shade: #484848;
