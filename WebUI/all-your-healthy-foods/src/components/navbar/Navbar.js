@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import Search from '../search/Search'
+import Search from '../search/Search';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPagelines } from "@fortawesome/free-brands-svg-icons";
 import { faShoppingCart, faClipboardList, faSignInAlt } from '@fortawesome/free-solid-svg-icons';
+import { CartContext } from '../pages/CartContext';
 import './Navbar.css';
 
 function Navbar() {
+    const { cartCount } = useContext(CartContext);
+
     return (
         <nav className="navbar">
             <span>
@@ -26,6 +29,7 @@ function Navbar() {
                 <span className="input-space"></span>
                 <Link className='shopping-cart-link' to="/cart">
                     <FontAwesomeIcon className='shopping-cart' icon={faShoppingCart} />
+                    <span className='cart-count'>{cartCount}</span>
                 </Link>
             </div>
         </nav>
