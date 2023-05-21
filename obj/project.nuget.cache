@@ -1,8 +1,16 @@
 {
   "version": 2,
-  "dgSpecHash": "gwPerLVrywqmojsNTRcbv5vesyOJUwgZ5KiW6KZuhpa0ZBJEpDwilSQrf8jSZXruS0v7Mqv2so5/Rp9Faz3KZA==",
+  "dgSpecHash": "9e0QZgQAuB/SmDnC0bolK6tkg+4XrcxZzTiM+f8l5UfP6bQaLJo9/eBxOIny0PefcfUhGPblKV2YAbDqBo4Rzg==",
   "success": true,
-  "projectFilePath": "/Users/Julian.Codespoti/Desktop/Uni/AYHF_Software_Architecture_And_Design/AYHF_Software_Architecture_And_Design.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "C:\\Uni\\Software Architecture & Design\\AYHF_Software_Architecture_And_Design\\AYHF_Software_Architecture_And_Design.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\akyri\\.nuget\\packages\\microsoft.data.sqlite\\7.0.5\\microsoft.data.sqlite.7.0.5.nupkg.sha512",
+    "C:\\Users\\akyri\\.nuget\\packages\\microsoft.data.sqlite.core\\7.0.5\\microsoft.data.sqlite.core.7.0.5.nupkg.sha512",
+    "C:\\Users\\akyri\\.nuget\\packages\\sqlitepclraw.bundle_e_sqlite3\\2.1.4\\sqlitepclraw.bundle_e_sqlite3.2.1.4.nupkg.sha512",
+    "C:\\Users\\akyri\\.nuget\\packages\\sqlitepclraw.core\\2.1.4\\sqlitepclraw.core.2.1.4.nupkg.sha512",
+    "C:\\Users\\akyri\\.nuget\\packages\\sqlitepclraw.lib.e_sqlite3\\2.1.4\\sqlitepclraw.lib.e_sqlite3.2.1.4.nupkg.sha512",
+    "C:\\Users\\akyri\\.nuget\\packages\\sqlitepclraw.provider.e_sqlite3\\2.1.4\\sqlitepclraw.provider.e_sqlite3.2.1.4.nupkg.sha512",
+    "C:\\Users\\akyri\\.nuget\\packages\\system.memory\\4.5.3\\system.memory.4.5.3.nupkg.sha512"
+  ],
   "logs": []
 }

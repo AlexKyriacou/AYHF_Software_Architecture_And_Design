@@ -8,6 +8,13 @@ public class Feedback
         Message = message;
         FeedbackDate = DateTime.Now;
     }
+    public Feedback(int id, Customer customer, string message, DateTime feedbackDate)
+    {
+        Id = id;
+        Customer = customer;
+        Message = message;
+        FeedbackDate = feedbackDate;
+    }
 
     public int Id { get; set; }
     public Customer Customer { get; set; }
