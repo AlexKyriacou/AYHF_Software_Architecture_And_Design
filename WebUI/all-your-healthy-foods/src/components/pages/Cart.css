@@ -21,6 +21,10 @@
     gap: 10px;
 }
 
+.item-container p {
+    text-align: start;
+}
+
 .cart li:last-child {
     margin-bottom: 0;
 }
