@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClipboardList } from '@fortawesome/free-solid-svg-icons';
-import Rating from './Rating';
-import { CartContext } from './CartContext';
+import Rating from '../rating/Rating'
+import { CartContext } from '../cart/CartContext';
 import './Product.css';
 
 function ProductCard({ product }) {

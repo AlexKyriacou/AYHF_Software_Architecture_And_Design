@@ -1,12 +1,12 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import LoginPage from './components/pages/login/LoginPage';
-import SignupPage from './components/pages/login/SignupPage';
+import LoginPage from './components/login/LoginPage';
+import SignupPage from './components/login/SignupPage';
 import Navbar from './components/navbar/Navbar';
+import HomePage from './pages/home/HomePage';
+import CartPage from './pages/cart/CartPage';
+import { CartProvider } from './pages/cart/CartContext';
 import './App.css';
-import HomePage from './components/pages/HomePage';
-import CartPage from './components/pages/CartPage';
-import { CartProvider } from './components/pages/CartContext';
 
 function App() {
     return (

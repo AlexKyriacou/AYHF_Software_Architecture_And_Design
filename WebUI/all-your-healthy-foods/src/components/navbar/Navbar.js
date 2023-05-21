@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import Search from '../search/Search';
+import Search from '../../pages/search/Search';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPagelines } from "@fortawesome/free-brands-svg-icons";
 import { faShoppingCart, faClipboardList, faSignInAlt } from '@fortawesome/free-solid-svg-icons';
-import { CartContext } from '../pages/CartContext';
+import { CartContext } from '../../pages/cart/CartContext';
 import './Navbar.css';
 
 function Navbar() {
