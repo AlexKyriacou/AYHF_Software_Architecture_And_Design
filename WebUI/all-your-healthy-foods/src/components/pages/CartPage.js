@@ -21,7 +21,7 @@ function calculateTotal(cartItems, promotionPercentage) {
     };
 }
 
-function Cart() {
+function CartPage() {
     const { cartItems, removeFromCart, increaseCount, decreaseCount } = useContext(CartContext);
     const promotionPercentage = 10; // Assuming a 10% promotion for this example
     const { subtotal, promotionAmount, total } = calculateTotal(Object.values(cartItems), promotionPercentage);
@@ -57,7 +57,7 @@ function Cart() {
 
     return (
         <div className="cart">
-            <h2>Your Cart</h2>
+            <h2>Your CartPage</h2>
             {Object.keys(sortedGroupedProducts).length === 0 ? (
                 <div>
                     <p>Your cart is empty.</p>
@@ -128,4 +128,4 @@ function Cart() {
     );
 }
 
-export default Cart;
+export default CartPage;

@@ -5,7 +5,7 @@ import SignupPage from './components/pages/login/SignupPage';
 import Navbar from './components/navbar/Navbar';
 import './App.css';
 import HomePage from './components/pages/HomePage';
-import Cart from './components/pages/Cart';
+import CartPage from './components/pages/CartPage';
 import { CartProvider } from './components/pages/CartContext';
 
 function App() {
@@ -20,7 +20,7 @@ function App() {
                         </Route>
                         <Route path="/signup" element={<SignupPage />}>
                         </Route>
-                        <Route path="/cart" element={<Cart />} />
+                        <Route path="/cart" element={<CartPage />} />
                     </Routes>
                     <footer className="App-footer">
                         <p>
