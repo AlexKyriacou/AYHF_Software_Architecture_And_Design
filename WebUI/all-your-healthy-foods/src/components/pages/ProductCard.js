@@ -19,7 +19,7 @@ function ProductCard({ product }) {
                 <p className='product-name'>{product.name}</p>
                 <p className='product-desc'>{product.description}</p>
                 <div className='product-rating'><Rating rate={product.rating} /> ({product.numRatings})</div>
-                <p className='product-price'>$ {product.price}</p>
+                <p className='product-price'>$ {(product.price).toFixed(2)}</p>
                 <button className='add-to-cart-button' onClick={handleAddToCart}>Add to cart</button>
                 <button className='save-to-list-button'><FontAwesomeIcon className='shopping-list' icon={faClipboardList} />Save to list</button>
             </div>
