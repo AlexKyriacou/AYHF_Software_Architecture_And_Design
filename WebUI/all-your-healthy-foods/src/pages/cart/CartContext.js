@@ -57,12 +57,29 @@ const CartProvider = ({ children }) => {
         setCartCount(0);
     };
 
+    // Grouping the products by name and calculating the count
+    const groupedProducts = cartItems.reduce((grouped, item) => {
+        if (!grouped[item.name]) {
+            grouped[item.name] = {
+                ...item,
+                count: 1,
+            };
+        } else {
+            grouped[item.name].count += 1;
+        }
+        return grouped;
+    }, {});
+
+    const sortedGroupedProducts = Object.fromEntries(
+        Object.entries(groupedProducts).sort(([nameA], [nameB]) => nameA.localeCompare(nameB))
+    );
 
     return (
         <CartContext.Provider
             value={{
                 cartCount,
                 cartItems,
+                sortedGroupedProducts,
                 addToCart,
                 removeFromCart,
                 decreaseCount,

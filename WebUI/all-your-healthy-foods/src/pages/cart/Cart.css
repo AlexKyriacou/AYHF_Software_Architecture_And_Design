@@ -120,13 +120,7 @@
     border-top: 1px solid #ccc;
 }
 
-.checkout-button {
-    width: 100%;
-    font-family: inherit;
-    font-size: 16px;
-}
-
-.checkout-button, .back-to-home {
+.next, .back-to-home {
     display: block;
     padding: 10px;
     margin-top: 20px;
@@ -136,12 +130,9 @@
     border-radius: 4px;
     text-align: center;
     cursor: pointer;
-}
-
-.checkout-button:hover, .back-to-home:hover {
-    background-color: #218838;
-}
-
-.back-to-home {
     text-decoration: none;
+}
+
+.next:hover, .back-to-home:hover {
+    background-color: #218838;
 }
