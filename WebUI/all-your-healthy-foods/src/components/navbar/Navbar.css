@@ -13,6 +13,15 @@
     display: flex;
 }
 
+.icons a {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.icons a:last-child {
+    margin-right: 0;
+}
+
 .shopping-cart, .login-icon, .shopping-list {
     font-size: x-large;
     color: var(--text-color);

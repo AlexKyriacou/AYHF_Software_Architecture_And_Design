@@ -19,14 +19,11 @@ function Navbar() {
             <Search />
             <div className='icons'>
                 <Link className='login-link' to="/login">
-                    <FontAwesomeIcon className="login-icon" icon={faSignInAlt} />
-                    <span className="input-space"></span>Login
+                    <FontAwesomeIcon className="login-icon" icon={faSignInAlt} />&nbsp;Login
                 </Link>
-                <span className="input-space"></span>
                 <Link className='shopping-list-link' to="/list">
                     <FontAwesomeIcon className='shopping-list' icon={faClipboardList} />
                 </Link>
-                <span className="input-space"></span>
                 <Link className='shopping-cart-link' to="/cart">
                     <FontAwesomeIcon className='shopping-cart' icon={faShoppingCart} />
                     <span className='cart-count'>{cartCount}</span>
