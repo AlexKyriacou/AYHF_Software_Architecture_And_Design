@@ -1,11 +1,11 @@
-@import '/src/colors.css';
+@import "/src/colors.css";
 
 .login-container,
 .signup-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 70vh;
+    margin-top: 20px;
 }
 
 .login-card,
@@ -37,8 +37,20 @@
     border-radius: 4px;
 }
 
-.login-button,
-.signup-button {
+.signup-input-group {
+    display: flex;
+}
+  
+.signup-input-group input {
+    flex: 1;
+    margin-right: 16px;
+}
+  
+.signup-input-group input:last-child {
+    margin-right: 0;
+}
+  
+.primary-button {
     background-color: black;
     color: white;
     border: none;
@@ -48,13 +60,12 @@
     cursor: pointer;
 }
 
-.login-button:hover,
-.signup-button:hover {
+.primary-button {
     background-color: var(--dark-shade);
 }
 
-.input-space {
-    padding-left: 10px;
+.readonly {
+    color: var(--light-shade)
 }
 
 .password-container {
@@ -79,11 +90,11 @@
     padding: 0 5px 0 5px;
 }
 
-.password-error {
+.error {
     color: red;
     font-size: small;
     text-align: start;
-    margin-top: 5px;
+    margin: 5px 0px 5px 0px;
 }
 
 .password-info-container {

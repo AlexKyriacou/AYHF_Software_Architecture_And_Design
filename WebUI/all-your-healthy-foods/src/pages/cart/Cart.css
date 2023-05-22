@@ -52,10 +52,9 @@
     justify-content: center;
     width: 30px;
     height: 30px;
-    border-radius: 50%;
-    background-color: #f3f3f3;
+    border-radius: 25%;
+    background-color: var(--lighter-shade);
     border: none;
-    margin-right: 10px;
     cursor: pointer;
 }
 
@@ -78,14 +77,13 @@
     cursor: pointer;
 }
 
-.remove-button .shopping-list {
+.remove-button svg {
     margin-right: 5px;
 }
 
 .remove-button:hover {
     text-decoration: underline;
 }
-
 
 .summary-card {
     margin: 40px 0 100px 0;
@@ -120,13 +118,7 @@
     border-top: 1px solid #ccc;
 }
 
-.checkout-button {
-    width: 100%;
-    font-family: inherit;
-    font-size: 16px;
-}
-
-.checkout-button, .back-to-home {
+.link-button {
     display: block;
     padding: 10px;
     margin-top: 20px;
@@ -136,12 +128,9 @@
     border-radius: 4px;
     text-align: center;
     cursor: pointer;
-}
-
-.checkout-button:hover, .back-to-home:hover {
-    background-color: #218838;
-}
-
-.back-to-home {
     text-decoration: none;
+}
+
+.link-button:hover {
+    background-color: #218838;
 }
