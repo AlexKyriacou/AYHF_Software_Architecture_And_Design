@@ -1,4 +1,4 @@
-@import '/src/colors.css';
+@import "/src/colors.css";
 
 .login-container,
 .signup-container {
@@ -50,8 +50,7 @@
     margin-right: 0;
 }
   
-.login-button,
-.signup-button {
+.primary-button {
     background-color: black;
     color: white;
     border: none;
@@ -61,8 +60,7 @@
     cursor: pointer;
 }
 
-.login-button:hover,
-.signup-button:hover {
+.primary-button {
     background-color: var(--dark-shade);
 }
 
@@ -92,11 +90,11 @@
     padding: 0 5px 0 5px;
 }
 
-.password-error {
+.error {
     color: red;
     font-size: small;
     text-align: start;
-    margin-top: 5px;
+    margin: 5px 0px 5px 0px;
 }
 
 .password-info-container {

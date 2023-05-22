@@ -1,6 +1,6 @@
-import React, { useContext } from 'react';
-import { CartContext } from '../../AppContext';
-import './Cart.css';
+import React, { useContext } from "react";
+import { CartContext } from "../../AppContext";
+import "./Cart.css";
 
 function calculateTotal(cartItems, promotionPercentage) {
     let subtotal = 0;

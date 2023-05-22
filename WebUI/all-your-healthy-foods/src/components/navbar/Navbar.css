@@ -1,74 +1,60 @@
-@import '/src/colors.css';
+@import "/src/colors.css";
 
 .navbar {
-    display: flex;
-    background-color: var(--primary-color);
-    color: var(--light-shade);
-    padding: 20px;
-    align-items: baseline;
-    justify-content: space-evenly;
+  display: flex;
+  background-color: var(--primary-color);
+  color: var(--light-shade);
+  padding: 20px;
+  align-items: center;
+  justify-content: space-evenly;
 }
 
 .icons {
-    display: flex;
+  display: flex;
+  align-items: baseline;
 }
 
 .icons a {
-    flex: 1;
-    margin-right: 10px;
+  margin-left: 10px;
+  text-decoration: none;
+  color: var(--text-color);
 }
 
-.icons a:last-child {
-    margin-right: 0;
+.icons a:first-child {
+  margin-left: 0;
 }
 
-.shopping-cart, .login-icon, .shopping-list {
-    font-size: x-large;
-    color: var(--text-color);
-    margin-bottom: 10px;
+.icons svg {
+  font-size: x-large;
+  color: var(--text-color);
+  margin-right: 5px;
 }
 
-.login-link {
-    text-decoration: none;
-    font-weight: bold;
-    font-size: large;
-    color: var(--text-color);
-    display: flex;
-    align-items: flex-start;
-}
-
-.login-button {
-    color: white;
-    text-decoration: none;
-}
-
-.shopping-cart-link {
-    display: inline-block;
-    position: relative;
-    text-decoration: none;
-}
-
-.shopping-cart {
-    margin-right: 5px;
+.links {
+  text-decoration: none;
+  font-weight: bold;
+  font-size: large;
+  display: flex;
+  align-items: center;
 }
 
 .cart-count {
-    position: absolute;
-    top: -8px;
-    left: -8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 20px;
-    height: 20px;
-    background-color: #dc3545;
-    color: #fff;
-    border-radius: 50%;
-    font-size: 12px;
-    font-weight: bold;
+  position: relative;
+  top: -10px;
+  left: -40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background-color: #dc3545;
+  color: #fff;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: bold;
 }
 
-.shopping-cart-link:hover {
-    text-decoration: none;
+.links:hover {
+  text-decoration: none;
+  color: var(--text-color);
 }
-  

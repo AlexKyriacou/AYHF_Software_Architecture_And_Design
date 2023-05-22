@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect } from "react";
 
 const CartContext = createContext();
 const UserContext = createContext();
@@ -9,7 +9,7 @@ const CartProvider = ({ children }) => {
 
     useEffect(() => {
         // Load cart items from local storage when the component mounts
-        const storedCartItems = localStorage.getItem('cartItems');
+        const storedCartItems = localStorage.getItem("cartItems");
         if (storedCartItems) {
             setCartItems(JSON.parse(storedCartItems));
             setCartCount(JSON.parse(storedCartItems).length);
@@ -19,7 +19,7 @@ const CartProvider = ({ children }) => {
     const updateCartItems = (updatedItems) => {
         setCartItems(updatedItems);
         setCartCount(updatedItems.length);
-        localStorage.setItem('cartItems', JSON.stringify(updatedItems));
+        localStorage.setItem("cartItems", JSON.stringify(updatedItems));
     };
 
     const addToCart = (product) => {
@@ -58,7 +58,6 @@ const CartProvider = ({ children }) => {
         setCartCount(0);
     };
 
-    // Grouping the products by name and calculating the count
     const groupedProducts = cartItems.reduce((grouped, item) => {
         if (!grouped[item.name]) {
             grouped[item.name] = {
@@ -95,19 +94,37 @@ const CartProvider = ({ children }) => {
 
 const UserProvider = ({ children }) => {
     const [user, setUser] = useState(null);
+    const [loggedIn, setLoggedIn] = useState(false);
 
     const login = (userData) => {
         setUser(userData);
+        sessionStorage.setItem("user", JSON.stringify(userData));
+        setLoggedIn(true);
+        sessionStorage.setItem("loggedIn", "true");
     };
 
     const logout = () => {
         setUser(null);
+        sessionStorage.setItem("user", null);
+        setLoggedIn(false);
+        sessionStorage.setItem("loggedIn", "false");
     };
+
+    useEffect(() => {
+        // Load user details from Session storage
+        const loggedInValue = sessionStorage.getItem("loggedIn");
+        const loggedInUser = sessionStorage.getItem("user");
+        if (loggedInValue === "true") {
+            setUser(JSON.parse(loggedInUser));
+            setLoggedIn(true);
+        }
+    }, []);
 
     return (
         <UserContext.Provider
             value={{
                 user,
+                loggedIn,
                 login,
                 logout,
             }}

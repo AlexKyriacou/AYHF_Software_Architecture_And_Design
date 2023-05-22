@@ -44,6 +44,7 @@ const SignupPage = () => {
                 setPasswordError("");
 
                 const user = {
+                    name: firstName + " " + lastName,
                     username,
                     email,
                     password,
@@ -121,7 +122,7 @@ const SignupPage = () => {
                         <option value="customer">Customer</option>
                         <option value="admin">Admin</option>
                     </select>
-                    <button type="submit" className="signup-button">
+                    <button type="submit" className="primary-button">
                         Sign Up
                     </button>
                 </form>

@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 import { Link } from "react-router-dom";
-import OrderSummary from '../cart/OrderSummary';
-import './Checkout.css';
+import OrderSummary from "../cart/OrderSummary";
+import "./Checkout.css";
 
 function PaymentPage() {
     return (

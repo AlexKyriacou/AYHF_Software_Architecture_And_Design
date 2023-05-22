@@ -1,13 +1,12 @@
-import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
+import React, { useContext } from "react";
+import { Link, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClipboardList, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
-import Rating from '../rating/Rating';
-import { CartContext } from '../../AppContext';
-import productData from './productData';
-import './ProductCard.css'
-import './ProductPage.css';
+import { faClipboardList, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import Rating from "../rating/Rating";
+import { CartContext } from "../../AppContext";
+import productData from "./productData";
+import "./ProductCard.css"
+import "./ProductPage.css";
 
 function ProductPage() {
     const { productName } = useParams();
@@ -21,7 +20,7 @@ function ProductPage() {
 
     return (
         <div className="product-overview-container">
-            <div className='overview-card'>
+            <div className="overview-card">
                 <div className="image-container">
                     <div className="back-link-container">
                         <Link to="/" className="back-link">

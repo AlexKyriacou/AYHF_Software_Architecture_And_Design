@@ -67,7 +67,7 @@ const PasswordInput = ({ placeholder, showInfo, onChange, passwordError }) => {
                     )}
                 </div>
             </div>
-            {passwordError && <span className="password-error">{passwordError}</span>}
+            {passwordError && <span className="error">{passwordError}</span>}
         </div>
     );
 };

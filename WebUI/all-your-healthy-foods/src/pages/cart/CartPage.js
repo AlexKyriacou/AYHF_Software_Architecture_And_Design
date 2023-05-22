@@ -1,10 +1,10 @@
-import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
-import { CartContext } from '../../AppContext';
-import OrderSummary from './OrderSummary';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
-import './Cart.css';
+import React, { useContext } from "react";
+import { Link } from "react-router-dom";
+import { CartContext } from "../../AppContext";
+import OrderSummary from "./OrderSummary";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
+import "./Cart.css";
 
 function CartPage() {
     const { sortedGroupedProducts, removeFromCart, increaseCount, decreaseCount } = useContext(CartContext);
@@ -27,7 +27,7 @@ function CartPage() {
             {Object.keys(sortedGroupedProducts).length === 0 ? (
                 <div>
                     <p>Your cart is empty.</p>
-                    <Link className="back-to-home" to="/">Continue Shopping</Link>
+                    <Link className="link-button" to="/">Continue Shopping</Link>
                 </div>
             ) : (
                 <ul>
@@ -52,7 +52,7 @@ function CartPage() {
                                     </button>
                                 </div>
                                 <button className="remove-button" onClick={() => handleRemoveItem(item)}>
-                                    <FontAwesomeIcon className="shopping-list" icon={faTrash} />
+                                    <FontAwesomeIcon icon={faTrash} />
                                     Remove
                                 </button>
                                 <div>$ {(item.price * item.count).toFixed(2)}</div>
@@ -63,8 +63,8 @@ function CartPage() {
             )}
             {Object.keys(sortedGroupedProducts).length === 0 ? null : (
                 <OrderSummary extra={<div>
-                    <Link className="next" to="/checkout">Checkout</Link>
-                    <Link className="back-to-home" to="/">Continue Shopping</Link>
+                    <Link className="link-button" to="/checkout">Checkout</Link>
+                    <Link className="link-button" to="/">Continue Shopping</Link>
                 </div>} />
             )}
         </div>
