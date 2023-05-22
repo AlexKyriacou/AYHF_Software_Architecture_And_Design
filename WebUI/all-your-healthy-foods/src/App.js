@@ -7,6 +7,9 @@ import HomePage from './pages/home/HomePage';
 import CartPage from './pages/cart/CartPage';
 import { CartProvider } from './pages/cart/CartContext';
 import ProductPage from './pages/product/ProductPage';
+import CheckoutPage from './pages/checkout/CheckoutPage';
+import ShippingPage from './pages/checkout/ShippingPage';
+import PaymentPage from './pages/checkout/PaymentPage';
 import './App.css';
 
 function App() {
@@ -23,6 +26,9 @@ function App() {
                         </Route>
                         <Route path="/cart" element={<CartPage />} />
                         <Route path="/product/:productName" element={<ProductPage />} />
+                        <Route path="/checkout" element={<CheckoutPage />} />
+                        <Route path="/shipping" element={<ShippingPage />} />
+                        <Route path="/payment" element={<PaymentPage />} />
                     </Routes>
                     <footer className="App-footer">
                         <p>© 2023 All Your Healthy Foods - All Rights Reserved.</p>
