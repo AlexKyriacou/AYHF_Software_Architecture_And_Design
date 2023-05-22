@@ -49,7 +49,7 @@ function ProductOverview() {
                         </summary>
                         <p>{product.longDescription}</p>
                     </details>
-                    <details>
+                    <details open>
                         <summary>
                             Ingredients
                         </summary>
