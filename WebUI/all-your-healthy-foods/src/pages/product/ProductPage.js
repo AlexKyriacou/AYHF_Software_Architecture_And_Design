@@ -7,9 +7,9 @@ import Rating from '../rating/Rating';
 import { CartContext } from '../cart/CartContext';
 import productData from './productData';
 import './ProductCard.css'
-import './ProductOverview.css';
+import './ProductPage.css';
 
-function ProductOverview() {
+function ProductPage() {
     const { productName } = useParams();
     const product = productData.find(product => product.name === productName);
 
@@ -61,4 +61,4 @@ function ProductOverview() {
     );
 }
 
-export default ProductOverview;
+export default ProductPage;
