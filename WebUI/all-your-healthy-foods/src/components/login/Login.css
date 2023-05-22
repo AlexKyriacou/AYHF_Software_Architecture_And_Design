@@ -5,7 +5,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 70vh;
+    margin-top: 20px;
 }
 
 .login-card,
@@ -37,6 +37,19 @@
     border-radius: 4px;
 }
 
+.signup-input-group {
+    display: flex;
+}
+  
+.signup-input-group input {
+    flex: 1;
+    margin-right: 16px;
+}
+  
+.signup-input-group input:last-child {
+    margin-right: 0;
+}
+  
 .login-button,
 .signup-button {
     background-color: black;
@@ -53,8 +66,8 @@
     background-color: var(--dark-shade);
 }
 
-.input-space {
-    padding-left: 10px;
+.readonly {
+    color: var(--light-shade)
 }
 
 .password-container {
