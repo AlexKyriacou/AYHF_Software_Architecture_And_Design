@@ -32,4 +32,34 @@
     color: white;
     text-decoration: none;
 }
+
+.shopping-cart-link {
+    display: inline-block;
+    position: relative;
+    text-decoration: none;
+}
+
+.shopping-cart {
+    margin-right: 5px;
+}
+
+.cart-count {
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    background-color: #dc3545;
+    color: #fff;
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.shopping-cart-link:hover {
+    text-decoration: none;
+}
   
