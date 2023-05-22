@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClipboardList, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import Rating from '../rating/Rating';
-import { CartContext } from '../cart/CartContext';
+import { CartContext } from '../../AppContext';
 import productData from './productData';
 import './ProductCard.css'
 import './ProductPage.css';

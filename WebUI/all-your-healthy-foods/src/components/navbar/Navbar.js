@@ -4,7 +4,7 @@ import Search from '../../pages/search/Search';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPagelines } from "@fortawesome/free-brands-svg-icons";
 import { faShoppingCart, faClipboardList, faSignInAlt } from '@fortawesome/free-solid-svg-icons';
-import { CartContext } from '../../pages/cart/CartContext';
+import { CartContext } from '../../AppContext';
 import './Navbar.css';
 
 function Navbar() {

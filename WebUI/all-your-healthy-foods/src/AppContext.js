@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react';
 
 const CartContext = createContext();
+const UserContext = createContext();
 
 const CartProvider = ({ children }) => {
     const [cartCount, setCartCount] = useState(0);
@@ -92,4 +93,30 @@ const CartProvider = ({ children }) => {
     );
 };
 
-export { CartContext, CartProvider };
+const UserProvider = ({ children }) => {
+    const [user, setUser] = useState(null);
+
+    const login = (userData) => {
+        setUser(userData);
+    };
+
+    const logout = () => {
+        setUser(null);
+    };
+
+    return (
+        <UserContext.Provider
+            value={{
+                user,
+                login,
+                logout,
+            }}
+        >
+            <CartProvider>
+                {children}
+            </CartProvider>
+        </UserContext.Provider>
+    );
+};
+
+export { CartContext, CartProvider, UserContext, UserProvider };

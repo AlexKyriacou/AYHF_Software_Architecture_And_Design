@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClipboardList } from '@fortawesome/free-solid-svg-icons';
 import Rating from '../rating/Rating'
-import { CartContext } from '../cart/CartContext';
+import { CartContext } from '../../AppContext';
 import './ProductCard.css';
 
 function ProductCard({ product }) {

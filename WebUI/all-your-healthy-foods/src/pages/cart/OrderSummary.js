@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { CartContext } from './CartContext';
+import { CartContext } from '../../AppContext';
 import './Cart.css';
 
 function calculateTotal(cartItems, promotionPercentage) {
@@ -18,7 +18,7 @@ function calculateTotal(cartItems, promotionPercentage) {
     };
 }
 
-function CartSummary({ extra }) {
+function OrderSummary({ extra }) {
     const { cartItems, sortedGroupedProducts } = useContext(CartContext);
     const promotionPercentage = 10; // Assuming a 10% promotion for this example
     const { subtotal, promotionAmount, total } = calculateTotal(Object.values(cartItems), promotionPercentage);
@@ -54,4 +54,4 @@ function CartSummary({ extra }) {
     );
 }
 
-export default CartSummary;
+export default OrderSummary;

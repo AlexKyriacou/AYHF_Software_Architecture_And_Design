@@ -5,7 +5,7 @@ import SignupPage from './components/login/SignupPage';
 import Navbar from './components/navbar/Navbar';
 import HomePage from './pages/home/HomePage';
 import CartPage from './pages/cart/CartPage';
-import { CartProvider } from './pages/cart/CartContext';
+import { UserProvider } from './AppContext';
 import ProductPage from './pages/product/ProductPage';
 import CheckoutPage from './pages/checkout/CheckoutPage';
 import ShippingPage from './pages/checkout/ShippingPage';
@@ -15,7 +15,7 @@ import './App.css';
 function App() {
     return (
         <Router>
-            <CartProvider>
+            <UserProvider>
                 <div className="App">
                     <Navbar />
                     <Routes>
@@ -34,7 +34,7 @@ function App() {
                         <p>© 2023 All Your Healthy Foods - All Rights Reserved.</p>
                     </footer>
                 </div>
-            </CartProvider>
+            </UserProvider>
         </Router>
     );
 }

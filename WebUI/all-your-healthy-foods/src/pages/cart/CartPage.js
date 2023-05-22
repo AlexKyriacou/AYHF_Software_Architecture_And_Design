@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { CartContext } from './CartContext';
-import CartSummary from './CartSummary';
+import { CartContext } from '../../AppContext';
+import OrderSummary from './OrderSummary';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import './Cart.css';
@@ -62,7 +62,7 @@ function CartPage() {
                 </ul>
             )}
             {Object.keys(sortedGroupedProducts).length === 0 ? null : (
-                <CartSummary extra={<div>
+                <OrderSummary extra={<div>
                     <Link className="next" to="/checkout">Checkout</Link>
                     <Link className="back-to-home" to="/">Continue Shopping</Link>
                 </div>} />
