@@ -3,8 +3,7 @@
     font-size: x-large;
 }
 
-.product-container {
+.products-container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: flex-start;
 }

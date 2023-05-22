@@ -1,9 +1,10 @@
 import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClipboardList } from '@fortawesome/free-solid-svg-icons';
 import Rating from '../rating/Rating'
 import { CartContext } from '../cart/CartContext';
-import './Product.css';
+import './ProductCard.css';
 
 function ProductCard({ product }) {
     const { addToCart } = useContext(CartContext);
@@ -15,7 +16,9 @@ function ProductCard({ product }) {
     return (
         <div className='product-container'>
             <div className='product-card'>
-                <img src={product.image} alt={product.name} />
+                <Link to={`/product/${product.name}`}>
+                    <img src={product.image} alt={product.name} />
+                </Link>
                 <p className='product-name'>{product.name}</p>
                 <p className='product-desc'>{product.description}</p>
                 <div className='product-rating'><Rating rate={product.rating} /> ({product.numRatings})</div>

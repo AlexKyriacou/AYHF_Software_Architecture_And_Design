@@ -1,66 +1,15 @@
 import React from 'react';
 import ProductCard from '../product/ProductCard';
 import './Home.css';
+import productData from '../product/productData';
 
 const HomePage = () => {
-    //Products coming from backend will have the following structure
-    const products = [
-        {
-            name: "Celebrate Health",
-            description: "Tomato Sauce 430ml",
-            image: require('../../images/tomato-sauce.png'),
-            rating: 3,
-            numRatings: 25,
-            price: 4.99
-        }, {
-            name: "Nutra Organics",
-            description: "Bone Broth Chicken Organic Homestyle Original 125g",
-            image: require('../../images/chicken-broth.png'),
-            rating: 5,
-            numRatings: 1,
-            price: 43.95
-        }, {
-            name: "Ceres Organics",
-            description: "Basil Pesto 130g",
-            image: require('../../images/basil-pesto.png'),
-            rating: 5,
-            numRatings: 6,
-            price: 8.49
-        }, {
-            name: "Bae Juice",
-            description: "120ml",
-            image: require('../../images/bae-juice.png'),
-            rating: 4,
-            numRatings: 20,
-            price: 3.95
-        }, {
-            name: "Alter Eco Organic",
-            description: "Chocolate Truffles Dark Salted Caramel 108g",
-            image: require('../../images/dark-chocolate-sc.png'),
-            rating: 2,
-            numRatings: 4,
-            price: 11.17
-        }, {
-            name: "Naked Life",
-            description: "Nootropics Calm Passionfruit 4x250ml",
-            image: require('../../images/sparkling-water.png'),
-            rating: 1,
-            numRatings: 16,
-            price: 10.00
-        }, {
-            name: "Lum Lum Organic",
-            description: "Instant Noodle Chicken 75g",
-            image: require('../../images/instant-noodles.png'),
-            rating: 5,
-            numRatings: 2,
-            price: 5.79
-        }
-    ];
+    const products = productData;
 
     return (
         <div>
             <p className='welcome'>Welcome to All Your Healthy Foods Online Store</p>
-            <div className='product-container'>
+            <div className='products-container'>
                 {products.map((product, index) => (
                     <ProductCard key={index} product={product} />
                 ))}

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faEyeSlash, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 
 
 const PasswordInput = ({ placeholder, showInfo, onChange, passwordError }) => {

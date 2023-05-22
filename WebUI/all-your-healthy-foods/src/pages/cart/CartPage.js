@@ -68,7 +68,9 @@ function CartPage() {
                     {Object.entries(sortedGroupedProducts).map(([name, item], index) => (
                         <li key={index}>
                             <div className="item-container">
-                                <img src={item.image} alt={item.name} />
+                                <Link to={`/product/${item.name}`}>
+                                    <img src={item.image} alt={item.name} />
+                                </Link>
                                 <p><strong>{name}</strong> - {item.description}</p>
                                 <div className="count-buttons">
                                     <button
