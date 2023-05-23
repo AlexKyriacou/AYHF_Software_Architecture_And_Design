@@ -1,8 +1,5 @@
 using Microsoft.Data.Sqlite;
 using MyProject.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.IO;
 
 namespace MyProject.Infrastructure.Repositories
 {

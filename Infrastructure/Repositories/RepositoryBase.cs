@@ -8,7 +8,7 @@ namespace MyProject.Infrastructure.Repositories
     /// </summary>
     public abstract class RepositoryBase
     {
-        private static string _databasePath = "AYHFDatabase.db";
+        private static string _databasePath = "Infrastructure\\Data\\AYHFDatabase.db";
 
         private static readonly Lazy<SqliteConnection> _lazyConnection = new Lazy<SqliteConnection>(() =>
         {
@@ -57,7 +57,20 @@ namespace MyProject.Infrastructure.Repositories
 
         private void CreateDatabase(string databasePath)
         {
-            File.Create(databasePath);
+            try
+            {
+                using (File.Create(databasePath))
+                {
+                    // File created successfully
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle or log the exception
+                Console.WriteLine($"Error occurred during database creation: {ex.Message}");
+            }
         }
+
+
     }
 }
