@@ -4,7 +4,7 @@ import { UserContext } from "../../AppContext";
 import { Navigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
-import userData from "../../components/login/users"; //TO DELETE ONCE WE ESTABLISH BACKEND CONNECTION
+import userData from "../../testData/users"; //TO DELETE ONCE WE ESTABLISH BACKEND CONNECTION
 
 const AccountPage = () => {
     const { username } = useParams();

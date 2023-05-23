@@ -4,7 +4,16 @@
     padding: 20px;
 }
 
-.disabled {
-    background-color: gray;
-    pointer-events: none;
+.checkout-container h3 {
+    text-align: start;
+}
+
+.payment-options {
+    display: flex;
+    justify-content: space-evenly;
+    padding-bottom: 16px;
+}
+
+.payment-options label {
+    font-size: large;
 }

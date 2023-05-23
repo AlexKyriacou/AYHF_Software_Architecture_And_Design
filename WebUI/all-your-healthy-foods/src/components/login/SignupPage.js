@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
-import "./Login.css";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect, useContext } from "react";
+import { Link, Navigate, useLocation } from "react-router-dom";
+import { UserContext } from "../../AppContext";
 import PasswordInput from "./PasswordInput";
+import "./Login.css";
 
 const SignupPage = () => {
     const [firstName, setFirstName] = useState("");
@@ -11,8 +12,12 @@ const SignupPage = () => {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [role, setRole] = useState("");
-
     const [passwordError, setPasswordError] = useState("");
+    const { loggedIn } = useContext(UserContext);
+
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const from = queryParams.get("from");
 
     const isValidPassword = (password) => {
         const passwordValidationRegex = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
@@ -62,23 +67,26 @@ const SignupPage = () => {
     };
 
     return (
-        <div className="signup-container">
-            <div className="signup-card">
-                <h2 className="signup-title">Create Account</h2>
-                <form className="signup-form" onSubmit={handleSubmit}>
+        <div className="page-container">
+            {loggedIn && (
+                <Navigate to={from ? ("/" + from) : "/"} replace={true} />
+            )}
+            <div className="page-card">
+                <h2 className="page-title">Create Account</h2>
+                <form className="page-form" onSubmit={handleSubmit}>
                     <input
                         type="text"
                         placeholder="Username"
-                        className="signup-input readonly"
+                        className="form-input readonly"
                         required
                         value={username}
                         readOnly
                     />
-                    <div className="signup-input-group">
+                    <div className="input-group">
                         <input
                             type="text"
                             placeholder="First name"
-                            className="signup-input"
+                            className="form-input"
                             required
                             value={firstName}
                             onChange={(e) => setFirstName(e.target.value)}
@@ -86,7 +94,7 @@ const SignupPage = () => {
                         <input
                             type="text"
                             placeholder="Last Name"
-                            className="signup-input"
+                            className="form-input"
                             required
                             value={lastName}
                             onChange={(e) => setLastName(e.target.value)}
@@ -95,7 +103,7 @@ const SignupPage = () => {
                     <input
                         type="email"
                         placeholder="Email"
-                        className="signup-input"
+                        className="form-input"
                         required
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
@@ -113,7 +121,7 @@ const SignupPage = () => {
                         passwordError={passwordError}
                     />
                     <select
-                        className="signup-input"
+                        className="form-input"
                         required
                         value={role}
                         onChange={(e) => setRole(e.target.value)}
