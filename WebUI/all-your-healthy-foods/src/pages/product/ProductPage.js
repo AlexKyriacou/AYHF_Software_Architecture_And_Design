@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClipboardList, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import Rating from "../rating/Rating";
 import { CartContext } from "../../AppContext";
-import productData from "./productData";
+import productData from "../../testData/productData";
 import "./ProductCard.css"
 import "./ProductPage.css";
 

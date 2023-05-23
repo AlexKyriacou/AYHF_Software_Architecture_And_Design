@@ -36,7 +36,7 @@ const PasswordInput = ({ placeholder, showInfo, onChange, passwordError }) => {
                 <input
                     type={passwordShown ? "text" : "password"}
                     placeholder={placeholder}
-                    className="signup-input"
+                    className="form-input"
                     required
                     onChange={onChange}
                 />

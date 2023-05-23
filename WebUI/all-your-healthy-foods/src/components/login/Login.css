@@ -1,55 +1,50 @@
 @import "/src/colors.css";
 
-.login-container,
-.signup-container {
+.page-container {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-top: 20px;
 }
 
-.login-card,
-.signup-card {
+.page-card {
     background-color: white;
     padding: 40px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.login-title,
-.signup-title {
+.page-title {
     text-align: center;
     margin-bottom: 20px;
     color: var(--text-color);
 }
 
-.login-form,
-.signup-form {
+.page-form {
     display: flex;
     flex-direction: column;
 }
 
-.login-input,
-.signup-input {
+.form-input {
     margin-bottom: 16px;
     padding: 10px;
     border: 1px solid var(--light-shade);
     border-radius: 4px;
 }
 
-.signup-input-group {
+.input-group {
     display: flex;
 }
   
-.signup-input-group input {
+.input-group input {
     flex: 1;
     margin-right: 16px;
 }
   
-.signup-input-group input:last-child {
+.input-group input:last-child {
     margin-right: 0;
 }
-  
+
 .primary-button {
     background-color: black;
     color: white;

@@ -1,8 +1,8 @@
 import React, { useState, useContext } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useLocation } from "react-router-dom";
 import PasswordInput from "./PasswordInput";
 import { UserContext } from "../../AppContext";
-import userData from "../login/users"; //TO DELETE ONCE WE ESTABLISH BACKEND CONNECTION
+import userData from "../../testData/users"; //TO DELETE ONCE WE ESTABLISH BACKEND CONNECTION
 import "./Login.css";
 
 const LoginPage = () => {
@@ -11,6 +11,10 @@ const LoginPage = () => {
     const [password, setPassword] = useState("");
     const [loginError, setLoginError] = useState("");
     const { login, loggedIn } = useContext(UserContext);
+
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const from = queryParams.get("from");
 
     const handleUsernameChange = (event) => {
         setUsername(event.target.value);
@@ -36,18 +40,18 @@ const LoginPage = () => {
     };
 
     return (
-        <div className="login-container">
-            <div className="login-card">
-                <h2 className="login-title">Login</h2>
-                <form className="login-form" onSubmit={handleSubmit}>
+        <div className="page-container">
+            <div className="page-card">
+                <h2 className="page-title">Login</h2>
+                <form className="page-form" onSubmit={handleSubmit}>
                     {loginError && <span className="error">{loginError}</span>}
                     {loggedIn && (
-                        <Navigate to="/" replace={true} />
+                        <Navigate to={from ? ("/" + from) : "/"} replace={true} />
                     )}
                     <input
                         type="text"
                         placeholder="Username"
-                        className="login-input"
+                        className="form-input"
                         value={username}
                         onChange={handleUsernameChange}
                         required
