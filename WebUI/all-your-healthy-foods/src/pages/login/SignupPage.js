@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link, Navigate, useLocation } from "react-router-dom";
 import { UserContext } from "../../AppContext";
-import PasswordInput from "../PasswordInput";
-import TextInputWithValidation from "../TextInputWithValidation";
+import PasswordInput from "../../components/PasswordInput";
+import TextInputWithValidation from '../../components/TextInputWithValidation'
 import "./Login.css";
-import SelectWithValidation from "../SelectWithValidation";
+import SelectWithValidation from "../../components/SelectWithValidation";
 
 const SignupPage = () => {
     const [firstName, setFirstName] = useState("");
