@@ -76,4 +76,7 @@ details summary {
 details p {
     margin-top: 5px;
 }
-  
+
+.admin-buttons button:not(:last-child){
+    margin-right: 10px;
+}

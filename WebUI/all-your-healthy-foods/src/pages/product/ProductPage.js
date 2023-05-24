@@ -1,9 +1,10 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClipboardList, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import Rating from "../rating/Rating";
 import { CartContext } from "../../AppContext";
+import { UserContext } from "../../AppContext";
 import productData from "../../testData/productData";
 import "./ProductCard.css"
 import "./ProductPage.css";
@@ -17,6 +18,23 @@ function ProductPage() {
     const handleAddToCart = () => {
         addToCart(product);
     };
+
+    const { loggedIn, user } = useContext(UserContext);
+    const [inEditMode, setInEditMode] = useState(false);
+
+    const handleEdit = () => {
+        setInEditMode(true);
+    };
+
+    const handleDelete = () => {
+        // Handle delete logic here
+        console.log("Delete this product: ", productName)
+    };
+
+    const handleSave = () => {
+        setInEditMode(false);
+        console.log("Saving changes to: ", productName)
+    }
 
     return (
         <div className="product-overview-container">
@@ -55,6 +73,25 @@ function ProductPage() {
                         <p>{product.ingredients}</p>
                     </details>
                 </div>
+                {loggedIn && user.role === "admin" && (
+                    <div className="admin-buttons">
+                        {!inEditMode && (
+                            <>
+                                <button className="primary-button" onClick={handleEdit}>
+                                    Edit
+                                </button>
+                                <button className="primary-button" onClick={handleDelete}>
+                                    Delete
+                                </button>
+                            </>
+                        )}
+                        {inEditMode && (
+                            <button className="primary-button" onClick={handleSave}>
+                                Save
+                            </button>
+                        )}
+                    </div>
+                )}
             </div>
         </div>
     );
