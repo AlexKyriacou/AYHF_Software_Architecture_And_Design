@@ -118,7 +118,7 @@ function PaymentPage() {
         }
     };
 
-    const handleLinkClick = () => {
+    const handleLinkClick = (event) => {
         const paymentDetails = {
             email: email,
             password: password,
@@ -129,6 +129,7 @@ function PaymentPage() {
         const errorMessage = validateForm(paymentMethod, paymentDetails);
 
         if (errorMessage) {
+            event.preventDefault();
             setFormErrorMessage(errorMessage);
         } else {
             setFormErrorMessage("");
@@ -171,6 +172,7 @@ function PaymentPage() {
                         <Link
                             className={`link-button ${(loggedIn && paymentMethod) ? "" : "disabled"}`}
                             onClick={handleLinkClick}
+                            to="/order-confirmation"
                         >
                             <FontAwesomeIcon icon={faLock} aria-hidden="true" /> Pay Securely
                         </Link>

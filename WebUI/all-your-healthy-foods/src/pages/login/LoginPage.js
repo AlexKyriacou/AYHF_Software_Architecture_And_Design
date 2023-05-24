@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import { Link, Navigate, useLocation } from "react-router-dom";
 import PasswordInput from "../../components/PasswordInput";
 import { UserContext } from "../../AppContext";
-import userData from "../../testData/users"; //TO DELETE ONCE WE ESTABLISH BACKEND CONNECTION
+import userData from "../../testData/userData"; //TO DELETE ONCE WE ESTABLISH BACKEND CONNECTION
 import TextInputWithValidation from '../../components/TextInputWithValidation'
 import "./Login.css";
 

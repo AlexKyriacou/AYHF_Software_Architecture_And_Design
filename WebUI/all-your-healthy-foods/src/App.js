@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import LoginPage from "./components/login/LoginPage";
-import SignupPage from "./components/login/SignupPage";
+import LoginPage from "./pages/login/LoginPage";
+import SignupPage from "./pages/login/SignupPage";
 import Navbar from "./components/navbar/Navbar";
 import HomePage from "./pages/home/HomePage";
 import CartPage from "./pages/cart/CartPage";
@@ -11,6 +11,7 @@ import CheckoutPage from "./pages/checkout/CheckoutPage";
 import ShippingPage from "./pages/checkout/ShippingPage";
 import PaymentPage from "./pages/checkout/PaymentPage";
 import AccountPage from "./pages/account/AccountPage";
+import OrderConfirmationPage from "./pages/checkout/OrderConfirmationPage"
 import "./App.css";
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
                         <Route path="/checkout" element={<CheckoutPage />} />
                         <Route path="/shipping" element={<ShippingPage />} />
                         <Route path="/payment" element={<PaymentPage />} />
+                        <Route path="/order-confirmation" element={<OrderConfirmationPage />} />
                     </Routes>
                     <footer className="App-footer">
                         <p>© 2023 All Your Healthy Foods - All Rights Reserved.</p>
