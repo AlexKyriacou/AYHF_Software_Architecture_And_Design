@@ -2,10 +2,14 @@ import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import OrderSummary from "../cart/OrderSummary";
 import { UserContext } from "../../AppContext";
+import TextInputWithValidation from "../../components/TextInputWithValidation";
 import './Checkout.css';
+import SelectWithValidation from "../../components/SelectWithValidation";
 
 function ShippingPage() {
     const { loggedIn } = useContext(UserContext);
+    const [address, setAddress] = useState("");
+    const [suburb, setSuburb] = useState("");
     const [postcode, setPostcode] = useState("");
     const [selectedState, setSelectedState] = useState("");
     const [isPostcodeValid, setIsPostcodeValid] = useState(true);
@@ -30,27 +34,25 @@ function ShippingPage() {
         return true;
     };
 
-    const handlePostcodeChange = (event) => {
-        const newPostcode = event.target.value;
+    const handlePostcodeChange = (newPostcode) => {
         setPostcode(newPostcode);
         setIsPostcodeValid(validatePostcode(newPostcode, selectedState));
     };
 
-    const handleStateChange = (event) => {
-        const newState = event.target.value;
+    const handleStateChange = (newState) => {
         setSelectedState(newState);
         setIsPostcodeValid(validatePostcode(postcode, newState));
     };
 
     const handleLinkClick = (event) => {
         const requiredFields = [
-            document.getElementById("address"),
-            document.getElementById("suburb"),
-            document.getElementById("state"),
-            document.getElementById("postcode")
+            address,
+            suburb,
+            postcode,
+            selectedState
         ];
 
-        const isValid = requiredFields.every((field) => field.value);
+        const isValid = requiredFields.every((value) => value);
 
         if (!isValid || !isPostcodeValid) {
             event.preventDefault();
@@ -62,40 +64,44 @@ function ShippingPage() {
         <div className="checkout-container">
             <h2>Shipping</h2>
             <form className="page-form">
-                <input type="text" placeholder="Address" className="form-input" id="address" />
-                <input type="text" placeholder="Apartment, suite, etc. (optional)" className="form-input" />
+                <TextInputWithValidation
+                    placeholder="Address"
+                    required={true}
+                    value={address}
+                    parentOnChange={setAddress}
+                />
+                <TextInputWithValidation
+                    placeholder="Apartment, suite, etc. (optional)"
+                />
                 <div className="input-group">
-                    <input
-                        type="text"
+                    <TextInputWithValidation
                         placeholder="Suburb"
-                        id="suburb"
-                        className="form-input"
+                        required={true}
+                        value={suburb}
+                        parentOnChange={setSuburb}
                     />
-                    <input
-                        type="text"
+                    <TextInputWithValidation
                         placeholder="Postcode"
-                        id="postcode"
-                        className={`form-input ${isPostcodeValid ? "" : "invalid"}`}
+                        required={true}
                         value={postcode}
-                        onChange={handlePostcodeChange}
+                        parentOnChange={handlePostcodeChange}
                     />
                 </div>
-                <select
-                    className="form-input"
-                    id="state"
+                <SelectWithValidation
                     value={selectedState}
-                    onChange={handleStateChange}
-                >
-                    <option value="">State/territory</option>
-                    <option value="ACT">Australian Capital Territory</option>
-                    <option value="NSW">New South Wales</option>
-                    <option value="NT">Northern Territory</option>
-                    <option value="QLD">Queensland</option>
-                    <option value="SA">South Australia</option>
-                    <option value="TAS">Tasmania</option>
-                    <option value="VIC">Victoria</option>
-                    <option value="WA">Western Australia</option>
-                </select>
+                    parentOnChange={handleStateChange}
+                    placeholder="State/territory"
+                    options={[
+                        { label: "Australian Capital Territory", value: "ACT" },
+                        { label: "New South Wales", value: "NSW" },
+                        { label: "Northern Territory", value: "NT" },
+                        { label: "Queensland", value: "QLD" },
+                        { label: "South Australia", value: "SA" },
+                        { label: "Tasmania", value: "TAS" },
+                        { label: "Victoria", value: "VIC" },
+                        { label: "Western Australia", value: "WA" }
+                    ]}
+                />
                 {!isPostcodeValid && (
                     <span className="error">Invalid postcode for the selected state/territory</span>
                 )}

@@ -13,12 +13,12 @@ const paypalPaymentData = [
 const creditCardPaymentData = [
     {
         cardHolderName: "Marella",
-        cardNumber: 1234567890123456,
+        cardNumber: 5234567890123456,
         cvv: 123
     },
     {
         cardHolderName: "Test Admin",
-        cardNumber: 98765432109876543,
+        cardNumber: 58765432109876543,
         cvv: 456
     }
 ];

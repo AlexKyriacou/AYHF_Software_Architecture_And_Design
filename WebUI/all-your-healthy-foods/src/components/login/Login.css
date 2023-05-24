@@ -25,26 +25,6 @@
     flex-direction: column;
 }
 
-.form-input {
-    margin-bottom: 16px;
-    padding: 10px;
-    border: 1px solid var(--light-shade);
-    border-radius: 4px;
-}
-
-.input-group {
-    display: flex;
-}
-  
-.input-group input {
-    flex: 1;
-    margin-right: 16px;
-}
-  
-.input-group input:last-child {
-    margin-right: 0;
-}
-
 .primary-button {
     background-color: black;
     color: white;
@@ -57,10 +37,6 @@
 
 .primary-button {
     background-color: var(--dark-shade);
-}
-
-.readonly {
-    color: var(--light-shade)
 }
 
 .password-container {

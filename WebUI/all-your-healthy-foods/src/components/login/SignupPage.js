@@ -2,7 +2,9 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link, Navigate, useLocation } from "react-router-dom";
 import { UserContext } from "../../AppContext";
 import PasswordInput from "./PasswordInput";
+import TextInputWithValidation from "../TextInputWithValidation";
 import "./Login.css";
+import SelectWithValidation from "../SelectWithValidation";
 
 const SignupPage = () => {
     const [firstName, setFirstName] = useState("");
@@ -83,30 +85,30 @@ const SignupPage = () => {
                         readOnly
                     />
                     <div className="input-group">
-                        <input
-                            type="text"
-                            placeholder="First name"
-                            className="form-input"
-                            required
+                        <TextInputWithValidation
+                            placeholder="First Name"
+                            required={true}
                             value={firstName}
-                            onChange={(e) => setFirstName(e.target.value)}
+                            regex={/^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/}
+                            regexErrorMsg="Invalid Character"
+                            parentOnChange={setFirstName}
                         />
-                        <input
-                            type="text"
+                        <TextInputWithValidation
                             placeholder="Last Name"
-                            className="form-input"
-                            required
+                            required={true}
                             value={lastName}
-                            onChange={(e) => setLastName(e.target.value)}
+                            regex={/^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/}
+                            regexErrorMsg="Invalid Character"
+                            parentOnChange={setLastName}
                         />
                     </div>
-                    <input
-                        type="email"
+                    <TextInputWithValidation
                         placeholder="Email"
-                        className="form-input"
-                        required
+                        required={true}
                         value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        regex={/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/}
+                        regexErrorMsg="Invalid Email"
+                        parentOnChange={setEmail}
                     />
                     <PasswordInput
                         placeholder="Password"
@@ -120,16 +122,16 @@ const SignupPage = () => {
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         passwordError={passwordError}
                     />
-                    <select
-                        className="form-input"
-                        required
+                    <SelectWithValidation
+                        placeholder="Select a Role"
+                        required={true}
                         value={role}
-                        onChange={(e) => setRole(e.target.value)}
-                    >
-                        <option value="">Select a Role</option>
-                        <option value="customer">Customer</option>
-                        <option value="admin">Admin</option>
-                    </select>
+                        parentOnChange={setRole}
+                        options={[
+                            { label: "Customer", value: "customer" },
+                            { label: "Admin", value: "admin" }
+                        ]}
+                    />
                     <button type="submit" className="primary-button">
                         Sign Up
                     </button>

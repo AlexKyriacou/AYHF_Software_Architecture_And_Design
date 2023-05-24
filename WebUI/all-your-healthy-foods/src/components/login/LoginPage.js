@@ -3,6 +3,7 @@ import { Link, Navigate, useLocation } from "react-router-dom";
 import PasswordInput from "./PasswordInput";
 import { UserContext } from "../../AppContext";
 import userData from "../../testData/users"; //TO DELETE ONCE WE ESTABLISH BACKEND CONNECTION
+import TextInputWithValidation from '../TextInputWithValidation'
 import "./Login.css";
 
 const LoginPage = () => {
@@ -16,8 +17,8 @@ const LoginPage = () => {
     const queryParams = new URLSearchParams(location.search);
     const from = queryParams.get("from");
 
-    const handleUsernameChange = (event) => {
-        setUsername(event.target.value);
+    const handleUsernameChange = (username) => {
+        setUsername(username);
     };
 
     const handlePasswordChange = (event) => {
@@ -48,13 +49,11 @@ const LoginPage = () => {
                     {loggedIn && (
                         <Navigate to={from ? ("/" + from) : "/"} replace={true} />
                     )}
-                    <input
-                        type="text"
+                    <TextInputWithValidation
                         placeholder="Username"
-                        className="form-input"
                         value={username}
-                        onChange={handleUsernameChange}
-                        required
+                        parentOnChange={handleUsernameChange}
+                        required={true}
                     />
                     <PasswordInput
                         placeholder="Password"
