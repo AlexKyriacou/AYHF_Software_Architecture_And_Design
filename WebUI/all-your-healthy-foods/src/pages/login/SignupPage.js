@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link, Navigate, useLocation } from "react-router-dom";
 import { UserContext } from "../../AppContext";
-import PasswordInput from "./PasswordInput";
+import PasswordInput from "../../components/PasswordInput";
+import TextInputWithValidation from '../../components/TextInputWithValidation'
 import "./Login.css";
+import SelectWithValidation from "../../components/SelectWithValidation";
 
 const SignupPage = () => {
     const [firstName, setFirstName] = useState("");
@@ -18,11 +20,6 @@ const SignupPage = () => {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const from = queryParams.get("from");
-
-    const isValidPassword = (password) => {
-        const passwordValidationRegex = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
-        return passwordValidationRegex.test(password);
-    };
 
     const doPasswordsMatch = (password, confirmPassword) => {
         return password === confirmPassword;
@@ -44,26 +41,24 @@ const SignupPage = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if (isValidPassword(password)) {
-            if (doPasswordsMatch(password, confirmPassword)) {
-                setPasswordError("");
 
-                const user = {
-                    name: firstName + " " + lastName,
-                    username,
-                    email,
-                    password,
-                    role
-                };
+        if (doPasswordsMatch(password, confirmPassword)) {
+            setPasswordError("");
 
-                // TODO: Send the user object to the backend and get the backend response
-                console.log("User: ", user);
-            } else {
-                setPasswordError("Passwords do not match");
-            }
+            const user = {
+                name: firstName + " " + lastName,
+                username,
+                email,
+                password,
+                role
+            };
+
+            // TODO: Send the user object to the backend and get the backend response
+            console.log("User: ", user);
         } else {
-            setPasswordError("Password does not meet the policy requirements");
+            setPasswordError("Passwords do not match");
         }
+
     };
 
     return (
@@ -77,59 +72,61 @@ const SignupPage = () => {
                     <input
                         type="text"
                         placeholder="Username"
-                        className="form-input readonly"
+                        className="text-input readonly"
                         required
                         value={username}
                         readOnly
                     />
                     <div className="input-group">
-                        <input
-                            type="text"
-                            placeholder="First name"
-                            className="form-input"
-                            required
+                        <TextInputWithValidation
+                            placeholder="First Name"
+                            required={true}
                             value={firstName}
-                            onChange={(e) => setFirstName(e.target.value)}
+                            regex={/^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/}
+                            regexErrorMsg="Invalid Character"
+                            parentOnChange={setFirstName}
                         />
-                        <input
-                            type="text"
+                        <TextInputWithValidation
                             placeholder="Last Name"
-                            className="form-input"
-                            required
+                            required={true}
                             value={lastName}
-                            onChange={(e) => setLastName(e.target.value)}
+                            regex={/^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/}
+                            regexErrorMsg="Invalid Character"
+                            parentOnChange={setLastName}
                         />
                     </div>
-                    <input
-                        type="email"
+                    <TextInputWithValidation
                         placeholder="Email"
-                        className="form-input"
-                        required
+                        required={true}
                         value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        regex={/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/}
+                        regexErrorMsg="Invalid Email"
+                        parentOnChange={setEmail}
                     />
                     <PasswordInput
                         placeholder="Password"
                         showInfo={true}
-                        onChange={(e) => setPassword(e.target.value)}
+                        onChange={setPassword}
                         passwordError={passwordError}
+                        checkPattern={true}
                     />
                     <PasswordInput
                         placeholder="Confirm password"
                         value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        onChange={setConfirmPassword}
                         passwordError={passwordError}
+                        checkPattern={true}
                     />
-                    <select
-                        className="form-input"
-                        required
+                    <SelectWithValidation
+                        placeholder="Select a Role"
+                        required={true}
                         value={role}
-                        onChange={(e) => setRole(e.target.value)}
-                    >
-                        <option value="">Select a Role</option>
-                        <option value="customer">Customer</option>
-                        <option value="admin">Admin</option>
-                    </select>
+                        parentOnChange={setRole}
+                        options={[
+                            { label: "Customer", value: "customer" },
+                            { label: "Admin", value: "admin" }
+                        ]}
+                    />
                     <button type="submit" className="primary-button">
                         Sign Up
                     </button>

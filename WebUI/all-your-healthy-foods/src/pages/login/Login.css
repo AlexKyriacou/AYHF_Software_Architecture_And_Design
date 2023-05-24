@@ -1,0 +1,45 @@
+@import "/src/colors.css";
+
+.page-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.page-card {
+    background-color: white;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.page-title {
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--text-color);
+}
+
+.page-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.primary-button {
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.primary-button {
+    background-color: var(--dark-shade);
+}
+
+.switch {
+    text-decoration: none;
+    color: var(--text-color);
+}

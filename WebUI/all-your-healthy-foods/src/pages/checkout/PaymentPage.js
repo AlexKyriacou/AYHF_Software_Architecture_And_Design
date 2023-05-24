@@ -6,52 +6,32 @@ import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { faPaypal, faCcMastercard } from "@fortawesome/free-brands-svg-icons";
 import { UserContext } from "../../AppContext";
 import { paypalPaymentData, creditCardPaymentData } from "../../testData/paymentData"
+import TextInputWithValidation from "../../components/TextInputWithValidation"
+import PasswordInput from "../../components/PasswordInput"
 import './Checkout.css';
 
-function clearInputs() {
-    const inputs = [document.getElementById("email"),
-    document.getElementById("password"),
-    document.getElementById("cardHolderName"),
-    document.getElementById("cardNumber"),
-    document.getElementById("cvv")];
-
-    inputs.forEach(element => {
-        if (element) {
-            element.value = "";
-        }
-    });
-
-}
-
-function validateForm(paymentMethod) {
+function validateForm(paymentMethod, paymentDetails) {
     if (paymentMethod === "paypal") {
-        const email = document.getElementById("email").value;
-        const password = document.getElementById("password").value;
-
-        if (!email || !password) {
+        if (!paymentDetails.email || !paymentDetails.password) {
             return "Please provide email and password for PayPal.";
         }
 
         const isValid = paypalPaymentData.some(
-            ({ email: dbEmail, password: dbPassword }) =>
-                email === dbEmail && password === dbPassword
+            ({ email, password }) =>
+                paymentDetails.email === email && paymentDetails.password === password
         );
 
         if (!isValid) {
             return "Invalid Email Or Password, please try again.";
         }
     } else if (paymentMethod === "creditcard") {
-        const cardHolderName = document.getElementById("cardHolderName").value;
-        const cardNumber = document.getElementById("cardNumber").value;
-        const cvv = document.getElementById("cvv").value;
-
-        if (!cardHolderName || !cardNumber || !cvv) {
+        if (!paymentDetails.cardHolderName || !paymentDetails.cardNumber || !paymentDetails.cvv) {
             return "Please provide all required information for Credit Card.";
         }
 
         const isValid = creditCardPaymentData.some(
             ({ cardHolderName: dbCardHolderName, cardNumber: dbCardNumber, cvv: dbCvv }) =>
-                cardHolderName === dbCardHolderName && cardNumber === dbCardNumber && cvv === dbCvv
+                paymentDetails.cardHolderName === dbCardHolderName && paymentDetails.cardNumber === dbCardNumber && paymentDetails.cvv === dbCvv
         );
 
         if (!isValid) {
@@ -66,8 +46,21 @@ function validateForm(paymentMethod) {
 
 function PaymentPage() {
     const { loggedIn } = useContext(UserContext);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [cardHolderName, setCardHolderName] = useState("");
+    const [cardNumber, setCardNumber] = useState("");
+    const [cvv, setCVV] = useState("");
     const [paymentMethod, setPaymentMethod] = useState(""); // State to track the selected payment method
     const [formErrorMessage, setFormErrorMessage] = useState("");
+
+    const clearInputs = () => {
+        setEmail("");
+        setPassword("");
+        setCardHolderName("");
+        setCardNumber("");
+        setCVV("");
+    }
 
     const handlePaymentMethodChange = (event) => {
         clearInputs();
@@ -79,16 +72,45 @@ function PaymentPage() {
         if (paymentMethod === "paypal") {
             return (
                 <div className="input-group">
-                    <input className="form-input" placeholder="Email" id="email" type="email" name="email" />
-                    <input className="form-input" placeholder="Password" id="password" type="password" name="password" />
+                    <TextInputWithValidation
+                        placeholder="Email"
+                        regex={/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/}
+                        regexErrorMsg="Invalid Email"
+                        value={email}
+                        parentOnChange={setEmail}
+                    />
+                    <PasswordInput
+                        placeholder="Password"
+                        value={password}
+                        onChange={setPassword}
+                        checkPattern={false}
+                    />
                 </div>
             );
         } else if (paymentMethod === "creditcard") {
             return (
                 <div className="input-group">
-                    <input className="form-input" placeholder="Card Holder Name" id="cardHolderName" type="text" name="cardHolderName" />
-                    <input className="form-input" placeholder="Card Number" id="cardNumber" type="text" name="cardNumber" />
-                    <input className="form-input" placeholder="CVV" id="cvv" type="text" name="cvv" />
+                    <TextInputWithValidation
+                        placeholder="Card Holder Name"
+                        regex={/^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/}
+                        regexErrorMsg="Invalid Character"
+                        value={cardHolderName}
+                        parentOnChange={setCardHolderName}
+                    />
+                    <TextInputWithValidation
+                        placeholder="Card Number"
+                        regex={/^5[1-5][0-9]{14}|^(222[1-9]|22[3-9]\\d|2[3-6]\\d{2}|27[0-1]\\d|2720)[0-9]{12}$/}
+                        regexErrorMsg="Invalid Mastercard Number"
+                        value={cardNumber}
+                        parentOnChange={setCardNumber}
+                    />
+                    <TextInputWithValidation
+                        placeholder="CVV"
+                        regex={/^\d{3}$/}
+                        regexErrorMsg="CVV Must be exactly 3 digits long"
+                        value={cvv}
+                        parentOnChange={setCVV}
+                    />
                 </div>
             );
         } else {
@@ -96,10 +118,18 @@ function PaymentPage() {
         }
     };
 
-    const handleLinkClick = () => {
-        const errorMessage = validateForm(paymentMethod);
+    const handleLinkClick = (event) => {
+        const paymentDetails = {
+            email: email,
+            password: password,
+            cardHolderName: cardHolderName,
+            cardNumber: cardNumber,
+            cvv: cvv
+        }
+        const errorMessage = validateForm(paymentMethod, paymentDetails);
 
         if (errorMessage) {
+            event.preventDefault();
             setFormErrorMessage(errorMessage);
         } else {
             setFormErrorMessage("");
@@ -135,13 +165,14 @@ function PaymentPage() {
                 </div>
             </form>
             {renderPaymentForm()}
-            {formErrorMessage && (<span className="error">{formErrorMessage}</span>)}
+            {formErrorMessage && (<span className="error-message">{formErrorMessage}</span>)}
             <OrderSummary
                 extra={
                     <div>
                         <Link
                             className={`link-button ${(loggedIn && paymentMethod) ? "" : "disabled"}`}
                             onClick={handleLinkClick}
+                            to="/order-confirmation"
                         >
                             <FontAwesomeIcon icon={faLock} aria-hidden="true" /> Pay Securely
                         </Link>

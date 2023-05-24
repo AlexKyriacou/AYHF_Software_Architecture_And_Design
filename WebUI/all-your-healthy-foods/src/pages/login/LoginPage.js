@@ -1,8 +1,9 @@
 import React, { useState, useContext } from "react";
 import { Link, Navigate, useLocation } from "react-router-dom";
-import PasswordInput from "./PasswordInput";
+import PasswordInput from "../../components/PasswordInput";
 import { UserContext } from "../../AppContext";
-import userData from "../../testData/users"; //TO DELETE ONCE WE ESTABLISH BACKEND CONNECTION
+import userData from "../../testData/userData"; //TO DELETE ONCE WE ESTABLISH BACKEND CONNECTION
+import TextInputWithValidation from '../../components/TextInputWithValidation'
 import "./Login.css";
 
 const LoginPage = () => {
@@ -15,14 +16,6 @@ const LoginPage = () => {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const from = queryParams.get("from");
-
-    const handleUsernameChange = (event) => {
-        setUsername(event.target.value);
-    };
-
-    const handlePasswordChange = (event) => {
-        setPassword(event.target.value);
-    };
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -44,22 +37,21 @@ const LoginPage = () => {
             <div className="page-card">
                 <h2 className="page-title">Login</h2>
                 <form className="page-form" onSubmit={handleSubmit}>
-                    {loginError && <span className="error">{loginError}</span>}
+                    {loginError && <span className="error-message">{loginError}</span>}
                     {loggedIn && (
                         <Navigate to={from ? ("/" + from) : "/"} replace={true} />
                     )}
-                    <input
-                        type="text"
+                    <TextInputWithValidation
                         placeholder="Username"
-                        className="form-input"
                         value={username}
-                        onChange={handleUsernameChange}
-                        required
+                        parentOnChange={setUsername}
+                        required={true}
                     />
                     <PasswordInput
                         placeholder="Password"
                         value={password}
-                        onChange={handlePasswordChange}
+                        onChange={setPassword}
+                        checkPattern={false}
                     />
                     <button type="submit" className="primary-button">Login</button>
                 </form>
