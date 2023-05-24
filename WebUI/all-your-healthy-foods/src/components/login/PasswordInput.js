@@ -7,6 +7,7 @@ const PasswordInput = ({ placeholder, showInfo, onChange, passwordError }) => {
     const [passwordShown, setPasswordShown] = useState(false);
     const [passwordPolicyVisible, setPasswordPolicyVisible] = useState(false);
     const passwordContainerRef = useRef(null);
+    const isEdgeBrowser = navigator.userAgent.indexOf("Edg") !== -1;
 
     const togglePasswordVisibility = () => {
         setPasswordShown(!passwordShown);
@@ -18,7 +19,10 @@ const PasswordInput = ({ placeholder, showInfo, onChange, passwordError }) => {
 
     useEffect(() => {
         const handleClickOutside = (event) => {
-            if (passwordContainerRef.current && !passwordContainerRef.current.contains(event.target)) {
+            if (
+                passwordContainerRef.current &&
+                !passwordContainerRef.current.contains(event.target)
+            ) {
                 setPasswordPolicyVisible(false);
             }
         };
@@ -40,11 +44,13 @@ const PasswordInput = ({ placeholder, showInfo, onChange, passwordError }) => {
                     required
                     onChange={onChange}
                 />
-                <FontAwesomeIcon
-                    icon={passwordShown ? faEyeSlash : faEye}
-                    className="toggle-password password-icon"
-                    onClick={togglePasswordVisibility}
-                />
+                {!isEdgeBrowser && (
+                    <FontAwesomeIcon
+                        icon={passwordShown ? faEyeSlash : faEye}
+                        className="toggle-password password-icon"
+                        onClick={togglePasswordVisibility}
+                    />
+                )}
                 <div className="password-info-container">
                     {showInfo && (
                         <FontAwesomeIcon
@@ -61,7 +67,9 @@ const PasswordInput = ({ placeholder, showInfo, onChange, passwordError }) => {
                                 <li>Contains at least one uppercase letter (A-Z)</li>
                                 <li>Contains at least one lowercase letter (a-z)</li>
                                 <li>Contains at least one digit (0-9)</li>
-                                <li>Contains at least one special character (e.g. !,@,#,$,%,&,*)</li>
+                                <li>
+                                    Contains at least one special character (e.g. !,@,#,$,%,&,*)
+                                </li>
                             </ul>
                         </div>
                     )}
