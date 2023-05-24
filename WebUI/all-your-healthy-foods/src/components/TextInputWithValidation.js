@@ -12,12 +12,14 @@ function validateInput(value, required, regex, regexErrorMsg) {
 }
 
 function TextInputWithValidation({
+    type = "text",
     placeholder,
     required,
     regex = "",
     regexErrorMsg = "",
     parentOnChange,
-    readonly
+    readonly,
+    customErrorMsg = ""
 }) {
     const [value, setValue] = useState("");
     const [error, setError] = useState("");
@@ -36,15 +38,15 @@ function TextInputWithValidation({
     return (
         <div className="input-with-validation">
             <input
-                type="text"
+                type={type}
                 placeholder={placeholder}
-                className={`text-input ${readonly ? 'readonly' : ''}`}
+                className={`text-input-validation ${readonly ? 'readonly' : ''}`}
                 value={value}
                 required={required}
                 onChange={handleChange}
                 readOnly={readonly}
             />
-            {error && <span className="error-message">{error}</span>}
+            {(error || customErrorMsg) && <span className="error-message">{error || customErrorMsg}</span>}
         </div>
     );
 }

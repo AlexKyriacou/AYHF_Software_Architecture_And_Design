@@ -7,7 +7,7 @@ import { faPaypal, faCcMastercard } from "@fortawesome/free-brands-svg-icons";
 import { UserContext } from "../../AppContext";
 import { paypalPaymentData, creditCardPaymentData } from "../../testData/paymentData"
 import TextInputWithValidation from "../../components/TextInputWithValidation"
-import PasswordInput from "../../components/login/PasswordInput"
+import PasswordInput from "../../components/PasswordInput"
 import './Checkout.css';
 
 function validateForm(paymentMethod, paymentDetails) {
@@ -83,6 +83,7 @@ function PaymentPage() {
                         placeholder="Password"
                         value={password}
                         onChange={setPassword}
+                        checkPattern={false}
                     />
                 </div>
             );
@@ -163,7 +164,7 @@ function PaymentPage() {
                 </div>
             </form>
             {renderPaymentForm()}
-            {formErrorMessage && (<span className="error">{formErrorMessage}</span>)}
+            {formErrorMessage && (<span className="error-message">{formErrorMessage}</span>)}
             <OrderSummary
                 extra={
                     <div>

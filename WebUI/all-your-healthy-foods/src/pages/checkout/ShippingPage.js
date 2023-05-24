@@ -85,6 +85,9 @@ function ShippingPage() {
                         required={true}
                         value={postcode}
                         parentOnChange={handlePostcodeChange}
+                        regex={/^\d{4}$/}
+                        regexErrorMsg="Postcode Must be exactly 4 digits long"
+                        customErrorMsg={!isPostcodeValid ? "Invalid postcode for the selected state/territory" : ""}
                     />
                 </div>
                 <SelectWithValidation
@@ -102,10 +105,7 @@ function ShippingPage() {
                         { label: "Western Australia", value: "WA" }
                     ]}
                 />
-                {!isPostcodeValid && (
-                    <span className="error">Invalid postcode for the selected state/territory</span>
-                )}
-                {formErrorMessage && (<span className="error">{formErrorMessage}</span>)}
+                {formErrorMessage && (<span className="error-message">{formErrorMessage}</span>)}
             </form>
             <OrderSummary
                 extra={

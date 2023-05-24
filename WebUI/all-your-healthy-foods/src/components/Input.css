@@ -4,10 +4,14 @@
     margin-bottom: 16px;
 }
 
-.text-input {
+.text-input-validation, .text-input {
     padding: 10px;
     border: 1px solid var(--light-shade);
     border-radius: 4px;
+}
+
+.text-input {
+    margin-bottom: 16px;
 }
 
 .error-message {
@@ -32,4 +36,17 @@
 
 .readonly {
     color: var(--light-shade)
+}
+
+.password-container {
+    display: flex;
+    align-items: baseline;
+}
+
+.password-container .input-with-validation {
+    width:  100%;
+}
+
+.password-container svg {
+    padding: 0 5px 0 5px;
 }

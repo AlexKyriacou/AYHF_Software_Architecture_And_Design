@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link, Navigate, useLocation } from "react-router-dom";
 import { UserContext } from "../../AppContext";
-import PasswordInput from "./PasswordInput";
+import PasswordInput from "../PasswordInput";
 import TextInputWithValidation from "../TextInputWithValidation";
 import "./Login.css";
 import SelectWithValidation from "../SelectWithValidation";
@@ -20,11 +20,6 @@ const SignupPage = () => {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const from = queryParams.get("from");
-
-    const isValidPassword = (password) => {
-        const passwordValidationRegex = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
-        return passwordValidationRegex.test(password);
-    };
 
     const doPasswordsMatch = (password, confirmPassword) => {
         return password === confirmPassword;
@@ -46,26 +41,24 @@ const SignupPage = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if (isValidPassword(password)) {
-            if (doPasswordsMatch(password, confirmPassword)) {
-                setPasswordError("");
 
-                const user = {
-                    name: firstName + " " + lastName,
-                    username,
-                    email,
-                    password,
-                    role
-                };
+        if (doPasswordsMatch(password, confirmPassword)) {
+            setPasswordError("");
 
-                // TODO: Send the user object to the backend and get the backend response
-                console.log("User: ", user);
-            } else {
-                setPasswordError("Passwords do not match");
-            }
+            const user = {
+                name: firstName + " " + lastName,
+                username,
+                email,
+                password,
+                role
+            };
+
+            // TODO: Send the user object to the backend and get the backend response
+            console.log("User: ", user);
         } else {
-            setPasswordError("Password does not meet the policy requirements");
+            setPasswordError("Passwords do not match");
         }
+
     };
 
     return (
@@ -79,7 +72,7 @@ const SignupPage = () => {
                     <input
                         type="text"
                         placeholder="Username"
-                        className="form-input readonly"
+                        className="text-input readonly"
                         required
                         value={username}
                         readOnly
@@ -113,14 +106,16 @@ const SignupPage = () => {
                     <PasswordInput
                         placeholder="Password"
                         showInfo={true}
-                        onChange={(e) => setPassword(e.target.value)}
+                        onChange={setPassword}
                         passwordError={passwordError}
+                        checkPattern={true}
                     />
                     <PasswordInput
                         placeholder="Confirm password"
                         value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        onChange={setConfirmPassword}
                         passwordError={passwordError}
+                        checkPattern={true}
                     />
                     <SelectWithValidation
                         placeholder="Select a Role"
