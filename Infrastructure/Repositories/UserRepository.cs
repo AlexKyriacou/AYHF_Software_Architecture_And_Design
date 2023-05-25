@@ -1,10 +1,11 @@
 using AYHF_Software_Architecture_And_Design.Domain.Entities.Interfaces;
+using AYHF_Software_Architecture_And_Design.Infrastructure.Interfaces;
 using Microsoft.Data.Sqlite;
 using MyProject.Domain.Models;
 
 namespace MyProject.Infrastructure.Repositories;
 
-public class UserRepository : RepositoryBase
+public class UserRepository : RepositoryBase, IUserRepository
 {
     private static UserRepository? _instance;
 
@@ -22,6 +23,27 @@ public class UserRepository : RepositoryBase
         }
     }
 
+    public IUser GetUserById(int id)
+    {
+        IUser user = new User();
+        string selectQuery = "SELECT * FROM Users WHERE Id = @id";
+        using (var selectCommand = new SqliteCommand(selectQuery, Connection))
+        {
+            selectCommand.Parameters.AddWithValue("@id", id);
+            using (var reader = selectCommand.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    user.Id = reader.GetInt32(0);
+                    user.Username = reader.GetString(1);
+                    user.Password = reader.GetString(2);
+                    user.Email = reader.GetString(3);
+                }
+            }
+        }
+        return user;
+    }
+
     public void AddUser(IUser user)
     {
         string insertQuery = "INSERT INTO Users (Id, Username, Password, Email, Role) VALUES (@userId, @username, @password, @email, @role)";
@@ -35,8 +57,33 @@ public class UserRepository : RepositoryBase
             insertCommand.ExecuteNonQuery();
         }
     }
+    
+    public List<IUser> GetUsers()
+    {
+        List<IUser> users = new List<IUser>();
+        string selectQuery = "SELECT * FROM Users";
+        using (var selectCommand = new SqliteCommand(selectQuery, Connection))
+        {
+            using (var reader = selectCommand.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    IUser user = new User
+                    {
+                        Id = reader.GetInt32(0),
+                        Username = reader.GetString(1),
+                        Password = reader.GetString(2),
+                        Email = reader.GetString(3),
+                        // role etc
+                    };
+                    users.Add(user);
+                }
+            }
+        }
 
-
+        return users;
+    }
+    
     public T? GetUserById<T>(int entityId) where T : IUser, new()
     {
         string selectQuery = "SELECT * FROM Users WHERE Id = @entityId";
