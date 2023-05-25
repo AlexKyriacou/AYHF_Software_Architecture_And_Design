@@ -22,7 +22,7 @@ public class UserRepository : RepositoryBase
         }
     }
 
-    public void AddUser(User user)
+    public void AddUser(IUser user)
     {
         string insertQuery = "INSERT INTO Users (Id, Username, Password, Email, Role) VALUES (@userId, @username, @password, @email, @role)";
         using (var insertCommand = new SqliteCommand(insertQuery, Connection))
@@ -31,7 +31,6 @@ public class UserRepository : RepositoryBase
             insertCommand.Parameters.AddWithValue("@username", user.Username);
             insertCommand.Parameters.AddWithValue("@password", user.Password);
             insertCommand.Parameters.AddWithValue("@email", user.Email);
-            insertCommand.Parameters.AddWithValue("@role", user.Role);
 
             insertCommand.ExecuteNonQuery();
         }
@@ -68,7 +67,7 @@ public class UserRepository : RepositoryBase
     }
 
 
-    public void UpdateUser(User user)
+    public void UpdateUser(IUser user)
     {
         string updateQuery = "UPDATE Users SET Username = @username, Password = @password, Email = @email, Role = @role WHERE Id = @userId";
         using (var updateCommand = new SqliteCommand(updateQuery, Connection))
@@ -76,7 +75,6 @@ public class UserRepository : RepositoryBase
             updateCommand.Parameters.AddWithValue("@username", user.Username);
             updateCommand.Parameters.AddWithValue("@password", user.Password);
             updateCommand.Parameters.AddWithValue("@email", user.Email);
-            updateCommand.Parameters.AddWithValue("@role", user.Role);
             updateCommand.Parameters.AddWithValue("@userId", user.Id);
 
             updateCommand.ExecuteNonQuery();
@@ -84,7 +82,7 @@ public class UserRepository : RepositoryBase
     }
 
 
-    public void DeleteUser(User user)
+    public void DeleteUser(IUser user)
     {
         string deleteQuery = "DELETE FROM Users WHERE Id = @userId";
         using (var deleteCommand = new SqliteCommand(deleteQuery, Connection))

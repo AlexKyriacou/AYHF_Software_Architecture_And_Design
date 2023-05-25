@@ -1,5 +1,6 @@
 using AYHF_Software_Architecture_And_Design.Domain.Entities.Interfaces;
 using MyProject.Domain.Interfaces;
+using MyProject.Infrastructure.Repositories;
 
 namespace MyProject.Domain.Models;
 
@@ -11,20 +12,29 @@ public class Admin : IUser
     public string Username { get; set; }
     public string Password { get; set; }
     public string Email { get; set; }
+    public string Role { get; set; }
+
+    private readonly UserRepository _userRepository;
+
+    public Admin()
+    {
+        _userRepository = UserRepository.Instance;
+        Role = "Admin";
+    }
 
     public void Save()
     {
-        // Logic to save the admin to the database
+        _userRepository.AddUser(this);
     }
 
     public void Update()
     {
-        // Logic to update the admin in the database
+        _userRepository.UpdateUser(this);
     }
 
     public void Delete()
     {
-        // Logic to delete the admin from the database
+        _userRepository.DeleteUser(this);
     }
 
     // Additional methods specific to admins

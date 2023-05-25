@@ -1,31 +1,43 @@
 using AYHF_Software_Architecture_And_Design.Domain.Entities.Interfaces;
+using MyProject.Infrastructure.Repositories;
 
-namespace MyProject.Domain.Models;
-
-public class Customer : IUser
+namespace MyProject.Domain.Models
 {
-    // Additional properties specific to customers
-    public List<Order> Orders { get; set; }
-    public DeliveryAddress DeliveryAddress { get; set; }
-    public int Id { get; set; }
-    public string Username { get; set; }
-    public string Password { get; set; }
-    public string Email { get; set; }
-
-    public void Save()
+    public class Customer : IUser
     {
-        // Logic to save the customer to the database
-    }
+        // Additional properties specific to customers
+        public List<Order> Orders { get; set; }
+        public DeliveryAddress DeliveryAddress { get; set; }
+        public int Id { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public string Email { get; set; }
+        public string Role { get; set; }
 
-    public void Update()
-    {
-        // Logic to update the customer in the database
-    }
 
-    public void Delete()
-    {
-        // Logic to delete the customer from the database
-    }
+        private readonly UserRepository _userRepository;
 
-    // Additional methods specific to customers
+        public Customer()
+        {
+            _userRepository = UserRepository.Instance;
+            Role = "Customer";
+        }
+
+        public void Save()
+        {
+            _userRepository.AddUser(this);
+        }
+
+        public void Update()
+        {
+            _userRepository.UpdateUser(this);
+        }
+
+        public void Delete()
+        {
+            _userRepository.DeleteUser(this);
+        }
+
+        // Additional methods specific to customers
+    }
 }
