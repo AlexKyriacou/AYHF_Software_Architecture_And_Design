@@ -338,11 +338,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Uni\\Software Architecture & Design\\AYHF_Software_Architecture_And_Design\\AYHF_Software_Architecture_And_Design.csproj",
+      "projectUniqueName": "C:\\Uni\\Software Architecture And Design\\AYHF_Software_Architecture_And_Design\\AYHF_Software_Architecture_And_Design.csproj",
       "projectName": "AYHF_Software_Architecture_And_Design",
-      "projectPath": "C:\\Uni\\Software Architecture & Design\\AYHF_Software_Architecture_And_Design\\AYHF_Software_Architecture_And_Design.csproj",
+      "projectPath": "C:\\Uni\\Software Architecture And Design\\AYHF_Software_Architecture_And_Design\\AYHF_Software_Architecture_And_Design.csproj",
       "packagesPath": "C:\\Users\\akyri\\.nuget\\packages\\",
-      "outputPath": "C:\\Uni\\Software Architecture & Design\\AYHF_Software_Architecture_And_Design\\obj\\",
+      "outputPath": "C:\\Uni\\Software Architecture And Design\\AYHF_Software_Architecture_And_Design\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\akyri\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -353,6 +353,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\sdk\\7.0.302\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -395,7 +396,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.200\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
       }
     }
   }
