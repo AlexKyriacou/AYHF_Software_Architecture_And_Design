@@ -2,16 +2,19 @@ namespace AYHF_Software_Architecture_And_Design.Domain.Entities.Interfaces;
 
 public interface IUser
 {
-    int Id { get; set; }
-    string Username { get; set; }
-    string Password { get; set; }
 
-    string Email { get; set; }
-    // Add any additional properties common to all users
+    public string Role { get; set; }
+    public int Id { get; set; }
+    public string Username { get; set; }
+    public string Password { get; set; }
+    public string Email { get; set; }
 
-    void Save();
-    void Update();
+    public void Save();
 
-    void Delete();
-    // Add any additional methods common to all users
+
+    public void Update();
+
+
+    public void Delete();
+
 }
