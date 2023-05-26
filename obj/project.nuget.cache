@@ -1,12 +1,15 @@
 {
   "version": 2,
-  "dgSpecHash": "xJ+FjOMsMD8vDfFvcP7yPkzmgolmlhJGJcmkw8BhJTYjPz7MRm1CTzew+1fMvYWCQzCfoZoV81+Tg1qsNJPvDA==",
+  "dgSpecHash": "Fiq57WG+QI9kKCp8kHlEUhxtn74rKvbH5hRC+a09849WkB2RJSPSmkyGRIKoOaKK1GPeFZwha+eWNPXZNq2xqg==",
   "success": true,
   "projectFilePath": "/Users/Julian.Codespoti/Desktop/Uni/SAD/AYHF_Software_Architecture_And_Design/AYHF_Software_Architecture_And_Design.csproj",
   "expectedPackageFiles": [
+    "/Users/Julian.Codespoti/.nuget/packages/mediatr/12.0.1/mediatr.12.0.1.nupkg.sha512",
+    "/Users/Julian.Codespoti/.nuget/packages/mediatr.contracts/2.0.1/mediatr.contracts.2.0.1.nupkg.sha512",
     "/Users/Julian.Codespoti/.nuget/packages/microsoft.data.sqlite/7.0.5/microsoft.data.sqlite.7.0.5.nupkg.sha512",
     "/Users/Julian.Codespoti/.nuget/packages/microsoft.data.sqlite.core/7.0.5/microsoft.data.sqlite.core.7.0.5.nupkg.sha512",
     "/Users/Julian.Codespoti/.nuget/packages/microsoft.extensions.apidescription.server/6.0.5/microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
+    "/Users/Julian.Codespoti/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/6.0.0/microsoft.extensions.dependencyinjection.abstractions.6.0.0.nupkg.sha512",
     "/Users/Julian.Codespoti/.nuget/packages/microsoft.openapi/1.2.3/microsoft.openapi.1.2.3.nupkg.sha512",
     "/Users/Julian.Codespoti/.nuget/packages/sqlitepclraw.bundle_e_sqlite3/2.1.4/sqlitepclraw.bundle_e_sqlite3.2.1.4.nupkg.sha512",
     "/Users/Julian.Codespoti/.nuget/packages/sqlitepclraw.core/2.1.4/sqlitepclraw.core.2.1.4.nupkg.sha512",
