@@ -14,37 +14,29 @@ namespace AYHF_Software_Architecture_And_Design.Application.Services
             _userRepository = userRepository;
         }
 
-        public Task<List<IUser>> GetUsers()
+        public Task<List<IUser>> GetUsersAsync()
         {
-            return Task<List<IUser>>.FromResult(_userRepository.GetUsers());
+            return _userRepository.GetUsersAsync();
         }
 
-        public Task<IUser> GetUserById(int id)
+        public Task<IUser> GetUserByIdAsync(int id)
         {
-            IUser user = _userRepository.GetUserById(id);
-            return Task.FromResult(user);
+            return _userRepository.GetUserByIdAsync(id);
         }
 
-
-        public Task AddUser(IUser user)
+        public Task AddUserAsync(IUser user)
         {
-            _userRepository.AddUser(user);
-            return Task.CompletedTask;
+            return _userRepository.AddUserAsync(user);
         }
 
-        public Task UpdateUser(IUser user)
+        public Task UpdateUserAsync(IUser user)
         {
-            _userRepository.UpdateUser(user);
-            return Task.CompletedTask;
+            return _userRepository.UpdateUserAsync(user);
         }
 
-        public async Task DeleteUser(int id)
+        public Task DeleteUserAsync(int id)
         {
-            IUser userToDelete = await GetUserById(id);
-            if (userToDelete != null)
-            {
-                _userRepository.DeleteUser(userToDelete);
-            }
+            return _userRepository.DeleteUserAsync(id);
         }
     }
 }

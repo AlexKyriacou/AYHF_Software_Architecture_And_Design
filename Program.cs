@@ -1,10 +1,10 @@
-using AYHF_Software_Architecture_And_Design.Application.Dtos;
-using AYHF_Software_Architecture_And_Design.Application.Services;
-using AYHF_Software_Architecture_And_Design.Domain.Entities.Interfaces;
-using AYHF_Software_Architecture_And_Design.Infrastructure.Interfaces;
 using Microsoft.OpenApi.Models;
+using MyProject.Application.Services;
 using MyProject.Domain.Models;
 using MyProject.Infrastructure.Repositories;
+using System.Net;
+using AYHF_Software_Architecture_And_Design.Application.Services;
+using AYHF_Software_Architecture_And_Design.Infrastructure.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,51 +14,28 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
 });
+
+// Register your services
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<OrderService>();
+builder.Services.AddScoped<ProductService>();
 
 var app = builder.Build();
 
-// Configure the endpoints
-app.MapGet("/", () => "Hello World!");
-app.MapGet("/users", async () =>
-{
-    var userService = app.Services.GetService(typeof(UserService)) as UserService;
-    return await userService.GetUsers();
-});
+// Define routes for Users
+var userRoutes = new UserRoutes(app);
+userRoutes.Configure();
 
-app.MapGet("/users/{id}", async (int id) =>
-{
-    var userService = app.Services.GetService(typeof(UserService)) as UserService;
-    var user = await userService.GetUserById(id);
-    return user == null ? Results.NotFound() : Results.Ok(user);
-});
+// Define routes for Orders
+var orderRoutes = new OrderRoutes(app);
+orderRoutes.Configure();
 
-app.MapPost("/users", async (UserDto userDto) =>
-{
-    var userService = app.Services.GetService(typeof(UserService)) as UserService;
-    // Conversion from DTO to domain object would happen here
-    IUser user = new User { Id = userDto.Id, Username = userDto.Username };
-    await userService.AddUser(user);
-    return Results.Created($"/users/{user.Id}", user);
-});
-
-app.MapPut("/users/{id}", async (int id, UserDto userDto) =>
-{
-    var userService = app.Services.GetService(typeof(UserService)) as UserService;
-    // Conversion from DTO to domain object would happen here
-    IUser user = new User { Id = userDto.Id, Username = userDto.Username };
-    await userService.UpdateUser(user);
-    return Results.NoContent();
-});
-
-app.MapDelete("/users/{id}", async (int id) =>
-{
-    var userService = app.Services.GetService(typeof(UserService)) as UserService;
-    await userService.DeleteUser(id);
-    return Results.NoContent();
-});
-
+// Define routes for Products
+var productRoutes = new ProductRoutes(app);
+productRoutes.Configure();
 
 // Configure Swagger
 app.UseSwagger();

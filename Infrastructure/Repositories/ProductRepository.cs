@@ -1,151 +1,113 @@
 using Microsoft.Data.Sqlite;
 using MyProject.Domain.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace MyProject.Infrastructure.Repositories;
-
-public class ProductRepository : RepositoryBase
+namespace MyProject.Infrastructure.Repositories
 {
-    private static ProductRepository? _instance;
-
-    public ProductRepository()
+    public class ProductRepository : RepositoryBase, IProductRepository
     {
-        _instance = this;
-    }
-
-    public static ProductRepository Instance
-    {
-        get
+        public ProductRepository() : base()
         {
-            _instance ??= new ProductRepository();
-            return _instance;
+            CreateTables();
         }
-    }
 
-    public void AddProduct(Product product)
-    {
-        CreateTables();
-
-        using (var transaction = Connection.BeginTransaction())
+        protected override void CreateTables()
         {
-            var command = Connection.CreateCommand();
-            command.CommandText = "INSERT INTO Products (Id, Name, Price, Description, Images) VALUES (@id, @name, @price, @description, @images)";
-            command.Parameters.AddWithValue("@id", product.Id);
+            string createTableQuery = "CREATE TABLE IF NOT EXISTS Products (" +
+                                      "Id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                                      "Name TEXT NOT NULL, " +
+                                      "Price REAL NOT NULL, " +
+                                      "Description TEXT, " +
+                                      "Images TEXT)";
+
+            using var createTableCommand = new SqliteCommand(createTableQuery, Connection);
+            createTableCommand.ExecuteNonQuery();
+        }
+
+        public async Task AddProductAsync(Product product)
+        {
+            string insertQuery = "INSERT INTO Products (Name, Price, Description, Images) " +
+                                 "VALUES (@name, @price, @description, @images)";
+
+            await using var command = new SqliteCommand(insertQuery, Connection);
             command.Parameters.AddWithValue("@name", product.Name);
             command.Parameters.AddWithValue("@price", product.Price);
             command.Parameters.AddWithValue("@description", product.Description);
             command.Parameters.AddWithValue("@images", string.Join(",", product.Images));
 
-            command.ExecuteNonQuery();
-
-            transaction.Commit();
+            await command.ExecuteNonQueryAsync();
         }
-    }
 
-    public void UpdateProduct(Product product)
-    {
-        CreateTables();
-
-        using (var transaction = Connection.BeginTransaction())
+        public async Task UpdateProductAsync(Product product)
         {
-            var command = Connection.CreateCommand();
-            command.CommandText = "UPDATE Products SET Name = @name, Price = @price, Description = @description, Images = @images WHERE Id = @id";
+            string updateQuery = "UPDATE Products SET Name = @name, Price = @price, " +
+                                 "Description = @description, Images = @images WHERE Id = @id";
+
+            await using var command = new SqliteCommand(updateQuery, Connection);
             command.Parameters.AddWithValue("@name", product.Name);
             command.Parameters.AddWithValue("@price", product.Price);
             command.Parameters.AddWithValue("@description", product.Description);
             command.Parameters.AddWithValue("@images", string.Join(",", product.Images));
             command.Parameters.AddWithValue("@id", product.Id);
 
-            command.ExecuteNonQuery();
-
-            transaction.Commit();
+            await command.ExecuteNonQueryAsync();
         }
-    }
 
-    public void DeleteProduct(Product product)
-    {
-        CreateTables();
-
-        using (var transaction = Connection.BeginTransaction())
+        public async Task DeleteProductAsync(int id)
         {
-            var command = Connection.CreateCommand();
-            command.CommandText = "DELETE FROM Products WHERE Id = @id";
-            command.Parameters.AddWithValue("@id", product.Id);
+            string deleteQuery = "DELETE FROM Products WHERE Id = @id";
 
-            command.ExecuteNonQuery();
-
-            transaction.Commit();
+            await using var deleteCommand = new SqliteCommand(deleteQuery, Connection);
+            deleteCommand.Parameters.AddWithValue("@id", id);
+            await deleteCommand.ExecuteNonQueryAsync();
         }
-    }
 
-    public Product? GetProductById(int productId)
-    {
-        CreateTables();
-
-        string selectQuery = "SELECT * FROM Products WHERE Id = @productId";
-        using (var selectCommand = new SqliteCommand(selectQuery, Connection))
+        public async Task<Product?> GetProductByIdAsync(int productId)
         {
+            string selectQuery = "SELECT * FROM Products WHERE Id = @productId";
+
+            await using var selectCommand = new SqliteCommand(selectQuery, Connection);
             selectCommand.Parameters.AddWithValue("@productId", productId);
 
-            using (var reader = selectCommand.ExecuteReader())
-            {
-                if (reader.Read())
-                {
-                    Product product = new Product(
-                        id: reader.GetInt32(0),
-                        name: reader.GetString(1),
-                        price: reader.GetDecimal(2),
-                        description: reader.GetString(3),
-                        images: reader.GetString(4).Split(','));
+            await using var reader = await selectCommand.ExecuteReaderAsync();
 
-                    return product;
-                }
+            if (await reader.ReadAsync())
+            {
+                Product product = new Product(
+                    id: reader.GetInt32(0),
+                    name: reader.GetString(1),
+                    price: reader.GetDecimal(2),
+                    description: reader.GetString(3),
+                    images: reader.GetString(4).Split(','));
+
+                return product;
             }
+
+            return null; // Return null if the product with the given ID is not found
         }
 
-        return null; // Return null if the product with the given ID is not found
-    }
-
-    public List<Product> GetAllProducts()
-    {
-        CreateTables();
-
-        List<Product> products = new List<Product>();
-
-        string selectQuery = "SELECT * FROM Products";
-        using (var selectCommand = new SqliteCommand(selectQuery, Connection))
+        public async Task<List<Product>> GetAllProductsAsync()
         {
-            using (var reader = selectCommand.ExecuteReader())
+            List<Product> products = new List<Product>();
+            string selectQuery = "SELECT * FROM Products";
+
+            await using var selectCommand = new SqliteCommand(selectQuery, Connection);
+            await using var reader = await selectCommand.ExecuteReaderAsync();
+
+            while (await reader.ReadAsync())
             {
-                while (reader.Read())
-                {
-                    Product product = new Product(
-                        id: reader.GetInt32(0),
-                        name: reader.GetString(1),
-                        price: reader.GetDecimal(2),
-                        description: reader.GetString(3),
-                        images: reader.GetString(4).Split(','));
+                Product product = new Product(
+                    id: reader.GetInt32(0),
+                    name: reader.GetString(1),
+                    price: reader.GetDecimal(2),
+                    description: reader.GetString(3),
+                    images: reader.GetString(4).Split(','));
 
-                    products.Add(product);
-                }
+                products.Add(product);
             }
-        }
 
-        return products;
-    }
-
-    protected override void CreateTables()
-    {
-        string createTableQuery = @"
-                    CREATE TABLE IF NOT EXISTS Products (
-                        Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        Name TEXT NOT NULL,
-                        Price REAL NOT NULL,
-                        Description TEXT,
-                        Images TEXT
-                    )";
-        using (var createTableCommand = new SqliteCommand(createTableQuery, Connection))
-        {
-            createTableCommand.ExecuteNonQuery();
+            return products;
         }
     }
 }

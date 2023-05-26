@@ -14,28 +14,4 @@ public class User : IUser
     public string Username { get; set; }
     public string Password { get; set; }
     public string Email { get; set; }
-
-    public void Save()
-    {
-        Console.WriteLine("Saving user...");
-        // Save user logic
-    }
-
-    public void Update()
-    {
-        Console.WriteLine("Updating user...");
-        // Update user logic
-    }
-
-    public void Delete()
-    {
-        Console.WriteLine("Deleting user...");
-        // Delete user logic
-    }
-
-    public void SendMessage(string message)
-    {
-        Console.WriteLine($"Sending message: {message}");
-        // Send message logic
-    }
 }

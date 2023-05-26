@@ -143,3 +143,5 @@ C:/Uni/Software Architecture & Design/AYHF_Software_Architecture_And_Design/obj/
 /Users/Julian.Codespoti/Desktop/Uni/SAD/AYHF_Software_Architecture_And_Design/obj/Debug/net7.0/AYHF_Software_Architecture_And_Design.pdb
 /Users/Julian.Codespoti/Desktop/Uni/SAD/AYHF_Software_Architecture_And_Design/obj/Debug/net7.0/AYHF_Software_Architecture_And_Design.genruntimeconfig.cache
 /Users/Julian.Codespoti/Desktop/Uni/SAD/AYHF_Software_Architecture_And_Design/obj/Debug/net7.0/ref/AYHF_Software_Architecture_And_Design.dll
+/Users/Julian.Codespoti/Desktop/Uni/SAD/AYHF_Software_Architecture_And_Design/bin/Debug/net7.0/MediatR.dll
+/Users/Julian.Codespoti/Desktop/Uni/SAD/AYHF_Software_Architecture_And_Design/bin/Debug/net7.0/MediatR.Contracts.dll

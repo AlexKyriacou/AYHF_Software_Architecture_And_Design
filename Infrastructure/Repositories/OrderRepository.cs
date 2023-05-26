@@ -1,234 +1,195 @@
 using Microsoft.Data.Sqlite;
 using MyProject.Domain.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace MyProject.Infrastructure.Repositories;
-
-public class OrderRepository : RepositoryBase
+namespace MyProject.Infrastructure.Repositories
 {
-    private static OrderRepository? _instance;
-
-    public OrderRepository()
+    public class OrderRepository : RepositoryBase, IOrderRepository
     {
-        _instance = this;
-    }
-
-    public static OrderRepository Instance
-    {
-        get
+        public OrderRepository() : base()
         {
-            _instance ??= new OrderRepository();
-            return _instance;
+            CreateTables();
         }
-    }
 
-    public void AddOrder(Order order)
-    {
-        CreateTables();
-
-        using (var transaction = Connection.BeginTransaction())
+        protected override void CreateTables()
         {
-            var command = Connection.CreateCommand();
-            command.CommandText = "INSERT INTO Orders (OrderId, CustomerId, OrderDate, TotalAmount, IsCompleted) " +
-                                  "VALUES (@orderId, @customerId, @orderDate, @totalAmount, @isCompleted)";
+            string createOrdersTableQuery = "CREATE TABLE IF NOT EXISTS Orders (" +
+                                            "OrderId INTEGER PRIMARY KEY, " +
+                                            "CustomerId INTEGER, " +
+                                            "OrderDate TEXT, " +
+                                            "TotalAmount DECIMAL(10, 2), " +
+                                            "IsCompleted INTEGER)";
+
+            using var createOrdersTableCommand = new SqliteCommand(createOrdersTableQuery, Connection);
+            createOrdersTableCommand.ExecuteNonQuery();
+
+            string createOrderProductsTableQuery = "CREATE TABLE IF NOT EXISTS OrderProducts (" +
+                                                   "OrderId INTEGER, " +
+                                                   "ProductId INTEGER, " +
+                                                   "FOREIGN KEY(OrderId) REFERENCES Orders(OrderId), " +
+                                                   "FOREIGN KEY(ProductId) REFERENCES Products(ProductId))";
+
+            using var createOrderProductsTableCommand = new SqliteCommand(createOrderProductsTableQuery, Connection);
+            createOrderProductsTableCommand.ExecuteNonQuery();
+        }
+
+        public async Task AddOrderAsync(Order order)
+        {
+            string insertQuery = "INSERT INTO Orders (OrderId, CustomerId, OrderDate, TotalAmount, IsCompleted) " +
+                                 "VALUES (@orderId, @customerId, @orderDate, @totalAmount, @isCompleted)";
+
+            await using var command = new SqliteCommand(insertQuery, Connection);
             command.Parameters.AddWithValue("@orderId", order.Id);
             command.Parameters.AddWithValue("@customerId", order.Customer.Id);
             command.Parameters.AddWithValue("@orderDate", order.OrderDate);
             command.Parameters.AddWithValue("@totalAmount", order.TotalAmount);
             command.Parameters.AddWithValue("@isCompleted", order.IsCompleted ? 1 : 0);
 
-            command.ExecuteNonQuery();
+            await command.ExecuteNonQueryAsync();
 
             // Save the products for the order
-            SaveOrderProducts(order);
-
-            transaction.Commit();
+            await SaveOrderProductsAsync(order);
         }
-    }
 
-    public void UpdateOrder(Order order)
-    {
-        CreateTables();
-
-        using (var transaction = Connection.BeginTransaction())
+        public async Task UpdateOrderAsync(Order order)
         {
-            var command = Connection.CreateCommand();
-            command.CommandText = "UPDATE Orders SET CustomerId = @customerId, OrderDate = @orderDate, " +
-                                  "TotalAmount = @totalAmount, IsCompleted = @isCompleted WHERE OrderId = @orderId";
-            command.Parameters.AddWithValue("@customerId", order.Customer.Id);
-            command.Parameters.AddWithValue("@orderDate", order.OrderDate);
-            command.Parameters.AddWithValue("@totalAmount", order.TotalAmount);
-            command.Parameters.AddWithValue("@isCompleted", order.IsCompleted ? 1 : 0);
-            command.Parameters.AddWithValue("@orderId", order.Id);
+            string updateQuery = "UPDATE Orders SET CustomerId = @customerId, OrderDate = @orderDate, " +
+                                 "TotalAmount = @totalAmount, IsCompleted = @isCompleted WHERE OrderId = @orderId";
 
-            command.ExecuteNonQuery();
+            await using var updateCommand = new SqliteCommand(updateQuery, Connection);
+            updateCommand.Parameters.AddWithValue("@customerId", order.Customer.Id);
+            updateCommand.Parameters.AddWithValue("@orderDate", order.OrderDate);
+            updateCommand.Parameters.AddWithValue("@totalAmount", order.TotalAmount);
+            updateCommand.Parameters.AddWithValue("@isCompleted", order.IsCompleted ? 1 : 0);
+            updateCommand.Parameters.AddWithValue("@orderId", order.Id);
+
+            await updateCommand.ExecuteNonQueryAsync();
 
             // Save the updated products for the order
-            SaveOrderProducts(order);
-
-            transaction.Commit();
+            await SaveOrderProductsAsync(order);
         }
-    }
 
-    public void DeleteOrder(Order order)
-    {
-        CreateTables();
-
-        using (var transaction = Connection.BeginTransaction())
+        public async Task DeleteOrderAsync(int id)
         {
-            var command = Connection.CreateCommand();
-            command.CommandText = "DELETE FROM Orders WHERE OrderId = @orderId";
-            command.Parameters.AddWithValue("@orderId", order.Id);
+            string deleteQuery = "DELETE FROM Orders WHERE Id = @id";
 
-            command.ExecuteNonQuery();
-
-            transaction.Commit();
+            await using var deleteCommand = new SqliteCommand(deleteQuery, Connection);
+            deleteCommand.Parameters.AddWithValue("@id", id);
+            await deleteCommand.ExecuteNonQueryAsync();
         }
-    }
 
 
-    public Order? GetOrderById(int orderId)
-    {
-        CreateTables();
-
-        using (var command = new SqliteCommand("SELECT * FROM Orders WHERE OrderId = @orderId", Connection))
+        public async Task<Order?> GetOrderByIdAsync(int orderId)
         {
-            command.Parameters.AddWithValue("@orderId", orderId);
+            string selectQuery = "SELECT * FROM Orders WHERE OrderId = @orderId";
 
-            using (var reader = command.ExecuteReader())
+            await using var selectCommand = new SqliteCommand(selectQuery, Connection);
+            selectCommand.Parameters.AddWithValue("@orderId", orderId);
+
+            await using var reader = await selectCommand.ExecuteReaderAsync();
+
+            if (await reader.ReadAsync())
             {
-                if (reader.Read())
+                var customerRepository = new UserRepository();
+                var customer = await customerRepository.GetUserByIdAsync(reader.GetInt32(1));
+                if (customer != null)
                 {
-                    Customer? customer = UserRepository.Instance.GetUserById<Customer>(reader.GetInt32(1));
-                    if (customer != null)
+                    List<Product> products = await GetOrderProductsAsync(orderId);
+
+                    Order order = new Order((Customer)customer, products)
                     {
-                        List<Product> products = GetOrderProducts(orderId);
+                        Id = reader.GetInt32(0),
+                        OrderDate = reader.GetDateTime(3),
+                        TotalAmount = reader.GetDecimal(4),
+                        IsCompleted = reader.GetBoolean(5)
+                    };
 
-                        Order order = new(customer, products)
-                        {
-                            Id = reader.GetInt32(0),
-                            OrderDate = reader.GetDateTime(3),
-                            TotalAmount = reader.GetDecimal(4),
-                            IsCompleted = reader.GetBoolean(5)
-                        };
-
-                        return order;
-                    }
+                    return order;
                 }
             }
+
+            return null; // Return null if the order with the given ID is not found
         }
 
-        return null; // Return null if the order with the given ID is not found
-    }
-
-    public List<Order> GetAllOrders()
-    {
-        CreateTables();
-
-        List<Order> orders = new List<Order>();
-
-        using (var command = new SqliteCommand("SELECT * FROM Orders", Connection))
+        public async Task<List<Order>> GetAllOrdersAsync()
         {
-            using (var reader = command.ExecuteReader())
+            List<Order> orders = new List<Order>();
+            string selectQuery = "SELECT * FROM Orders";
+
+            await using var command = new SqliteCommand(selectQuery, Connection);
+            await using var reader = await command.ExecuteReaderAsync();
+
+            while (await reader.ReadAsync())
             {
-                while (reader.Read())
+                var customerRepository = new UserRepository();
+                var customer = await customerRepository.GetUserByIdAsync(reader.GetInt32(1));
+                if (customer != null)
                 {
-                    Customer? customer = UserRepository.Instance.GetUserById<Customer>(reader.GetInt32(1));
-                    if (customer != null)
+                    List<Product> products = await GetOrderProductsAsync(reader.GetInt32(0));
+
+                    Order order = new Order((Customer)customer, products)
                     {
-                        List<Product> products = GetOrderProducts(reader.GetInt32(0));
+                        Id = reader.GetInt32(0),
+                        OrderDate = reader.GetDateTime(3),
+                        TotalAmount = reader.GetDecimal(4),
+                        IsCompleted = reader.GetBoolean(5)
+                    };
 
-                        Order order = new(customer, products)
-                        {
-                            Id = reader.GetInt32(0),
-                            OrderDate = reader.GetDateTime(3),
-                            TotalAmount = reader.GetDecimal(4),
-                            IsCompleted = reader.GetBoolean(5)
-                        };
-
-                        orders.Add(order);
-                    }
+                    orders.Add(order);
                 }
             }
+
+            return orders;
         }
 
-        return orders;
-    }
-
-    private void SaveOrderProducts(Order order)
-    {
-        // Delete existing order products
-        using (var command = Connection.CreateCommand())
+        private async Task SaveOrderProductsAsync(Order order)
         {
-            command.CommandText = "DELETE FROM OrderProducts WHERE OrderId = @orderId";
-            command.Parameters.AddWithValue("@orderId", order.Id);
+            // Delete existing order products
+            string deleteQuery = "DELETE FROM OrderProducts WHERE OrderId = @orderId";
 
-            command.ExecuteNonQuery();
-        }
+            await using var deleteCommand = new SqliteCommand(deleteQuery, Connection);
+            deleteCommand.Parameters.AddWithValue("@orderId", order.Id);
 
-        // Insert new order products
-        using (var command = Connection.CreateCommand())
-        {
-            command.CommandText = "INSERT INTO OrderProducts (OrderId, ProductId) VALUES (@orderId, @productId)";
+            await deleteCommand.ExecuteNonQueryAsync();
+
+            // Insert new order products
+            string insertQuery = "INSERT INTO OrderProducts (OrderId, ProductId) VALUES (@orderId, @productId)";
+
+            await using var insertCommand = new SqliteCommand(insertQuery, Connection);
 
             foreach (var product in order.Products)
             {
-                command.Parameters.Clear();
-                command.Parameters.AddWithValue("@orderId", order.Id);
-                command.Parameters.AddWithValue("@productId", product.Id);
+                insertCommand.Parameters.Clear();
+                insertCommand.Parameters.AddWithValue("@orderId", order.Id);
+                insertCommand.Parameters.AddWithValue("@productId", product.Id);
 
-                command.ExecuteNonQuery();
+                await insertCommand.ExecuteNonQueryAsync();
             }
         }
-    }
 
-    private List<Product> GetOrderProducts(int orderId)
-    {
-        List<Product> products = new();
-
-        using (var command = new SqliteCommand("SELECT * FROM OrderProducts WHERE OrderId = @orderId", Connection))
+        private async Task<List<Product>> GetOrderProductsAsync(int orderId)
         {
-            command.Parameters.AddWithValue("@orderId", orderId);
+            List<Product> products = new List<Product>();
+            string selectQuery = "SELECT * FROM OrderProducts WHERE OrderId = @orderId";
 
-            using (var reader = command.ExecuteReader())
+            await using var selectCommand = new SqliteCommand(selectQuery, Connection);
+            selectCommand.Parameters.AddWithValue("@orderId", orderId);
+
+            await using var reader = await selectCommand.ExecuteReaderAsync();
+
+            while (await reader.ReadAsync())
             {
-                while (reader.Read())
+                int productId = reader.GetInt32(1);
+                var productRepository = new ProductRepository();
+                Product? product = await productRepository.GetProductByIdAsync(productId);
+                if (product != null)
                 {
-                    int productId = reader.GetInt32(1);
-                    Product? product = ProductRepository.Instance.GetProductById(productId);
-                    if (product != null)
-                    {
-                        products.Add(product);
-                    }
+                    products.Add(product);
                 }
             }
-        }
 
-        return products;
-    }
-
-    protected override void CreateTables()
-    {
-        // Create the Orders table if it doesn't exist
-        using (var command = Connection.CreateCommand())
-        {
-            command.CommandText = "CREATE TABLE IF NOT EXISTS Orders (" +
-                                  "OrderId INTEGER PRIMARY KEY, " +
-                                  "CustomerId INTEGER, " +
-                                  "OrderDate TEXT, " +
-                                  "TotalAmount DECIMAL(10, 2), " +
-                                  "IsCompleted INTEGER)";
-            command.ExecuteNonQuery();
-        }
-
-        // Create the OrderProducts table if it doesn't exist
-        using (var command = Connection.CreateCommand())
-        {
-            command.CommandText = "CREATE TABLE IF NOT EXISTS OrderProducts (" +
-                                  "OrderId INTEGER, " +
-                                  "ProductId INTEGER, " +
-                                  "FOREIGN KEY(OrderId) REFERENCES Orders(OrderId), " +
-                                  "FOREIGN KEY(ProductId) REFERENCES Products(ProductId))";
-            command.ExecuteNonQuery();
+            return products;
         }
     }
 }

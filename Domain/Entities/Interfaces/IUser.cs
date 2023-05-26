@@ -7,11 +7,5 @@ public interface IUser
     string Password { get; set; }
 
     string Email { get; set; }
-    // Add any additional properties common to all users
-
-    void Save();
-    void Update();
-
-    void Delete();
-    // Add any additional methods common to all users
+    string Role { get; set; }
 }
