@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClipboardList, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import Rating from "../rating/Rating";
 import { CartContext } from "../../AppContext";
 import { UserContext } from "../../AppContext";
@@ -55,10 +55,6 @@ function ProductPage() {
                         </div>
                         <p className="product-price">$ {(product.price).toFixed(2)}</p>
                         <button className="add-to-cart-button" onClick={handleAddToCart}>Add to cart</button>
-                        <button className="save-to-list-button">
-                            <FontAwesomeIcon className="shopping-list" icon={faClipboardList} />
-                            Save to list
-                        </button>
                     </div>
                     <details open>
                         <summary>

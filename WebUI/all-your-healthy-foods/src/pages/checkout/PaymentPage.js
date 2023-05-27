@@ -4,7 +4,7 @@ import OrderSummary from "../cart/OrderSummary";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { faPaypal, faCcMastercard } from "@fortawesome/free-brands-svg-icons";
-import { UserContext } from "../../AppContext";
+import { UserContext, CartContext } from "../../AppContext";
 import { paypalPaymentData, creditCardPaymentData } from "../../testData/paymentData"
 import TextInputWithValidation from "../../components/TextInputWithValidation"
 import PasswordInput from "../../components/PasswordInput"
@@ -46,6 +46,8 @@ function validateForm(paymentMethod, paymentDetails) {
 
 function PaymentPage() {
     const { loggedIn } = useContext(UserContext);
+    const { clearCart, placeOrder } = useContext(CartContext);
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [cardHolderName, setCardHolderName] = useState("");
@@ -53,6 +55,8 @@ function PaymentPage() {
     const [cvv, setCVV] = useState("");
     const [paymentMethod, setPaymentMethod] = useState(""); // State to track the selected payment method
     const [formErrorMessage, setFormErrorMessage] = useState("");
+
+    const [orderDetails, setOrderDetails] = useState({});
 
     const clearInputs = () => {
         setEmail("");
@@ -133,6 +137,8 @@ function PaymentPage() {
             setFormErrorMessage(errorMessage);
         } else {
             setFormErrorMessage("");
+            clearCart();
+            placeOrder(orderDetails);
         }
     };
 
@@ -178,6 +184,8 @@ function PaymentPage() {
                         </Link>
                     </div>
                 }
+                shipping={10}
+                setOrderDetails={setOrderDetails}
             />
         </div>
     );
