@@ -25,6 +25,7 @@ namespace MyProject.Infrastructure.Repositories
                 user.Username = reader.GetString(1);
                 user.Password = reader.GetString(2);
                 user.Email = reader.GetString(3);
+                user.Role = reader.GetString(4);
             }
 
             return user;
@@ -32,10 +33,10 @@ namespace MyProject.Infrastructure.Repositories
 
         public async Task AddUserAsync(IUser user)
         {
-            string insertQuery = "INSERT INTO Users (Id, Username, Password, Email, Role) VALUES (@userId, @username, @password, @email, @role)";
+            string insertQuery = "INSERT INTO Users (Username, Password, Email, Role) VALUES (@username, @password, @email, @role)";
+            Console.WriteLine($"Id: {user.Id}, Username: {user.Username}, Password: {user.Password}, Email: {user.Email}, Role: {user.Role}");
 
             await using var insertCommand = new SqliteCommand(insertQuery, Connection);
-            insertCommand.Parameters.AddWithValue("@userId", user.Id);
             insertCommand.Parameters.AddWithValue("@username", user.Username);
             insertCommand.Parameters.AddWithValue("@password", user.Password);
             insertCommand.Parameters.AddWithValue("@email", user.Email);
@@ -50,23 +51,26 @@ namespace MyProject.Infrastructure.Repositories
             string selectQuery = "SELECT * FROM Users";
 
             await using var selectCommand = new SqliteCommand(selectQuery, Connection);
-            
+    
             await using var reader = await selectCommand.ExecuteReaderAsync();
 
             while (await reader.ReadAsync())
             {
                 IUser user = new User
                 {
-                    Id = reader.GetInt32(0),
-                    Username = reader.GetString(1),
-                    Password = reader.GetString(2),
-                    Email = reader.GetString(3),
+                    Id = !reader.IsDBNull(0) ? reader.GetInt32(0) : 0,
+                    Username = !reader.IsDBNull(1) ? reader.GetString(1) : string.Empty,
+                    Password = !reader.IsDBNull(2) ? reader.GetString(2) : string.Empty,
+                    Email = !reader.IsDBNull(3) ? reader.GetString(3) : string.Empty,
+                    // Assuming that Role is at ordinal 4
+                    Role = !reader.IsDBNull(4) ? reader.GetString(4) : string.Empty,
                 };
                 users.Add(user);
             }
 
             return users;
         }
+
 
         public async Task UpdateUserAsync(IUser user)
         {
@@ -92,7 +96,7 @@ namespace MyProject.Infrastructure.Repositories
 
         protected override void CreateTables()
         {
-            string createTableQuery = "CREATE TABLE IF NOT EXISTS Users (Id INT PRIMARY KEY, Username TEXT, Password TEXT, Email TEXT)";
+            string createTableQuery = "CREATE TABLE IF NOT EXISTS Users (Id INT PRIMARY KEY, Username TEXT, Password TEXT, Email TEXT, Role TEXT)";
             using var createTableCommand = new SqliteCommand(createTableQuery, Connection);
             createTableCommand.ExecuteNonQuery();
         }
