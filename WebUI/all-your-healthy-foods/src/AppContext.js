@@ -56,6 +56,7 @@ const CartProvider = ({ children }) => {
     const clearCart = () => {
         setCartItems([]);
         setCartCount(0);
+        localStorage.setItem("cartItems", JSON.stringify([]));
     };
 
     const groupedProducts = cartItems.reduce((grouped, item) => {
@@ -74,17 +75,41 @@ const CartProvider = ({ children }) => {
         Object.entries(groupedProducts).sort(([nameA], [nameB]) => nameA.localeCompare(nameB))
     );
 
+    const [orders, setOrders] = useState([]);
+
+    const placeOrder = (orderDetails) => {
+        //get user orders from the backend
+        const storedOrders = localStorage.getItem("orders");
+        if (storedOrders) {
+            setOrders(JSON.parse(storedOrders));
+        }
+
+        const order = [{
+            orderItems: sortedGroupedProducts,
+            orderSubTotal: orderDetails.subtotal,
+            orderPromotion: orderDetails.promotionAmount,
+            orderTotal: orderDetails.total
+        }]
+
+        orders.push(order);
+
+        setOrders(orders);
+        localStorage.setItem("orders", JSON.stringify(orders));
+    }
+
     return (
         <CartContext.Provider
             value={{
                 cartCount,
                 cartItems,
                 sortedGroupedProducts,
+                orders,
                 addToCart,
                 removeFromCart,
                 decreaseCount,
                 increaseCount,
                 clearCart,
+                placeOrder
             }}
         >
             {children}

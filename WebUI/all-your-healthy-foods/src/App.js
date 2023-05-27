@@ -13,6 +13,7 @@ import PaymentPage from "./pages/checkout/PaymentPage";
 import AccountPage from "./pages/account/AccountPage";
 import OrderConfirmationPage from "./pages/checkout/OrderConfirmationPage"
 import "./App.css";
+import OrderHistory from "./pages/checkout/OrderHistory";
 
 function App() {
     return (
@@ -31,6 +32,7 @@ function App() {
                         <Route path="/shipping" element={<ShippingPage />} />
                         <Route path="/payment" element={<PaymentPage />} />
                         <Route path="/order-confirmation" element={<OrderConfirmationPage />} />
+                        <Route path="/order-history" element={<OrderHistory />} />
                     </Routes>
                     <footer className="App-footer">
                         <p>© 2023 All Your Healthy Foods - All Rights Reserved.</p>
