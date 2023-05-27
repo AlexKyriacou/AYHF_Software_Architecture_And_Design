@@ -3,6 +3,12 @@
 [Oo]bj/
 [Rr]elease/
 [Dd]ebug/
+.idea/
+.vs/
+./bin/
+.vscode
+./obj/
+
 
 # Ignore user-specific files
 *.suo
