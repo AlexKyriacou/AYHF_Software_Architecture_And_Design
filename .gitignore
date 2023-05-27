@@ -1,4 +1,42 @@
-obj/Debug/net7.0/project.razor.json
-obj/Debug/net7.0/AYHF_Software_Architecture_And_Design.GeneratedMSBuildEditorConfig.editorconfig
-obj/Debug/net7.0/AYHF_Software_Architecture_And_Design.csproj.AssemblyReference.cache
-obj/Debug/net7.0/AYHF_Software_Architecture_And_Design.assets.cache
+# Ignore build folder
+[Bb]in/
+[Oo]bj/
+[Rr]elease/
+[Dd]ebug/
+
+# Ignore user-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Ignore NuGet Packages
+*.nupkg
+# The packages folder can be ignored because of Package Restore
+**/packages/*
+# except build/, which is used as an MSBuild target.
+!**/packages/build/
+# Uncomment if necessary however generally it will be regenerated when needed
+#!**/packages/repositories.config
+
+# Others
+*.log
+*.bak
+*.cache
+*.swp
+*~
+*.dll
+*.exe
+*.pdb
+*.mdb
+*.ipdb
+*.idb
+test_results
+*.pidb
+*.userprefs
+*.ppdb
+*.npmrc
+*.yarnrc
+*.yarn-integrity
+**/bin
+**/obj

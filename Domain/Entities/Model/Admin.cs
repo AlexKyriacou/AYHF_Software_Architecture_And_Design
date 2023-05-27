@@ -14,28 +14,4 @@ public class Admin : IUser
     public string Email { get; set; }
     public string Role { get; set; }
 
-    private readonly UserRepository _userRepository;
-
-    public Admin()
-    {
-        _userRepository = UserRepository.Instance;
-        Role = "Admin";
-    }
-
-    public void Save()
-    {
-        _userRepository.AddUser(this);
-    }
-
-    public void Update()
-    {
-        _userRepository.UpdateUser(this);
-    }
-
-    public void Delete()
-    {
-        _userRepository.DeleteUser(this);
-    }
-
-    // Additional methods specific to admins
 }
