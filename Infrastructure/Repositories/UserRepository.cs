@@ -34,8 +34,6 @@ namespace MyProject.Infrastructure.Repositories
         public async Task AddUserAsync(IUser user)
         {
             string insertQuery = "INSERT INTO Users (Username, Password, Email, Role) VALUES (@username, @password, @email, @role)";
-            Console.WriteLine($"Id: {user.Id}, Username: {user.Username}, Password: {user.Password}, Email: {user.Email}, Role: {user.Role}");
-
             await using var insertCommand = new SqliteCommand(insertQuery, Connection);
             insertCommand.Parameters.AddWithValue("@username", user.Username);
             insertCommand.Parameters.AddWithValue("@password", user.Password);
@@ -62,7 +60,6 @@ namespace MyProject.Infrastructure.Repositories
                     Username = !reader.IsDBNull(1) ? reader.GetString(1) : string.Empty,
                     Password = !reader.IsDBNull(2) ? reader.GetString(2) : string.Empty,
                     Email = !reader.IsDBNull(3) ? reader.GetString(3) : string.Empty,
-                    // Assuming that Role is at ordinal 4
                     Role = !reader.IsDBNull(4) ? reader.GetString(4) : string.Empty,
                 };
                 users.Add(user);
