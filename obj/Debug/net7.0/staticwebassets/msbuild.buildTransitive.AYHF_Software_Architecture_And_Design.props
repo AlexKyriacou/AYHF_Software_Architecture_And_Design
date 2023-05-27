@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="../buildMultiTargeting/AYHF_Software_Architecture_And_Design.props" />
-</Project>

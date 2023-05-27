@@ -9,20 +9,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="645e8a8e-6801-4c56-adb3-cbdfe51eb0cd" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.vs/ProjectEvaluation/ayhf_software_architecture_and_design.metadata.v7.bin" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.vs/ProjectEvaluation/ayhf_software_architecture_and_design.projects.v7.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.AYHF_Software_Architecture_And_Design/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.AYHF_Software_Architecture_And_Design/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/AYHF_Software_Architecture_And_Design/v17/.futdcache.v2" beforeDir="false" afterPath="$PROJECT_DIR$/.vs/AYHF_Software_Architecture_And_Design/v17/.futdcache.v2" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/AYHF_Software_Architecture_And_Design/v17/.suo" beforeDir="false" afterPath="$PROJECT_DIR$/.vs/AYHF_Software_Architecture_And_Design/v17/.suo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Domain/Entities/Interfaces/IUser.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Domain/Entities/Interfaces/IUser.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/AYHF_Software_Architecture_And_Design.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/AYHF_Software_Architecture_And_Design.csproj.nuget.dgspec.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/AYHF_Software_Architecture_And_Design.csproj.nuget.g.props" beforeDir="false" afterPath="$PROJECT_DIR$/obj/AYHF_Software_Architecture_And_Design.csproj.nuget.g.props" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/net7.0/AYHF_Software_Architecture_And_Design.GeneratedMSBuildEditorConfig.editorconfig" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net7.0/AYHF_Software_Architecture_And_Design.GeneratedMSBuildEditorConfig.editorconfig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/net7.0/AYHF_Software_Architecture_And_Design.assets.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net7.0/AYHF_Software_Architecture_And_Design.assets.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/net7.0/AYHF_Software_Architecture_And_Design.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net7.0/AYHF_Software_Architecture_And_Design.csproj.AssemblyReference.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/project.assets.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/project.nuget.cache" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
