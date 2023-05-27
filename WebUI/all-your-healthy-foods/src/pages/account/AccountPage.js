@@ -5,6 +5,7 @@ import { Navigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import userData from "../../testData/userData"; //TO DELETE ONCE WE ESTABLISH BACKEND CONNECTION
+import { Link } from "react-router-dom";
 
 const AccountPage = () => {
     const { username } = useParams();
@@ -17,10 +18,15 @@ const AccountPage = () => {
                 <Navigate to="/login" replace={true} />
             )}
             <h1>Welcome {user.name}</h1>
+            <div className="manage-account-buttons">
+                <Link className="link-button" to="/order-history">
+                    My Orders
+                </Link>
+            </div>
             <button className="primary-button" onClick={logout}>
                 <FontAwesomeIcon className="logout-icon" icon={faSignOutAlt} />&nbsp;Logout
             </button>
-        </div>
+        </div >
     );
 };
 

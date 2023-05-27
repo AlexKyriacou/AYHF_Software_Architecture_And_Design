@@ -11,11 +11,12 @@ function CheckoutPage() {
             <h2>Checkout</h2>
             {!loggedIn && (
                 <div>
-                    <Link className="switch" to={`/login?from=checkout`}>
+                    <p>You need to login or signup to place an order</p>
+                    <Link className="link-button" to={`/login?from=checkout`}>
                         Already a member? Login
-                    </Link>{" "}
-                    |{" "}
-                    <Link className="switch" to={`/signup?from=checkout`}>
+                    </Link>
+                    <p>OR</p>
+                    <Link className="link-button" to={`/signup?from=checkout`}>
                         Not A member? Sign Up Now!
                     </Link>
                 </div>

@@ -41,8 +41,7 @@
     margin: 10px 0 0 0;
 }
 
-.add-to-cart-button, 
-.save-to-list-button {
+.add-to-cart-button {
     font-size: 14px;
     padding: 10px 20px;
     border: none;
@@ -60,28 +59,6 @@
 
 .add-to-cart-button:hover {
     background-color: var(--primary-color-darker);
-}
-
-.save-to-list-button {
-    background-color: transparent;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.save-to-list-button:hover {
-    border-radius: 7px;
-    color: white;
-    background-color: var(--primary-color);
-}
-
-.save-to-list-button:hover .shopping-list {
-    color: white;
-}
-
-.shopping-list {
-    margin-right: 5px;
-    margin-bottom: 0px;
 }
 
 img {
