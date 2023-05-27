@@ -38,3 +38,5 @@ test_results
 *.npmrc
 *.yarnrc
 *.yarn-integrity
+**/bin
+**/obj
