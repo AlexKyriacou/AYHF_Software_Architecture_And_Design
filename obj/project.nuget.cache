@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "4NuAU5LpPx3Ch+l9sAsfzL/SUBY2UgpINhUC5Hi7qVCVOa7gyJFUKaddx3qULNk/DQvld339BLb7S2beJ7arYw==",
+  "dgSpecHash": "eiiehykF2SXpbPPXCHkt5pT4MuqvW+U0hXhfS3LwarGd1dDCKE+33/EjGonUatSgUwStTbKaLknRHsSNFkz2Yg==",
   "success": true,
-  "projectFilePath": "/Users/Julian.Codespoti/Desktop/Uni/SAD/AYHF_Software_Architecture_And_Design/AYHF_Software_Architecture_And_Design.csproj",
+  "projectFilePath": "C:\\Uni\\Software Architecture And Design\\AYHF_Software_Architecture_And_Design\\AYHF_Software_Architecture_And_Design.csproj",
   "expectedPackageFiles": [
     "/Users/Julian.Codespoti/.nuget/packages/mediatr/12.0.1/mediatr.12.0.1.nupkg.sha512",
     "/Users/Julian.Codespoti/.nuget/packages/mediatr.contracts/2.0.1/mediatr.contracts.2.0.1.nupkg.sha512",

@@ -866,11 +866,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/Julian.Codespoti/Desktop/Uni/SAD/AYHF_Software_Architecture_And_Design/AYHF_Software_Architecture_And_Design.csproj",
+      "projectUniqueName": "C:\\Uni\\Software Architecture And Design\\AYHF_Software_Architecture_And_Design\\AYHF_Software_Architecture_And_Design.csproj",
       "projectName": "AYHF_Software_Architecture_And_Design",
-      "projectPath": "/Users/Julian.Codespoti/Desktop/Uni/SAD/AYHF_Software_Architecture_And_Design/AYHF_Software_Architecture_And_Design.csproj",
-      "packagesPath": "/Users/Julian.Codespoti/.nuget/packages/",
-      "outputPath": "/Users/Julian.Codespoti/Desktop/Uni/SAD/AYHF_Software_Architecture_And_Design/obj/",
+      "projectPath": "C:\\Uni\\Software Architecture And Design\\AYHF_Software_Architecture_And_Design\\AYHF_Software_Architecture_And_Design.csproj",
+      "packagesPath": "C:\\Users\\akyri\\.nuget\\packages\\",
+      "outputPath": "C:\\Uni\\Software Architecture And Design\\AYHF_Software_Architecture_And_Design\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/Julian.Codespoti/.nuget/NuGet/NuGet.Config"
@@ -879,6 +879,8 @@
         "net7.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\sdk\\7.0.302\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -929,7 +931,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/Users/Julian.Codespoti/.dotnet/sdk/7.0.203/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
       }
     }
   }
