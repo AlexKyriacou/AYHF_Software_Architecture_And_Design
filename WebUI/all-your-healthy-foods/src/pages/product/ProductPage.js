@@ -57,8 +57,6 @@ function ProductPage() {
         throw new Error("Request failed");
       }
 
-      // Redirect or perform any necessary actions after deleting the product
-      // For example, you can navigate back to the product list page
       navigate("/products");
     } catch (error) {
       console.error(error);
@@ -83,12 +81,20 @@ function ProductPage() {
         throw new Error("Request failed");
       }
 
-      // Redirect or perform any necessary actions after saving the product
-      // For example, you can navigate back to the product list page
       navigate("/products");
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const handleCancel = () => {
+    setInEditMode(false);
+    setEditedProduct({
+      name: "",
+      price: "",
+      longDescription: "",
+      ingredients: "",
+    });
   };
 
   return (
@@ -166,7 +172,7 @@ function ProductPage() {
         </div>
         {loggedIn && user.role === "admin" && (
           <div className="admin-buttons">
-            {!inEditMode && (
+            {!inEditMode ? (
               <>
                 <button className="primary-button" onClick={handleEdit}>
                   Edit
@@ -175,11 +181,15 @@ function ProductPage() {
                   Delete
                 </button>
               </>
-            )}
-            {inEditMode && (
-              <button className="primary-button" onClick={handleSave}>
-                Save
-              </button>
+            ) : (
+              <>
+                <button className="primary-button" onClick={handleSave}>
+                  Save
+                </button>
+                <button className="primary-button" onClick={handleCancel}>
+                  Cancel
+                </button>
+              </>
             )}
           </div>
         )}
