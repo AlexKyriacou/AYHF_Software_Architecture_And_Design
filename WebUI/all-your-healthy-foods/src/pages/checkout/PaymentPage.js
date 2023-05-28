@@ -1,11 +1,11 @@
-import React, {useContext, useState} from "react";
-import {Link} from "react-router-dom";
-import OrderSummary from "../cart/OrderSummary";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faLock} from "@fortawesome/free-solid-svg-icons";
-import {faCcMastercard, faPaypal} from "@fortawesome/free-brands-svg-icons";
-import {CartContext, UserContext} from "../../AppContext";
-import {creditCardPaymentData, paypalPaymentData} from "../../testData/paymentData"
+import React, { useContext, useState } from "react";
+import { Link } from "react-router-dom";
+import OrderSummary from "../order/OrderSummary";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLock } from "@fortawesome/free-solid-svg-icons";
+import { faCcMastercard, faPaypal } from "@fortawesome/free-brands-svg-icons";
+import { CartContext, UserContext } from "../../AppContext";
+import { creditCardPaymentData, paypalPaymentData } from "../../testData/paymentData"
 import TextInputWithValidation from "../../components/TextInputWithValidation"
 import PasswordInput from "../../components/PasswordInput"
 import './Checkout.css';
@@ -17,7 +17,7 @@ function validateForm(paymentMethod, paymentDetails) {
         }
 
         const isValid = paypalPaymentData.some(
-            ({email, password}) =>
+            ({ email, password }) =>
                 paymentDetails.email === email && paymentDetails.password === password
         );
 
@@ -30,7 +30,7 @@ function validateForm(paymentMethod, paymentDetails) {
         }
 
         const isValid = creditCardPaymentData.some(
-            ({cardHolderName: dbCardHolderName, cardNumber: dbCardNumber, cvv: dbCvv}) =>
+            ({ cardHolderName: dbCardHolderName, cardNumber: dbCardNumber, cvv: dbCvv }) =>
                 paymentDetails.cardHolderName === dbCardHolderName && paymentDetails.cardNumber === dbCardNumber && paymentDetails.cvv === dbCvv
         );
 
@@ -45,8 +45,8 @@ function validateForm(paymentMethod, paymentDetails) {
 }
 
 function PaymentPage() {
-    const {loggedIn} = useContext(UserContext);
-    const {clearCart, placeOrder} = useContext(CartContext);
+    const { loggedIn } = useContext(UserContext);
+    const { clearCart, placeOrder } = useContext(CartContext);
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -156,7 +156,7 @@ function PaymentPage() {
                         checked={paymentMethod === "paypal"}
                         onChange={handlePaymentMethodChange}
                     />
-                    <label htmlFor="paypal"><FontAwesomeIcon icon={faPaypal} aria-hidden="true"/> PayPal</label>
+                    <label htmlFor="paypal"><FontAwesomeIcon icon={faPaypal} aria-hidden="true" /> PayPal</label>
                 </div>
                 <div>
                     <input
@@ -167,7 +167,7 @@ function PaymentPage() {
                         checked={paymentMethod === "creditcard"}
                         onChange={handlePaymentMethodChange}
                     />
-                    <label htmlFor="creditcard"><FontAwesomeIcon icon={faCcMastercard} aria-hidden="true"/> Credit Card</label>
+                    <label htmlFor="creditcard"><FontAwesomeIcon icon={faCcMastercard} aria-hidden="true" /> Credit Card</label>
                 </div>
             </form>
             {renderPaymentForm()}
@@ -180,7 +180,7 @@ function PaymentPage() {
                             onClick={handleLinkClick}
                             to="/order-confirmation"
                         >
-                            <FontAwesomeIcon icon={faLock} aria-hidden="true"/> Pay Securely
+                            <FontAwesomeIcon icon={faLock} aria-hidden="true" /> Pay Securely
                         </Link>
                     </div>
                 }

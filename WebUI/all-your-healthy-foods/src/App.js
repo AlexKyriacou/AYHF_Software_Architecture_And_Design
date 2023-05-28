@@ -11,8 +11,8 @@ import CheckoutPage from "./pages/checkout/CheckoutPage";
 import ShippingPage from "./pages/checkout/ShippingPage";
 import PaymentPage from "./pages/checkout/PaymentPage";
 import AccountPage from "./pages/login/AccountPage";
-import OrderConfirmationPage from "./pages/checkout/OrderConfirmationPage";
-import OrderHistory from "./pages/checkout/OrderHistory";
+import OrderConfirmationPage from "./pages/order/OrderConfirmationPage";
+import OrderHistory from "./pages/order/OrderHistory";
 import AddProductPage from "./pages/product/AddProductPage";
 import "./App.css";
 
