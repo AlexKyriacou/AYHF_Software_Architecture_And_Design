@@ -2,12 +2,13 @@ import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { UserContext } from "../../AppContext";
+import { UserContext, ProductsContext } from "../../AppContext";
 import "./ProductPage.css";
 import axios from "axios";
 
 function AddProductPage() {
   const { loggedIn, user } = useContext(UserContext);
+  const { products, setProducts } = useContext(ProductsContext);
 
   const [newProduct, setNewProduct] = useState({
     name: "",
@@ -30,15 +31,17 @@ function AddProductPage() {
   };
 
   const handleSave = async () => {
-    ;
     try {
       const response = await axios.post("https://localhost:7269/products", newProduct);
 
-      if (!response.ok) {
+      if (response.status === 200) {
+        const newProductData = response.data;
+        setProducts([...products, newProductData]); // Update the products in ProductsContext
+        sessionStorage.setItem("products", JSON.stringify([...products, newProductData])); // Update the products in sessionStorage
+        navigate("/");
+      } else {
         throw new Error("Request failed");
       }
-
-      navigate("/products");
     } catch (error) {
       console.error(error);
     }
