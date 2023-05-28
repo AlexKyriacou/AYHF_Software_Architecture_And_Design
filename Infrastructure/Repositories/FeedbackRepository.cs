@@ -19,6 +19,11 @@ namespace MyProject.Infrastructure.Repositories
             createTableCommand.ExecuteNonQuery();
         }
 
+        protected override void AddData()
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task AddFeedbackAsync(Feedback feedback)
         {
             string insertQuery = "INSERT INTO Feedbacks (CustomerId, FeedbackId, Message, FeedbackDate) VALUES (@customerId, @feedbackId, @message, @feedbackDate)";
