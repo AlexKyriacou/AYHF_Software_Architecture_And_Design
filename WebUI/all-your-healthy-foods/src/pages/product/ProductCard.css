@@ -1,7 +1,17 @@
-.product-container {
+.product-container, .add-product-container {
     display: flex;
     justify-content: space-between;
     margin: 10px;
+}
+
+.add-product-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 25px;
+}
+
+.add-product-card {
+    width: 60%;
 }
 
 .product-card {

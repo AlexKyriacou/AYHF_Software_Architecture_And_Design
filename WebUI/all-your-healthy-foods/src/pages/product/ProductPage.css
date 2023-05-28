@@ -106,6 +106,7 @@ details p {
     font-size: medium;
     text-align: start;
     flex: 1;
+    margin-bottom: 10px;
 }
   
 .field-container input,
