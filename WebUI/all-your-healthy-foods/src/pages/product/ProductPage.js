@@ -35,7 +35,7 @@ function ProductPage() {
 
   const handleDelete = async () => {
     try {
-      const response = axios.delete(`https://localhost:7269/products/${productId}`);
+      const response = await axios.delete(`https://localhost:7269/products/${productId}`);
 
       if (!response.ok) {
         throw new Error("Request failed");
@@ -49,7 +49,7 @@ function ProductPage() {
 
   const handleSave = async () => {
     try {
-      const response = axios.put(`https://localhost:7269/products/${productId}`, editedProduct);
+      const response = await axios.put(`https://localhost:7269/products/${productId}`, editedProduct);
 
       if (!response.ok) {
         throw new Error("Request failed");
@@ -73,99 +73,102 @@ function ProductPage() {
           <img className="large-view" src={product.image} alt={product.name} />
         </div>
         <div className="product-overview-details">
+          {loggedIn && user.role === "admin" && (
+            <div className="admin-buttons">
+              {!inEditMode && (
+                <>
+                  <button className="primary-button" onClick={() => setInEditMode(true)}>
+                    Edit
+                  </button>
+                  <button className="primary-button" onClick={handleDelete}>
+                    Delete
+                  </button>
+                </>
+              )}
+              {inEditMode && (
+                <>
+                  <button className="primary-button" onClick={handleSave}>
+                    Save
+                  </button>
+                  <button className="primary-button" onClick={() => setInEditMode(false)}>
+                    Cancel
+                  </button>
+                </>
+              )}
+            </div>
+          )}
           <div className="product-info">
             {inEditMode ? (
-              <div className="product-name-desc">
-                <input
-                  type="text"
-                  name="name"
-                  value={editedProduct.name}
-                  onChange={handleInputChange}
-                />
-                <input
-                  type="text"
-                  name="name"
-                  value={editedProduct.description}
-                  onChange={handleInputChange}
-                />
+              <div className="edit-fields">
+                <div className="field-container">
+                  <label>Name:</label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={editedProduct.name}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="field-container">
+                  <label>Description:</label>
+                  <input
+                    type="text"
+                    name="description"
+                    value={editedProduct.description}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="field-container">
+                  <label>Price:</label>
+                  <input
+                    type="number"
+                    name="price"
+                    value={editedProduct.price}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="field-container">
+                  <label>Long Description:</label>
+                  <textarea
+                    name="longDescription"
+                    value={editedProduct.longDescription}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="field-container">
+                  <label>Ingredients:</label>
+                  <textarea
+                    name="ingredients"
+                    value={editedProduct.ingredients}
+                    onChange={handleInputChange}
+                  />
+                </div>
               </div>
             ) : (
-              <div className="product-name-desc">
-                <p>{product.name}</p>
-                <p>&nbsp;-&nbsp;</p>
-                <p>{product.description}</p>
+              <div>
+                <div className="product-name-desc">
+                  <p>{product.name}</p>
+                  <p>{product.description}</p>
+                </div>
+                <div className="product-rating">
+                  <Rating rate={product.rating} /> ({product.numRatings})
+                </div>
+                <p className="product-price">$ {(product.price).toFixed(2)}</p>
+                <button className="add-to-cart-button" onClick={handleAddToCart}>
+                  Add to cart
+                </button>
+                <details open>
+                  <summary>Description</summary>
+                  <p>{product.longDescription}</p>
+                </details>
+                <details open>
+                  <summary>Ingredients</summary>
+                  <p>{product.ingredients}</p>
+                </details>
               </div>
-            )}
-            {!inEditMode && (
-              <div className="product-rating">
-                <Rating rate={product.rating} /> ({product.numRatings})
-              </div>
-            )}
-            {inEditMode ? (
-              <input
-                type="number"
-                name="price"
-                value={editedProduct.price}
-                onChange={handleInputChange}
-              />
-            ) : (
-              <p className="product-price">$ {(product.price).toFixed(2)}</p>
-            )}
-            {!inEditMode && (
-              <button className="add-to-cart-button" onClick={handleAddToCart}>
-                Add to cart
-              </button>
             )}
           </div>
-          <details open>
-            <summary>Description</summary>
-            {inEditMode ? (
-              <textarea
-                name="longDescription"
-                value={editedProduct.longDescription}
-                onChange={handleInputChange}
-              />
-            ) : (
-              <p>{product.longDescription}</p>
-            )}
-          </details>
-          <details open>
-            <summary>Ingredients</summary>
-            {inEditMode ? (
-              <textarea
-                name="ingredients"
-                value={editedProduct.ingredients}
-                onChange={handleInputChange}
-              />
-            ) : (
-              <p>{product.ingredients}</p>
-            )}
-          </details>
         </div>
-        {loggedIn && user.role === "admin" && (
-          <div className="admin-buttons">
-            {!inEditMode && (
-              <>
-                <button className="primary-button" onClick={() => setInEditMode(true)}>
-                  Edit
-                </button>
-                <button className="primary-button" onClick={handleDelete}>
-                  Delete
-                </button>
-              </>
-            )}
-            {inEditMode && (
-              <>
-                <button className="primary-button" onClick={handleSave}>
-                  Save
-                </button>
-                <button className="primary-button" onClick={() => setInEditMode(false)}>
-                  Cancel
-                </button>
-              </>
-            )}
-          </div>
-        )}
       </div>
     </div>
   );
