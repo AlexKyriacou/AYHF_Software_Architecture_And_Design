@@ -30,19 +30,19 @@ public class OrderRoutes
             var order = new Order(orderDto.Customer, orderDto.Products);
             await orderService.AddOrderAsync(order);
             return Results.Created($"/orders/{order.Id}", order);
-        });
+        }).RequireAuthorization();
 
         _app.MapPut("/orders/{id}", async ([FromBody] OrderDto orderDto, [FromServices] OrderService orderService) =>
         {
             var order = new Order(orderDto.Customer, orderDto.Products);
             await orderService.UpdateOrderAsync(order);
             return Results.NoContent();
-        });
+        }).RequireAuthorization();
 
         _app.MapDelete("/orders/{id}", async (int id, [FromServices] OrderService orderService) =>
         {
             await orderService.DeleteOrderAsync(id);
             return Results.NoContent();
-        });
+        }).RequireAuthorization();
     }
 }

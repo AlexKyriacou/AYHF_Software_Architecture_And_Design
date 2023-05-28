@@ -10,27 +10,33 @@ const LoginPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loginError, setLoginError] = useState("");
-    const {login} = useContext(UserContext);
-
+    const {login} = useContext(UserContext);  // Use login instead of setUser
     const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
             const response = await axios.post('https://localhost:7269/users/login', { email, password });
+
             if (response.status !== 200) {
                 throw new Error('Network response was not ok');
             }
-            
+
+            const { token, user } = response.data;
+
+            localStorage.setItem("token", token);
+
+            login(user); 
+
             setLoginError("");
 
-            navigate("/home"); 
+            navigate("/home");
 
         } catch (error) {
             setLoginError("Invalid email or password");
         }
     };
-
+    
     return (
         <div className="page-container">
             <div className="page-card">
