@@ -1,13 +1,12 @@
-using MyProject.Domain.Models;
+using AYHF_Software_Architecture_And_Design.Domain.Entities.Model;
 
-namespace MyProject.Infrastructure.Repositories
+namespace AYHF_Software_Architecture_And_Design.Infrastructure.Interfaces;
+
+public interface IFeedbackRepository
 {
-    public interface IFeedbackRepository
-    {
-        Task AddFeedbackAsync(Feedback feedback);
-        Task UpdateFeedbackAsync(Feedback feedback);
-        Task DeleteFeedbackAsync(Feedback feedback);
-        Task<Feedback?> GetFeedbackByIdAsync(int feedbackId);
-        Task<List<Feedback>> GetAllFeedbackAsync();
-    }
+    Task AddFeedbackAsync(Feedback feedback);
+    Task UpdateFeedbackAsync(Feedback feedback);
+    Task DeleteFeedbackAsync(Feedback feedback);
+    Task<Feedback?> GetFeedbackByIdAsync(int feedbackId);
+    Task<List<Feedback>> GetAllFeedbackAsync();
 }

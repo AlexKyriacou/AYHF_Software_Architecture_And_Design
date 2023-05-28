@@ -1,4 +1,4 @@
-namespace MyProject.Domain.Models;
+namespace AYHF_Software_Architecture_And_Design.Domain.Entities.Model;
 
 public class ShoppingCart
 {
