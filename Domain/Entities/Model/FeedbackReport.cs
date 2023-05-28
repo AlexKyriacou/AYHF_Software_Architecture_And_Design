@@ -1,9 +1,7 @@
-using MyProject.Domain.Interfaces;
-using MyProject.Infrastructure.Repositories;
+using AYHF_Software_Architecture_And_Design.Domain.Entities.Interfaces;
 
-namespace MyProject.Domain.Models;
+namespace AYHF_Software_Architecture_And_Design.Domain.Entities.Model;
 
 public class FeedbackReport : IReport
 {
-
 }

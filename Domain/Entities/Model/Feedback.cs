@@ -1,4 +1,4 @@
-namespace MyProject.Domain.Models;
+namespace AYHF_Software_Architecture_And_Design.Domain.Entities.Model;
 
 public class Feedback
 {
@@ -8,6 +8,7 @@ public class Feedback
         Message = message;
         FeedbackDate = DateTime.Now;
     }
+
     public Feedback(int id, Customer customer, string message, DateTime feedbackDate)
     {
         Id = id;

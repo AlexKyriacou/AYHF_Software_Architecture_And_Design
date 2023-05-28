@@ -1,13 +1,12 @@
-using MyProject.Domain.Models;
+using AYHF_Software_Architecture_And_Design.Domain.Entities.Model;
 
-namespace MyProject.Infrastructure.Repositories
+namespace AYHF_Software_Architecture_And_Design.Infrastructure.Interfaces;
+
+public interface IProductRepository
 {
-    public interface IProductRepository
-    {
-        Task AddProductAsync(Product product);
-        Task UpdateProductAsync(Product product);
-        Task DeleteProductAsync(int id);
-        Task<Product?> GetProductByIdAsync(int productId);
-        Task<List<Product>> GetAllProductsAsync();
-    }
+    Task AddProductAsync(Product product);
+    Task UpdateProductAsync(Product product);
+    Task DeleteProductAsync(int id);
+    Task<Product?> GetProductByIdAsync(int productId);
+    Task<List<Product>> GetAllProductsAsync();
 }

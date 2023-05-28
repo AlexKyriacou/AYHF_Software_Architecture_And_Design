@@ -1,61 +1,54 @@
 using Microsoft.Data.Sqlite;
-using System;
 
-namespace MyProject.Infrastructure.Repositories
+namespace AYHF_Software_Architecture_And_Design.Infrastructure.Repositories;
+
+public abstract class RepositoryBase
 {
-    public abstract class RepositoryBase
+    private static readonly string _databasePath = "Infrastructure\\Data\\AYHFDatabase.db";
+
+    private static readonly Lazy<SqliteConnection> _lazyConnection = new(() =>
     {
-        private static string _databasePath = "Infrastructure\\Data\\AYHFDatabase.db";
+        var connectionString = $"Data Source={_databasePath};";
+        var connection = new SqliteConnection(connectionString);
+        connection.Open();
+        return connection;
+    });
 
-        private static readonly Lazy<SqliteConnection> _lazyConnection = new Lazy<SqliteConnection>(() =>
+    protected RepositoryBase()
+    {
+        if (!DatabaseExists(_databasePath)) CreateDatabase(_databasePath);
+        CreateTables();
+        AddData();
+    }
+
+    protected SqliteConnection Connection => _lazyConnection.Value;
+
+    protected abstract void CreateTables();
+
+    protected abstract void AddData();
+
+    public void Dispose()
+    {
+        Connection.Close();
+        Connection.Dispose();
+    }
+
+    private bool DatabaseExists(string databasePath)
+    {
+        return File.Exists(databasePath);
+    }
+
+    private void CreateDatabase(string databasePath)
+    {
+        try
         {
-            string connectionString = $"Data Source={_databasePath};";
-            var connection = new SqliteConnection(connectionString);
-            connection.Open();
-            return connection;
-        });
-        
-        protected SqliteConnection Connection => _lazyConnection.Value;
-        
-        protected RepositoryBase()
-        {
-            if (!DatabaseExists(_databasePath))
+            using (File.Create(databasePath))
             {
-                CreateDatabase(_databasePath);
-            }
-            CreateTables();
-            AddData();
-        }
-
-        protected abstract void CreateTables();
-
-        protected abstract void AddData();
-
-        public void Dispose()
-        {
-            Connection.Close();
-            Connection.Dispose();
-        }
-
-        private bool DatabaseExists(string databasePath)
-        {
-            return File.Exists(databasePath);
-        }
-
-        private void CreateDatabase(string databasePath)
-        {
-            try
-            {
-                using (File.Create(databasePath))
-                {
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error occurred during database creation: {ex.Message}");
             }
         }
-
-
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error occurred during database creation: {ex.Message}");
+        }
     }
 }
