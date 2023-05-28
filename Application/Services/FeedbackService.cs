@@ -46,9 +46,5 @@ namespace AYHF_Software_Architecture_And_Design.Application.Services
             return await Task.Run(() => _feedbackRepository.GetAllFeedbackForProductAsync(id));
         }
 
-        public async Task<float> GetAverageProductRatingAsync(int id)
-        {
-            return await Task.Run(() => _feedbackRepository.GetAverageProductRatingAsync(id));
-        }
     }
 }

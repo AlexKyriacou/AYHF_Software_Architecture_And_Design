@@ -11,22 +11,24 @@ public class OrderRepository : RepositoryBase, IOrderRepository
         CreateTables();
     }
 
-    public async Task AddOrderAsync(Order order)
+    public async Task<int> AddOrderAsync(Order order)
     {
-        var insertQuery = "INSERT INTO Orders (OrderId, CustomerId, OrderDate, TotalAmount, IsCompleted) " +
-                          "VALUES (@orderId, @customerId, @orderDate, @totalAmount, @isCompleted)";
+        var insertQuery = "INSERT INTO Orders (CustomerId, OrderDate, TotalAmount, IsCompleted) " +
+                          "VALUES (@customerId, @orderDate, @totalAmount, @isCompleted);" +
+                          "SELECT last_insert_rowid();";
 
         await using var command = new SqliteCommand(insertQuery, Connection);
-        command.Parameters.AddWithValue("@orderId", order.Id);
-        command.Parameters.AddWithValue("@customerId", order.Customer.Id);
+        command.Parameters.AddWithValue("@customerId", order.CustomerId);
         command.Parameters.AddWithValue("@orderDate", order.OrderDate);
         command.Parameters.AddWithValue("@totalAmount", order.TotalAmount);
         command.Parameters.AddWithValue("@isCompleted", order.IsCompleted ? 1 : 0);
 
-        await command.ExecuteNonQueryAsync();
-
+        int orderId = Convert.ToInt32(await command.ExecuteScalarAsync());
+        order.Id = orderId;
         // Save the products for the order
         await SaveOrderProductsAsync(order);
+
+        return orderId;
     }
 
     public async Task UpdateOrderAsync(Order order)
@@ -35,7 +37,7 @@ public class OrderRepository : RepositoryBase, IOrderRepository
                           "TotalAmount = @totalAmount, IsCompleted = @isCompleted WHERE OrderId = @orderId";
 
         await using var updateCommand = new SqliteCommand(updateQuery, Connection);
-        updateCommand.Parameters.AddWithValue("@customerId", order.Customer.Id);
+        updateCommand.Parameters.AddWithValue("@customerId", order.CustomerId);
         updateCommand.Parameters.AddWithValue("@orderDate", order.OrderDate);
         updateCommand.Parameters.AddWithValue("@totalAmount", order.TotalAmount);
         updateCommand.Parameters.AddWithValue("@isCompleted", order.IsCompleted ? 1 : 0);
@@ -74,7 +76,7 @@ public class OrderRepository : RepositoryBase, IOrderRepository
             {
                 var products = await GetOrderProductsAsync(orderId);
 
-                var order = new Order((Customer)customer, products)
+                var order = new Order(customer.Id, products)
                 {
                     Id = reader.GetInt32(0),
                     OrderDate = reader.GetDateTime(3),
@@ -105,7 +107,7 @@ public class OrderRepository : RepositoryBase, IOrderRepository
             {
                 var products = await GetOrderProductsAsync(reader.GetInt32(0));
 
-                var order = new Order((Customer)customer, products)
+                var order = new Order(customer.Id, products)
                 {
                     Id = reader.GetInt32(0),
                     OrderDate = reader.GetDateTime(3),
@@ -123,7 +125,7 @@ public class OrderRepository : RepositoryBase, IOrderRepository
     protected override void CreateTables()
     {
         var createOrdersTableQuery = "CREATE TABLE IF NOT EXISTS Orders (" +
-                                     "OrderId INTEGER PRIMARY KEY, " +
+                                     "OrderId INTEGER PRIMARY KEY AUTOINCREMENT, " +
                                      "CustomerId INTEGER, " +
                                      "OrderDate TEXT, " +
                                      "TotalAmount DECIMAL(10, 2), " +
@@ -135,8 +137,7 @@ public class OrderRepository : RepositoryBase, IOrderRepository
         var createOrderProductsTableQuery = "CREATE TABLE IF NOT EXISTS OrderProducts (" +
                                             "OrderId INTEGER, " +
                                             "ProductId INTEGER, " +
-                                            "FOREIGN KEY(OrderId) REFERENCES Orders(OrderId), " +
-                                            "FOREIGN KEY(ProductId) REFERENCES Products(ProductId))";
+                                            "PRIMARY KEY (OrderId, ProductId))";
 
         using var createOrderProductsTableCommand = new SqliteCommand(createOrderProductsTableQuery, Connection);
         createOrderProductsTableCommand.ExecuteNonQuery();
@@ -144,16 +145,8 @@ public class OrderRepository : RepositoryBase, IOrderRepository
 
     private async Task SaveOrderProductsAsync(Order order)
     {
-        // Delete existing order products
-        var deleteQuery = "DELETE FROM OrderProducts WHERE OrderId = @orderId";
-
-        await using var deleteCommand = new SqliteCommand(deleteQuery, Connection);
-        deleteCommand.Parameters.AddWithValue("@orderId", order.Id);
-
-        await deleteCommand.ExecuteNonQueryAsync();
-
         // Insert new order products
-        var insertQuery = "INSERT INTO OrderProducts (OrderId, ProductId) VALUES (@orderId, @productId)";
+        var insertQuery = "INSERT OR IGNORE INTO OrderProducts (OrderId, ProductId) VALUES (@orderId, @productId)";
 
         await using var insertCommand = new SqliteCommand(insertQuery, Connection);
 

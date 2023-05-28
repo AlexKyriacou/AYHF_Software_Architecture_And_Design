@@ -35,7 +35,7 @@ namespace AYHF_Software_Architecture_And_Design.Routes
                         productDto.LongDescription,
                         productDto.Ingredients, productDto.Image, productDto.Rating, productDto.NumRatings,
                         productDto.Price);
-                    await productService.AddProductAsync(product);
+                    product.Id = await productService.AddProductAsync(product);
                     return Results.Created($"/products/{product.Id}", product);
                 }).RequireAuthorization();
 

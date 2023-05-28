@@ -25,9 +25,9 @@ namespace AYHF_Software_Architecture_And_Design.Application.Services
             return await _productRepository.GetAllProductsAsync();
         }
 
-        public async Task AddProductAsync(Product product)
+        public async Task<int> AddProductAsync(Product product)
         {
-            await _productRepository.AddProductAsync(product);
+            return await _productRepository.AddProductAsync(product);
         }
 
         public async Task UpdateProductAsync(Product product)

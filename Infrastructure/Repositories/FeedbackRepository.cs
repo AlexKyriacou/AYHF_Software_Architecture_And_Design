@@ -15,16 +15,19 @@ public class FeedbackRepository : RepositoryBase, IFeedbackRepository
 
     public async Task<int> AddFeedbackAsync(Feedback feedback)
     {
-        var insertQuery = "INSERT INTO Feedbacks (CustomerId, ProductId, Rating, Message, FeedbackDate) VALUES (@customerId, @productId, @rating, @message, @feedbackDate); SELECT last_insert_rowid();";
+        var insertQuery = "INSERT INTO Feedbacks (CustomerId, ProductId, Rating, Message, FeedbackDate) VALUES (@customerId, @productId, @rating, @message, @feedbackDate);";
+        var updateQuery = "UPDATE Products SET NumRatings = NumRatings + 1, AvgRating = ((AvgRating*NumRatings)+@rating)/NumRatings WHERE Id = @productId;";
+        var autoIncrement = "SELECT last_insert_rowid();";
 
-        await using var command = new SqliteCommand(insertQuery, Connection);
+        await using var command = new SqliteCommand(insertQuery + updateQuery + autoIncrement, Connection);
         command.Parameters.AddWithValue("@customerId", feedback.CustomerId);
         command.Parameters.AddWithValue("@productId", feedback.ProductId);
         command.Parameters.AddWithValue("@rating", feedback.Rating);
         command.Parameters.AddWithValue("@message", feedback.Message);
         command.Parameters.AddWithValue("@feedbackDate", feedback.FeedbackDate);
 
-        return Convert.ToInt32(await command.ExecuteScalarAsync());
+        var result = await command.ExecuteScalarAsync();
+        return Convert.ToInt32(result);
     }
 
 
@@ -144,23 +147,6 @@ public class FeedbackRepository : RepositoryBase, IFeedbackRepository
         }
 
         return feedbacks;
-    }
-
-    public async Task<float> GetAverageProductRatingAsync(int productId)
-    {
-        var selectQuery = "SELECT AVG(Rating) FROM Feedbacks WHERE ProductId = @productId";
-
-        await using var selectCommand = new SqliteCommand(selectQuery, Connection);
-        selectCommand.Parameters.AddWithValue("@productId", productId);
-
-        var averageRating = await selectCommand.ExecuteScalarAsync();
-
-        if (averageRating == null)
-        {
-            return 0;
-        }
-
-        return Convert.ToSingle(averageRating);
     }
 
     protected override void CreateTables()
