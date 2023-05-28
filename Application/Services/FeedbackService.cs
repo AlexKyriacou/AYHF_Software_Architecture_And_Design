@@ -36,5 +36,10 @@ namespace AYHF_Software_Architecture_And_Design.Application.Services
         {
             await Task.Run(() => _feedbackRepository.DeleteFeedbackAsync(Feedback));
         }
+        public async Task DeleteFeedbackAsync(int id)
+        {
+            await Task.Run(() => _feedbackRepository.DeleteFeedbackAsync(id));
+        }
+
     }
 }

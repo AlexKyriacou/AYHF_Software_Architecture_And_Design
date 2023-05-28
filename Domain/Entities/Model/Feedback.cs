@@ -2,23 +2,23 @@ namespace AYHF_Software_Architecture_And_Design.Domain.Entities.Model;
 
 public class Feedback
 {
-    public Feedback(Customer customer, string message)
+    public Feedback(int customerId, string message)
     {
-        Customer = customer;
+        CustomerId = customerId;
         Message = message;
         FeedbackDate = DateTime.Now;
     }
 
-    public Feedback(int id, Customer customer, string message, DateTime feedbackDate)
+    public Feedback(int id, int customerId, string message, DateTime feedbackDate)
     {
         Id = id;
-        Customer = customer;
+        CustomerId = customerId;
         Message = message;
         FeedbackDate = feedbackDate;
     }
 
     public int Id { get; set; }
-    public Customer Customer { get; set; }
+    public int CustomerId { get; set; }
     public string Message { get; set; }
     public DateTime FeedbackDate { get; set; }
 }

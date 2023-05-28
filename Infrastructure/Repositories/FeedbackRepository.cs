@@ -1,3 +1,4 @@
+using AYHF_Software_Architecture_And_Design.Domain.Entities.Interfaces;
 using AYHF_Software_Architecture_And_Design.Domain.Entities.Model;
 using AYHF_Software_Architecture_And_Design.Infrastructure.Interfaces;
 using Microsoft.Data.Sqlite;
@@ -17,7 +18,7 @@ public class FeedbackRepository : RepositoryBase, IFeedbackRepository
             "INSERT INTO Feedbacks (CustomerId, FeedbackId, Message, FeedbackDate) VALUES (@customerId, @feedbackId, @message, @feedbackDate)";
 
         await using var command = new SqliteCommand(insertQuery, Connection);
-        command.Parameters.AddWithValue("@customerId", feedback.Customer.Id);
+        command.Parameters.AddWithValue("@customerId", feedback.CustomerId);
         command.Parameters.AddWithValue("@feedbackId", feedback.Id);
         command.Parameters.AddWithValue("@message", feedback.Message);
         command.Parameters.AddWithValue("@feedbackDate", feedback.FeedbackDate);
@@ -31,7 +32,7 @@ public class FeedbackRepository : RepositoryBase, IFeedbackRepository
             "UPDATE Feedbacks SET CustomerId = @customerId, Message = @message, FeedbackDate = @feedbackDate WHERE FeedbackId = @feedbackId";
 
         await using var updateCommand = new SqliteCommand(updateQuery, Connection);
-        updateCommand.Parameters.AddWithValue("@customerId", feedback.Customer.Id);
+        updateCommand.Parameters.AddWithValue("@customerId", feedback.CustomerId);
         updateCommand.Parameters.AddWithValue("@message", feedback.Message);
         updateCommand.Parameters.AddWithValue("@feedbackDate", feedback.FeedbackDate);
         updateCommand.Parameters.AddWithValue("@feedbackId", feedback.Id);
@@ -41,10 +42,15 @@ public class FeedbackRepository : RepositoryBase, IFeedbackRepository
 
     public async Task DeleteFeedbackAsync(Feedback feedback)
     {
+        await this.DeleteFeedbackAsync(feedback.Id);
+    }
+
+    public async Task DeleteFeedbackAsync(int Id)
+    {
         var deleteQuery = "DELETE FROM Feedbacks WHERE FeedbackId = @feedbackId";
 
         await using var deleteCommand = new SqliteCommand(deleteQuery, Connection);
-        deleteCommand.Parameters.AddWithValue("@feedbackId", feedback.Id);
+        deleteCommand.Parameters.AddWithValue("@feedbackId", Id);
         await deleteCommand.ExecuteNonQueryAsync();
     }
 
@@ -67,7 +73,7 @@ public class FeedbackRepository : RepositoryBase, IFeedbackRepository
             if (customer != null)
             {
                 // Create a new Feedback object using the retrieved data
-                var feedback = new Feedback(feedbackId, (Customer)customer, message, DateTime.Parse(feedbackDate));
+                var feedback = new Feedback(feedbackId, customer.Id, message, DateTime.Parse(feedbackDate));
                 return feedback;
             }
         }
@@ -91,10 +97,10 @@ public class FeedbackRepository : RepositoryBase, IFeedbackRepository
             var message = reader.GetString(2);
             var feedbackDateString = reader.GetString(3);
             var customerRepository = new UserRepository();
-            var customer = await customerRepository.GetUserByIdAsync(customerId);
+            IUser? customer = await customerRepository.GetUserByIdAsync(customerId);
             if (customer != null)
             {
-                var feedback = new Feedback(feedbackId, (Customer)customer, message,
+                var feedback = new Feedback(feedbackId, customer.Id, message,
                     DateTime.Parse(feedbackDateString));
                 feedbacks.Add(feedback);
             }
@@ -111,8 +117,4 @@ public class FeedbackRepository : RepositoryBase, IFeedbackRepository
         createTableCommand.ExecuteNonQuery();
     }
 
-    protected override void AddData()
-    {
-        throw new NotImplementedException();
-    }
 }

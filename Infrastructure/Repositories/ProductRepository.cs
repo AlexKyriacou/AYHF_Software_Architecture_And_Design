@@ -9,6 +9,7 @@ public class ProductRepository : RepositoryBase, IProductRepository
     public ProductRepository()
     {
         CreateTables();
+        AddData();
     }
 
     public async Task AddProductAsync(Product product)
@@ -154,7 +155,7 @@ public class ProductRepository : RepositoryBase, IProductRepository
         createTableCommand.ExecuteNonQuery();
     }
 
-    protected override void AddData()
+    protected void AddData()
     {
         var addDataQuery =
             "INSERT INTO Products (Name, Description, LongDescription, Ingredients, Image, Rating, NumRatings, Price) " +

@@ -7,9 +7,13 @@ namespace AYHF_Software_Architecture_And_Design.Infrastructure.Repositories;
 
 public class UserRepository : RepositoryBase, IUserRepository
 {
-    public async Task<IUser> GetUserByIdAsync(int id)
+    public UserRepository(): base()
     {
-        IUser user = new User();
+        AddData();
+    }
+    public async Task<IUser?> GetUserByIdAsync(int id)
+    {
+        IUser? user = null;
         var selectQuery = "SELECT * FROM Users WHERE Id = @id";
 
         await using var selectCommand = new SqliteCommand(selectQuery, Connection);
@@ -17,22 +21,25 @@ public class UserRepository : RepositoryBase, IUserRepository
 
         await using var reader = await selectCommand.ExecuteReaderAsync();
 
-        while (await reader.ReadAsync())
+        if (await reader.ReadAsync())
         {
-            user.Id = reader.GetInt32(0);
-            user.Name = reader.GetString(1);
-            user.Username = reader.GetString(2);
-            user.Email = reader.GetString(3);
-            user.Password = reader.GetString(4);
-            user.Role = reader.GetString(5);
+            user = new User
+            {
+                Id = reader.GetInt32(0),
+                Name = reader.GetString(1),
+                Username = reader.GetString(2),
+                Email = reader.GetString(3),
+                Password = reader.GetString(4),
+                Role = reader.GetString(5)
+            };
         }
 
         return user;
     }
-    
-    public async Task<IUser> GetUserByEmailAsync(string email)
+
+    public async Task<IUser?> GetUserByEmailAsync(string email)
     {
-        IUser user = null;
+        IUser? user = null;
         var selectQuery = "SELECT * FROM Users WHERE Email = @email";
 
         await using var selectCommand = new SqliteCommand(selectQuery, Connection);
@@ -130,7 +137,7 @@ public class UserRepository : RepositoryBase, IUserRepository
         createTableCommand.ExecuteNonQuery();
     }
 
-    protected override void AddData()
+    protected  void AddData()
     {
         var addDataQuery = "INSERT INTO Users (Name, Username, Email, Password, Role) " +
                            "SELECT * FROM (VALUES " +

@@ -2,6 +2,7 @@
 using AYHF_Software_Architecture_And_Design.Application.Services;
 using AYHF_Software_Architecture_And_Design.Domain.Entities.Interfaces;
 using AYHF_Software_Architecture_And_Design.Domain.Entities.Model;
+using AYHF_Software_Architecture_And_Design.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AYHF_Software_Architecture_And_Design.Routes
@@ -28,41 +29,31 @@ namespace AYHF_Software_Architecture_And_Design.Routes
 
             _app.MapPost("/Feedbacks", async ([FromBody] FeedbackDto FeedbackDto, [FromServices] FeedbackService FeedbackService) =>
             {
-                Customer user = new Customer
+                var userRepo = new UserRepository();
+                IUser? user = await userRepo.GetUserByIdAsync(FeedbackDto.CustomerId); //Check if provided user is a valid user
+                if (user == null)
                 {
-                    Id = FeedbackDto.Customer.Id,
-                    Name = FeedbackDto.Customer.Name,
-                    Username = FeedbackDto.Customer.Username,
-                    Email = FeedbackDto.Customer.Email,
-                    Password = FeedbackDto.Customer.Password,
-                    Role = FeedbackDto.Customer.Role
-                };
-                var Feedback = new Feedback(user, FeedbackDto.Message);
-                await FeedbackService.AddFeedbackAsync(Feedback);
-                return Results.Created($"/Feedbacks/{Feedback.Id}", Feedback);
+                    return Results.BadRequest();
+                }
+                var feedback = new Feedback(FeedbackDto.CustomerId, FeedbackDto.Message);
+                await FeedbackService.AddFeedbackAsync(feedback);
+                return Results.Created($"/Feedbacks/{feedback.Id}", feedback);
             });
 
             _app.MapPut("/Feedbacks/{id}", async ([FromBody] FeedbackDto FeedbackDto, [FromServices] FeedbackService FeedbackService) =>
             {
-                Customer user = new Customer
-                {
-                    Id = FeedbackDto.Customer.Id,
-                    Name = FeedbackDto.Customer.Name,
-                    Username = FeedbackDto.Customer.Username,
-                    Email = FeedbackDto.Customer.Email,
-                    Password = FeedbackDto.Customer.Password,
-                    Role = FeedbackDto.Customer.Role
-                };
-                var Feedback = new Feedback(user, FeedbackDto.Message);
-                await FeedbackService.UpdateFeedbackAsync(Feedback);
+                var feedback = new Feedback(FeedbackDto.Id,FeedbackDto.CustomerId,FeedbackDto.Message,FeedbackDto.FeedbackDate);
+                await FeedbackService.UpdateFeedbackAsync(feedback);
                 return Results.NoContent();
             });
 
-            _app.MapDelete("/Feedbacks/{id}", async (Feedback Feedback, [FromServices] FeedbackService FeedbackService) =>
+            _app.MapDelete("/Feedbacks/{id}", async ([FromBody] FeedbackDto FeedbackDto, [FromServices] FeedbackService FeedbackService) =>
             {
-                await FeedbackService.DeleteFeedbackAsync(Feedback);
+                var feedback = new Feedback(FeedbackDto.Id, FeedbackDto.CustomerId, FeedbackDto.Message, FeedbackDto.FeedbackDate);
+                await FeedbackService.DeleteFeedbackAsync(feedback);
                 return Results.NoContent();
             });
+
         }
     }
 }

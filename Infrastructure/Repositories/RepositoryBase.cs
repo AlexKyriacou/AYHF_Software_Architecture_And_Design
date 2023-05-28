@@ -18,14 +18,11 @@ public abstract class RepositoryBase
     {
         if (!DatabaseExists(_databasePath)) CreateDatabase(_databasePath);
         CreateTables();
-        AddData();
     }
 
     protected SqliteConnection Connection => _lazyConnection.Value;
 
     protected abstract void CreateTables();
-
-    protected abstract void AddData();
 
     public void Dispose()
     {

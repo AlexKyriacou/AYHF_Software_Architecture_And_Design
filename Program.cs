@@ -32,7 +32,9 @@ builder.Services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo { Title
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IFeedbackRepository, FeedbackRepository>();
 builder.Services.AddScoped<IScraper, ColesScraper>();
+builder.Services.AddScoped<FeedbackService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<OrderService>();
 builder.Services.AddScoped<ProductService>();
@@ -53,6 +55,10 @@ orderRoutes.Configure();
 // Define routes for Products
 var productRoutes = new ProductRoutes(app);
 productRoutes.Configure();
+
+//Define routes for Feedback
+var feedbackRoutes = new FeedbackRoutes(app);
+feedbackRoutes.Configure();
 
 // Configure Swagger
 app.UseSwagger();

@@ -142,11 +142,6 @@ public class OrderRepository : RepositoryBase, IOrderRepository
         createOrderProductsTableCommand.ExecuteNonQuery();
     }
 
-    protected override void AddData()
-    {
-        throw new NotImplementedException();
-    }
-
     private async Task SaveOrderProductsAsync(Order order)
     {
         // Delete existing order products
