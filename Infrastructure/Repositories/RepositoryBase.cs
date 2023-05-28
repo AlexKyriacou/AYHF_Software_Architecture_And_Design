@@ -24,9 +24,12 @@ namespace MyProject.Infrastructure.Repositories
                 CreateDatabase(_databasePath);
             }
             CreateTables();
+            AddData();
         }
 
         protected abstract void CreateTables();
+
+        protected abstract void AddData();
 
         public void Dispose()
         {

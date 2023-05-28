@@ -34,6 +34,11 @@ namespace MyProject.Infrastructure.Repositories
             createOrderProductsTableCommand.ExecuteNonQuery();
         }
 
+        protected override void AddData()
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task AddOrderAsync(Order order)
         {
             string insertQuery = "INSERT INTO Orders (OrderId, CustomerId, OrderDate, TotalAmount, IsCompleted) " +

@@ -97,9 +97,20 @@ namespace MyProject.Infrastructure.Repositories
 
         protected override void CreateTables()
         {
-            string createTableQuery = "CREATE TABLE IF NOT EXISTS Users (Id INT AUTO_INCREMENT PRIMARY KEY, Name TEXT, Username TEXT, Email TEXT, Password TEXT, Role TEXT)";
+            string createTableQuery = "CREATE TABLE IF NOT EXISTS Users (Id INTEGER PRIMARY KEY AUTOINCREMENT, Name TEXT, Username TEXT, Email TEXT, Password TEXT, Role TEXT)";
             using var createTableCommand = new SqliteCommand(createTableQuery, Connection);
             createTableCommand.ExecuteNonQuery();
+        }
+
+        protected override void AddData()
+        {
+            string addDataQuery = "INSERT INTO Users (Name, Username, Email, Password, Role) " + 
+                                  "SELECT * FROM (VALUES " + 
+                                  "('Marella Admin', 'MMorad', 'marella@gmail.com', 'Test@123', 'admin')," +
+                                  "('Marella Customer', 'Marella.Customer', 'marella@gmail.com', 'Test@123', 'customer')) AS Temp " +
+                                  "WHERE NOT EXISTS (SELECT 1 FROM Users);";
+            using var addDataCommand = new SqliteCommand(addDataQuery, Connection);
+            addDataCommand.ExecuteNonQuery();
         }
     }
 }
