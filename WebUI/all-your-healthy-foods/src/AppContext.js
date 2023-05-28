@@ -1,7 +1,9 @@
 import React, { createContext, useEffect, useState } from "react";
+import axios from "axios";
 
 const CartContext = createContext();
 const UserContext = createContext();
+const ProductsContext = createContext();
 
 const CartProvider = ({ children }) => {
     const [cartCount, setCartCount] = useState(0);
@@ -117,6 +119,32 @@ const CartProvider = ({ children }) => {
     );
 };
 
+const ProductsProvider = ({ children }) => {
+    const [products, setProducts] = useState([]);
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const response = await axios.get("https://localhost:7269/products");
+                if (response.status === 200) {
+                    setProducts(response.data);
+                }
+            } catch (error) {
+                console.log("Error fetching products:", error);
+            }
+        };
+
+        fetchProducts();
+    }, []);
+
+    return (
+        <ProductsContext.Provider value={{ products }}>
+            {children}
+        </ProductsContext.Provider>
+    );
+};
+
+
 const UserProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loggedIn, setLoggedIn] = useState(false);
@@ -161,4 +189,4 @@ const UserProvider = ({ children }) => {
     );
 };
 
-export { CartContext, CartProvider, UserContext, UserProvider };
+export { CartContext, CartProvider, UserContext, UserProvider, ProductsContext, ProductsProvider };

@@ -3,15 +3,17 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import Rating from "../rating/Rating";
-import { CartContext, UserContext } from "../../AppContext";
-import productData from "../../testData/productData";
+import { CartContext, UserContext, ProductsContext } from "../../AppContext";
 import "./ProductCard.css";
 import "./ProductPage.css";
 import axios from "axios";
 
 function ProductPage() {
+  const { products } = useContext(ProductsContext);
+
+  debugger;
   const { productName } = useParams();
-  const product = productData.find(product => product.name === productName);
+  const product = products.find(product => product.name === productName);
   const productId = product.id;
   const { addToCart } = useContext(CartContext);
   const [editedProduct, setEditedProduct] = useState({ ...product });
@@ -131,7 +133,7 @@ function ProductPage() {
           <div className="admin-buttons">
             {!inEditMode && (
               <>
-                <button className="primary-button" onClick={handleEdit}>
+                <button className="primary-button" onClick={() => setInEditMode(true)}>
                   Edit
                 </button>
                 <button className="primary-button" onClick={handleDelete}>
