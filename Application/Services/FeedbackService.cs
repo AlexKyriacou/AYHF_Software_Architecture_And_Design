@@ -22,9 +22,9 @@ namespace AYHF_Software_Architecture_And_Design.Application.Services
             return await Task.Run(() => _feedbackRepository.GetAllFeedbackAsync());
         }
 
-        public async Task AddFeedbackAsync(Feedback Feedback)
+        public async Task<int> AddFeedbackAsync(Feedback Feedback)
         {
-            await Task.Run(() => _feedbackRepository.AddFeedbackAsync(Feedback));
+            return await Task.Run(() => _feedbackRepository.AddFeedbackAsync(Feedback));
         }
 
         public async Task UpdateFeedbackAsync(Feedback Feedback)
@@ -41,5 +41,14 @@ namespace AYHF_Software_Architecture_And_Design.Application.Services
             await Task.Run(() => _feedbackRepository.DeleteFeedbackAsync(id));
         }
 
+        public async Task<List<Feedback>> GetAllFeedbackForProductAsync(int id)
+        {
+            return await Task.Run(() => _feedbackRepository.GetAllFeedbackForProductAsync(id));
+        }
+
+        public async Task<float> GetAverageProductRatingAsync(int id)
+        {
+            return await Task.Run(() => _feedbackRepository.GetAverageProductRatingAsync(id));
+        }
     }
 }

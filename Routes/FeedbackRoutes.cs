@@ -24,6 +24,18 @@ namespace AYHF_Software_Architecture_And_Design.Routes
                 return Feedback == null ? Results.NotFound() : Results.Ok(Feedback);
             });
 
+            _app.MapGet("/Feedbacks/Product/{id}", async (int id, [FromServices] FeedbackService FeedbackService) =>
+            {
+                var Feedback = await FeedbackService.GetAllFeedbackForProductAsync(id);
+                return Feedback == null ? Results.NotFound() : Results.Ok(Feedback);
+            });
+
+            _app.MapGet("/Products/Rating/{id}", async (int id, [FromServices] FeedbackService FeedbackService) =>
+            {
+                float rating = await FeedbackService.GetAverageProductRatingAsync(id);
+                return Results.Ok(rating);
+            });
+
             _app.MapGet("/Feedbacks",
                 async ([FromServices] FeedbackService FeedbackService) => { return await FeedbackService.GetAllFeedbacksAsync(); });
 
@@ -35,21 +47,21 @@ namespace AYHF_Software_Architecture_And_Design.Routes
                 {
                     return Results.BadRequest();
                 }
-                var feedback = new Feedback(FeedbackDto.CustomerId, FeedbackDto.Message);
-                await FeedbackService.AddFeedbackAsync(feedback);
+                var feedback = new Feedback(FeedbackDto.Id, FeedbackDto.CustomerId, FeedbackDto.Rating, FeedbackDto.ProductId, FeedbackDto.Message, FeedbackDto.FeedbackDate);
+                feedback.Id = await FeedbackService.AddFeedbackAsync(feedback);
                 return Results.Created($"/Feedbacks/{feedback.Id}", feedback);
             });
 
             _app.MapPut("/Feedbacks/{id}", async ([FromBody] FeedbackDto FeedbackDto, [FromServices] FeedbackService FeedbackService) =>
             {
-                var feedback = new Feedback(FeedbackDto.Id,FeedbackDto.CustomerId,FeedbackDto.Message,FeedbackDto.FeedbackDate);
+                var feedback = new Feedback(FeedbackDto.Id,FeedbackDto.CustomerId,FeedbackDto.Rating,FeedbackDto.ProductId,FeedbackDto.Message,FeedbackDto.FeedbackDate);
                 await FeedbackService.UpdateFeedbackAsync(feedback);
                 return Results.NoContent();
             });
 
             _app.MapDelete("/Feedbacks/{id}", async ([FromBody] FeedbackDto FeedbackDto, [FromServices] FeedbackService FeedbackService) =>
             {
-                var feedback = new Feedback(FeedbackDto.Id, FeedbackDto.CustomerId, FeedbackDto.Message, FeedbackDto.FeedbackDate);
+                var feedback = new Feedback(FeedbackDto.Id, FeedbackDto.CustomerId, FeedbackDto.Rating, FeedbackDto.ProductId, FeedbackDto.Message, FeedbackDto.FeedbackDate);
                 await FeedbackService.DeleteFeedbackAsync(feedback);
                 return Results.NoContent();
             });
