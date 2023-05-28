@@ -1,5 +1,5 @@
-using MyProject.Domain.Models;
-using MyProject.Infrastructure.Repositories;
+using AYHF_Software_Architecture_And_Design.Domain.Entities.Model;
+using AYHF_Software_Architecture_And_Design.Infrastructure.Interfaces;
 
 namespace AYHF_Software_Architecture_And_Design.Application.Services;
 

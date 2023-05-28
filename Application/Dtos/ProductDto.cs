@@ -7,5 +7,4 @@ public class ProductDto
     public decimal Price { get; set; }
     public string Description { get; set; } = null!;
     public string[] Images { get; set; } = null!;
-
 }

@@ -1,8 +1,10 @@
 using AYHF_Software_Architecture_And_Design.Application.Dtos;
 using AYHF_Software_Architecture_And_Design.Application.Services;
 using AYHF_Software_Architecture_And_Design.Domain.Entities.Interfaces;
+using AYHF_Software_Architecture_And_Design.Domain.Entities.Model;
 using Microsoft.AspNetCore.Mvc;
-using MyProject.Domain.Models;
+
+namespace AYHF_Software_Architecture_And_Design.Routes;
 
 public class UserRoutes
 {
@@ -15,10 +17,8 @@ public class UserRoutes
 
     public void Configure()
     {
-        _app.MapGet("/users", async ([FromServices] UserService userService) =>
-        {
-            return await userService.GetUsersAsync();
-        });
+        _app.MapGet("/users",
+            async ([FromServices] UserService userService) => { return await userService.GetUsersAsync(); });
 
         _app.MapGet("/users/{id}", async (int id, [FromServices] UserService userService) =>
         {
@@ -28,14 +28,16 @@ public class UserRoutes
 
         _app.MapPost("/users", async ([FromBody] UserDto userDto, [FromServices] UserService userService) =>
         {
-            IUser user = new User { Id = userDto.Id, Username = userDto.Username, Password = userDto.Password, Email = userDto.Email };
+            IUser user = new User
+                { Id = userDto.Id, Username = userDto.Username, Password = userDto.Password, Email = userDto.Email };
             await userService.AddUserAsync(user);
             return Results.Created($"/users/{user.Id}", user);
         });
 
         _app.MapPut("/users/{id}", async ([FromBody] UserDto userDto, [FromServices] UserService userService) =>
         {
-            IUser user = new User { Id = userDto.Id, Username = userDto.Username, Password = userDto.Password, Email = userDto.Email };
+            IUser user = new User
+                { Id = userDto.Id, Username = userDto.Username, Password = userDto.Password, Email = userDto.Email };
             await userService.UpdateUserAsync(user);
             return Results.NoContent();
         });

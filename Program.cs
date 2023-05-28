@@ -1,19 +1,14 @@
-using Microsoft.OpenApi.Models;
-using MyProject.Application.Services;
-using MyProject.Domain.Models;
-using MyProject.Infrastructure.Repositories;
-using System.Net;
 using AYHF_Software_Architecture_And_Design.Application.Services;
 using AYHF_Software_Architecture_And_Design.Infrastructure.Interfaces;
+using AYHF_Software_Architecture_And_Design.Infrastructure.Repositories;
+using AYHF_Software_Architecture_And_Design.Routes;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Configure services
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
-});
+builder.Services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" }); });
 
 // Register your services
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -39,9 +34,6 @@ productRoutes.Configure();
 
 // Configure Swagger
 app.UseSwagger();
-app.UseSwaggerUI(c =>
-{
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-});
+app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1"); });
 
 app.Run();
