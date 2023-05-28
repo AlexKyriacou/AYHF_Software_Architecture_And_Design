@@ -1,42 +1,62 @@
 using AYHF_Software_Architecture_And_Design.Domain.Entities.Interfaces;
 using AYHF_Software_Architecture_And_Design.Infrastructure.Interfaces;
-using MyProject.Domain.Models;
-using MyProject.Infrastructure.Repositories;
 
-namespace AYHF_Software_Architecture_And_Design.Application.Services
+namespace AYHF_Software_Architecture_And_Design.Application.Services;
+
+public class UserService
 {
-    public class UserService
+    private readonly IUserRepository _userRepository;
+
+    public UserService(IUserRepository userRepository)
     {
-        private readonly IUserRepository _userRepository;
+        _userRepository = userRepository;
+    }
 
-        public UserService(IUserRepository userRepository)
-        {
-            _userRepository = userRepository;
-        }
+    public Task<List<IUser>> GetUsersAsync()
+    {
+        return _userRepository.GetUsersAsync();
+    }
 
-        public Task<List<IUser>> GetUsersAsync()
-        {
-            return _userRepository.GetUsersAsync();
-        }
+    public Task<IUser> GetUserByIdAsync(int id)
+    {
+        return _userRepository.GetUserByIdAsync(id);
+    }
 
-        public Task<IUser> GetUserByIdAsync(int id)
-        {
-            return _userRepository.GetUserByIdAsync(id);
-        }
+    public Task AddUserAsync(IUser user)
+    {
+        return _userRepository.AddUserAsync(user);
+    }
 
-        public Task AddUserAsync(IUser user)
-        {
-            return _userRepository.AddUserAsync(user);
-        }
+    public Task UpdateUserAsync(IUser user)
+    {
+        return _userRepository.UpdateUserAsync(user);
+    }
 
-        public Task UpdateUserAsync(IUser user)
+    public Task DeleteUserAsync(int id)
+    {
+        return _userRepository.DeleteUserAsync(id);
+    }
+    
+    public async Task RegisterUserAsync(IUser user)
+    {
+        var existingUser = await _userRepository.GetUserByEmailAsync(user.Email);
+        if (existingUser != null)
         {
-            return _userRepository.UpdateUserAsync(user);
+            throw new ArgumentException("User already exists");
         }
-
-        public Task DeleteUserAsync(int id)
+        
+        user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password); 
+        await _userRepository.AddUserAsync(user);
+    }
+    
+    public async Task<IUser> LoginUserAsync(string email, string password)
+    {
+        var user = await _userRepository.GetUserByEmailAsync(email);
+        if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.Password))
         {
-            return _userRepository.DeleteUserAsync(id);
+            throw new ArgumentException("Invalid email or password");
         }
+        
+        return user;
     }
 }

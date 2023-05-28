@@ -1,25 +1,25 @@
-import React, { useContext, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import React, {useContext, useState} from "react";
+import {Link, useParams} from "react-router-dom";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faArrowLeft} from "@fortawesome/free-solid-svg-icons";
 import Rating from "../rating/Rating";
-import { CartContext } from "../../AppContext";
-import { UserContext } from "../../AppContext";
+import {CartContext, UserContext} from "../../AppContext";
 import productData from "../../testData/productData";
 import "./ProductCard.css"
 import "./ProductPage.css";
 
 function ProductPage() {
-    const { productName } = useParams();
+    const {productName} = useParams();
     const product = productData.find(product => product.name === productName);
     const productId = product.id;
     const { addToCart } = useContext(CartContext);
+
 
     const handleAddToCart = () => {
         addToCart(product);
     };
 
-    const { loggedIn, user } = useContext(UserContext);
+    const {loggedIn, user} = useContext(UserContext);
     const [inEditMode, setInEditMode] = useState(false);
 
     const handleEdit = () => {

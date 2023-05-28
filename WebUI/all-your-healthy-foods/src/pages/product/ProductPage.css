@@ -2,40 +2,40 @@
     display: flex;
     justify-content: center;
 }
-  
+
 .overview-card {
     display: flex;
     align-items: flex-start; /* Align items at the top */
     width: 70%;
     margin: 40px 0 100px 0;
 }
-  
+
 .image-container {
     height: 500px;
     width: 500px;
     object-fit: contain;
     position: relative;
 }
-  
+
 .image-container img {
     width: 100%;
     height: auto;
 }
-  
+
 .back-link-container {
     position: absolute;
     top: 0;
     left: 0;
     margin-bottom: 20px;
 }
-  
+
 .back-link {
     color: #333;
     text-decoration: none;
     display: flex;
     align-items: center;
 }
-  
+
 .back-link svg {
     margin-right: 5px;
 }
@@ -46,7 +46,7 @@
     max-width: 600px;
     flex: 1;
 }
-  
+
 .product-overview-details .product-name-desc {
     font-size: 30px;
     font-weight: bold;
@@ -65,17 +65,17 @@
 details {
     text-align: start;
 }
-  
+
 details summary {
     margin-top: 10px;
     cursor: pointer;
     font-weight: bold;
 }
-  
+
 details p {
     margin-top: 5px;
 }
 
-.admin-buttons button:not(:last-child){
+.admin-buttons button:not(:last-child) {
     margin-right: 10px;
 }

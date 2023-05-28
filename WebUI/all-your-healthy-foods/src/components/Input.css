@@ -24,12 +24,12 @@
 .input-group {
     display: flex;
 }
-  
+
 .input-group .input-with-validation {
     width: 100%;
     margin-right: 16px;
 }
-  
+
 .input-group .input-with-validation:last-child {
     margin-right: 0;
 }
@@ -44,7 +44,7 @@
 }
 
 .password-container .input-with-validation {
-    width:  100%;
+    width: 100%;
 }
 
 .password-container svg {

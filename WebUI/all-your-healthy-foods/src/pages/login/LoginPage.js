@@ -1,34 +1,33 @@
-import React, { useState, useContext } from "react";
-import { Link, Navigate, useLocation } from "react-router-dom";
+import React, {useContext, useState} from "react";
+import {Link, useNavigate} from "react-router-dom";
 import PasswordInput from "../../components/PasswordInput";
-import { UserContext } from "../../AppContext";
-import userData from "../../testData/userData"; //TO DELETE ONCE WE ESTABLISH BACKEND CONNECTION
+import {UserContext} from "../../AppContext";
 import TextInputWithValidation from '../../components/TextInputWithValidation'
 import "./Login.css";
+import axios from "axios";
 
 const LoginPage = () => {
-    const users = userData; //TODO: REPLACE WITH ACTUAL USERS ONCE WE ESTABLISH BACKEND CONNECTION
-    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loginError, setLoginError] = useState("");
-    const { login, loggedIn } = useContext(UserContext);
+    const {login} = useContext(UserContext);
 
-    const location = useLocation();
-    const queryParams = new URLSearchParams(location.search);
-    const from = queryParams.get("from");
+    const navigate = useNavigate();
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        // TODO: Send the user object to the backend and get the backend response
-        // (including whether the user exists, and if so what"s their role)
-        const user = users.find((u) => u.username === username && u.password === password);
-
-        if (user) {
-            // Set the logged in user details using the login function from UserContext
-            login(user);
+        try {
+            const response = await axios.post('https://localhost:7269/users/login', { email, password });
+            if (response.status !== 200) {
+                throw new Error('Network response was not ok');
+            }
+            
             setLoginError("");
-        } else {
-            setLoginError("Invalid username or password");
+
+            navigate("/home"); 
+
+        } catch (error) {
+            setLoginError("Invalid email or password");
         }
     };
 
@@ -38,14 +37,12 @@ const LoginPage = () => {
                 <h2 className="page-title">Login</h2>
                 <form className="page-form" onSubmit={handleSubmit}>
                     {loginError && <span className="error-message">{loginError}</span>}
-                    {loggedIn && (
-                        <Navigate to={from ? ("/" + from) : "/"} replace={true} />
-                    )}
                     <TextInputWithValidation
-                        placeholder="Username"
-                        value={username}
-                        parentOnChange={setUsername}
+                        placeholder="Email"
+                        value={email}
+                        parentOnChange={setEmail}
                         required={true}
+                        type="email"
                     />
                     <PasswordInput
                         placeholder="Password"

@@ -1,39 +1,39 @@
-using MyProject.Domain.Models;
-using MyProject.Infrastructure.Repositories;
+using AYHF_Software_Architecture_And_Design.Domain.Entities.Model;
+using AYHF_Software_Architecture_And_Design.Infrastructure.Interfaces;
 
 namespace AYHF_Software_Architecture_And_Design.Application.Services;
 
-public class ProductService
+public class OrderService
 {
-    private readonly IProductRepository _productRepository;
+    private readonly IOrderRepository _orderRepository;
 
-    public ProductService(IProductRepository productRepository)
+    public OrderService(IOrderRepository orderRepository)
     {
-        _productRepository = productRepository;
+        _orderRepository = orderRepository;
     }
 
-    public async Task<Product?> GetProductByIdAsync(int productId)
+    public async Task<Order?> GetOrderByIdAsync(int orderId)
     {
-        return await Task.Run(() => _productRepository.GetProductByIdAsync(productId));
+        return await Task.Run(() => _orderRepository.GetOrderByIdAsync(orderId));
     }
 
-    public async Task<List<Product>> GetAllProductsAsync()
+    public async Task<List<Order>> GetAllOrdersAsync()
     {
-        return await Task.Run(() => _productRepository.GetAllProductsAsync());
+        return await Task.Run(() => _orderRepository.GetAllOrdersAsync());
     }
 
-    public async Task AddProductAsync(Product product)
+    public async Task AddOrderAsync(Order order)
     {
-        await Task.Run(() => _productRepository.AddProductAsync(product));
+        await Task.Run(() => _orderRepository.AddOrderAsync(order));
     }
 
-    public async Task UpdateProductAsync(Product product)
+    public async Task UpdateOrderAsync(Order order)
     {
-        await Task.Run(() => _productRepository.UpdateProductAsync(product));
+        await Task.Run(() => _orderRepository.UpdateOrderAsync(order));
     }
 
-    public async Task DeleteProductAsync(int id)
+    public async Task DeleteOrderAsync(int id)
     {
-        await Task.Run(() => _productRepository.DeleteProductAsync(id));
+        await Task.Run(() => _orderRepository.DeleteOrderAsync(id));
     }
 }
