@@ -1,8 +1,9 @@
-namespace MyProject.Domain.Models;
+namespace AYHF_Software_Architecture_And_Design.Domain.Entities.Model;
 
 public class Product
 {
-    public Product(int id, string name, string description, string longDescription, string ingredients, string image, int rating, int numRatings, decimal price)
+    public Product(int id, string name, string description, string longDescription, string ingredients, string image,
+        int rating, int numRatings, decimal price)
     {
         Id = id;
         Name = name;

@@ -1,11 +1,11 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import LoginPage from "./pages/login/LoginPage";
 import SignupPage from "./pages/login/SignupPage";
 import Navbar from "./components/navbar/Navbar";
 import HomePage from "./pages/home/HomePage";
 import CartPage from "./pages/cart/CartPage";
-import { UserProvider } from "./AppContext";
+import {UserProvider} from "./AppContext";
 import ProductPage from "./pages/product/ProductPage";
 import CheckoutPage from "./pages/checkout/CheckoutPage";
 import ShippingPage from "./pages/checkout/ShippingPage";
@@ -20,19 +20,19 @@ function App() {
         <Router>
             <UserProvider>
                 <div className="App">
-                    <Navbar />
+                    <Navbar/>
                     <Routes>
-                        <Route path="" element={<HomePage />}></Route>
-                        <Route path="/login" element={<LoginPage />}></Route>
-                        <Route path="/signup" element={<SignupPage />}></Route>
-                        <Route path="/account/:username" element={<AccountPage />} />
-                        <Route path="/cart" element={<CartPage />} />
-                        <Route path="/product/:productName" element={<ProductPage />} />
-                        <Route path="/checkout" element={<CheckoutPage />} />
-                        <Route path="/shipping" element={<ShippingPage />} />
-                        <Route path="/payment" element={<PaymentPage />} />
-                        <Route path="/order-confirmation" element={<OrderConfirmationPage />} />
-                        <Route path="/order-history" element={<OrderHistory />} />
+                        <Route path="" element={<HomePage/>}></Route>
+                        <Route path="/login" element={<LoginPage/>}></Route>
+                        <Route path="/signup" element={<SignupPage/>}></Route>
+                        <Route path="/account/:username" element={<AccountPage/>}/>
+                        <Route path="/cart" element={<CartPage/>}/>
+                        <Route path="/product/:productName" element={<ProductPage/>}/>
+                        <Route path="/checkout" element={<CheckoutPage/>}/>
+                        <Route path="/shipping" element={<ShippingPage/>}/>
+                        <Route path="/payment" element={<PaymentPage/>}/>
+                        <Route path="/order-confirmation" element={<OrderConfirmationPage/>}/>
+                        <Route path="/order-history" element={<OrderHistory/>}/>
                     </Routes>
                     <footer className="App-footer">
                         <p>© 2023 All Your Healthy Foods - All Rights Reserved.</p>

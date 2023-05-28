@@ -1,7 +1,7 @@
-import React, { useState, useContext } from "react";
-import { Link, Navigate, useLocation } from "react-router-dom";
+import React, {useContext, useState} from "react";
+import {Link, Navigate, useLocation} from "react-router-dom";
 import PasswordInput from "../../components/PasswordInput";
-import { UserContext } from "../../AppContext";
+import {UserContext} from "../../AppContext";
 import userData from "../../testData/userData"; //TO DELETE ONCE WE ESTABLISH BACKEND CONNECTION
 import TextInputWithValidation from '../../components/TextInputWithValidation'
 import "./Login.css";
@@ -11,7 +11,7 @@ const LoginPage = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [loginError, setLoginError] = useState("");
-    const { login, loggedIn } = useContext(UserContext);
+    const {login, loggedIn} = useContext(UserContext);
 
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
@@ -39,7 +39,7 @@ const LoginPage = () => {
                 <form className="page-form" onSubmit={handleSubmit}>
                     {loginError && <span className="error-message">{loginError}</span>}
                     {loggedIn && (
-                        <Navigate to={from ? ("/" + from) : "/"} replace={true} />
+                        <Navigate to={from ? ("/" + from) : "/"} replace={true}/>
                     )}
                     <TextInputWithValidation
                         placeholder="Username"
