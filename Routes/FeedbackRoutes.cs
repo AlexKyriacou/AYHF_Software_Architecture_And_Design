@@ -49,7 +49,8 @@ namespace AYHF_Software_Architecture_And_Design.Routes
                 }
                 var feedback = new Feedback(FeedbackDto.Id, FeedbackDto.CustomerId, FeedbackDto.Rating, FeedbackDto.ProductId, FeedbackDto.Message, FeedbackDto.FeedbackDate);
                 feedback.Id = await FeedbackService.AddFeedbackAsync(feedback);
-            });
+
+                return Results.Created($"/Feedbacks/{feedback.Id}", feedback);
             }).RequireAuthorization();
 
             _app.MapPut("/Feedbacks/{id}", async ([FromBody] FeedbackDto FeedbackDto, [FromServices] FeedbackService FeedbackService) =>
