@@ -1,4 +1,4 @@
-﻿using AYHF_Software_Architecture_And_Design.Application.Dtos;
+using AYHF_Software_Architecture_And_Design.Application.Dtos;
 using AYHF_Software_Architecture_And_Design.Application.Services;
 using AYHF_Software_Architecture_And_Design.Domain.Entities.Interfaces;
 using AYHF_Software_Architecture_And_Design.Domain.Entities.Model;
@@ -49,15 +49,16 @@ namespace AYHF_Software_Architecture_And_Design.Routes
                 }
                 var feedback = new Feedback(FeedbackDto.Id, FeedbackDto.CustomerId, FeedbackDto.Rating, FeedbackDto.ProductId, FeedbackDto.Message, FeedbackDto.FeedbackDate);
                 feedback.Id = await FeedbackService.AddFeedbackAsync(feedback);
+
                 return Results.Created($"/Feedbacks/{feedback.Id}", feedback);
-            });
+            }).RequireAuthorization();
 
             _app.MapPut("/Feedbacks/{id}", async ([FromBody] FeedbackDto FeedbackDto, [FromServices] FeedbackService FeedbackService) =>
             {
                 var feedback = new Feedback(FeedbackDto.Id,FeedbackDto.CustomerId,FeedbackDto.Rating,FeedbackDto.ProductId,FeedbackDto.Message,FeedbackDto.FeedbackDate);
                 await FeedbackService.UpdateFeedbackAsync(feedback);
                 return Results.NoContent();
-            });
+            }).RequireAuthorization();
 
             _app.MapDelete("/Feedbacks/{id}", async ([FromBody] FeedbackDto FeedbackDto, [FromServices] FeedbackService FeedbackService) =>
             {
@@ -65,7 +66,6 @@ namespace AYHF_Software_Architecture_And_Design.Routes
                 await FeedbackService.DeleteFeedbackAsync(feedback);
                 return Results.NoContent();
             });
-
         }
     }
 }

@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import Rating from "../rating/Rating";
@@ -8,12 +7,14 @@ import { CartContext, UserContext } from "../../AppContext";
 import productData from "../../testData/productData";
 import "./ProductCard.css";
 import "./ProductPage.css";
+import axios from "axios";
 
 function ProductPage() {
   const { productName } = useParams();
-  const product = productData.find((product) => product.name === productName);
+  const product = productData.find(product => product.name === productName);
   const productId = product.id;
   const { addToCart } = useContext(CartContext);
+  const [editedProduct, setEditedProduct] = useState({ ...product });
 
   const navigate = useNavigate();
 
@@ -24,34 +25,16 @@ function ProductPage() {
   const { loggedIn, user } = useContext(UserContext);
   const [inEditMode, setInEditMode] = useState(false);
 
-  // Define the editedProduct and handleInputChange variables
-  const [editedProduct, setEditedProduct] = useState({
-    name: "",
-    price: "",
-    longDescription: "",
-    ingredients: "",
-  });
-
-  const handleInputChange = (e) => {
-    setEditedProduct((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
-  const handleEdit = () => {
-    setInEditMode(true);
+  const handleInputChange = (event) => {
+    setEditedProduct({
+      ...editedProduct,
+      [event.target.name]: event.target.value,
+    });
   };
 
   const handleDelete = async () => {
     try {
-      // Make a DELETE request to the API endpoint to delete the product
-      const response = await fetch(
-        `https://localhost:7269/products/${productId}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const response = axios.delete(`https://localhost:7269/products/${productId}`);
 
       if (!response.ok) {
         throw new Error("Request failed");
@@ -65,17 +48,7 @@ function ProductPage() {
 
   const handleSave = async () => {
     try {
-      // Make a PUT request to the API endpoint to update the product
-      const response = await fetch(
-        `https://localhost:7269/products/${productId}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(editedProduct),
-        }
-      );
+      const response = axios.put(`https://localhost:7269/products/${productId}`, editedProduct);
 
       if (!response.ok) {
         throw new Error("Request failed");
@@ -87,16 +60,6 @@ function ProductPage() {
     }
   };
 
-  const handleCancel = () => {
-    setInEditMode(false);
-    setEditedProduct({
-      name: "",
-      price: "",
-      longDescription: "",
-      ingredients: "",
-    });
-  };
-
   return (
     <div className="product-overview-container">
       <div className="overview-card">
@@ -106,11 +69,7 @@ function ProductPage() {
               <FontAwesomeIcon icon={faArrowLeft} /> Back
             </Link>
           </div>
-          <img
-            className="large-view"
-            src={product.image}
-            alt={product.name}
-          />
+          <img className="large-view" src={product.image} alt={product.name} />
         </div>
         <div className="product-overview-details">
           <div className="product-info">
@@ -137,9 +96,7 @@ function ProductPage() {
                 onChange={handleInputChange}
               />
             ) : (
-              <p className="product-price">
-                $ {(product.price).toFixed(2)}
-              </p>
+              <p className="product-price">$ {(product.price).toFixed(2)}</p>
             )}
             <button className="add-to-cart-button" onClick={handleAddToCart}>
               Add to cart
@@ -172,7 +129,7 @@ function ProductPage() {
         </div>
         {loggedIn && user.role === "admin" && (
           <div className="admin-buttons">
-            {!inEditMode ? (
+            {!inEditMode && (
               <>
                 <button className="primary-button" onClick={handleEdit}>
                   Edit
@@ -181,12 +138,13 @@ function ProductPage() {
                   Delete
                 </button>
               </>
-            ) : (
+            )}
+            {inEditMode && (
               <>
                 <button className="primary-button" onClick={handleSave}>
                   Save
                 </button>
-                <button className="primary-button" onClick={handleCancel}>
+                <button className="primary-button" onClick={() => setInEditMode(false)}>
                   Cancel
                 </button>
               </>

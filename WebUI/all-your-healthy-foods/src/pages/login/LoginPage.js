@@ -18,19 +18,26 @@ const LoginPage = () => {
         event.preventDefault();
         try {
             const response = await axios.post('https://localhost:7269/users/login', { email, password });
+
             if (response.status !== 200) {
                 throw new Error('Network response was not ok');
             }
 
+            const { token, user } = response.data;
+
+            localStorage.setItem("token", token);
+
+            login(user); 
+
             setLoginError("");
-            login(response.data);
-            navigate("/");
+
+            navigate("/home");
 
         } catch (error) {
             setLoginError("Invalid email or password");
         }
     };
-
+    
     return (
         <div className="page-container">
             <div className="page-card">
