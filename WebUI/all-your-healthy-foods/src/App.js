@@ -12,7 +12,7 @@ import ShippingPage from "./pages/checkout/ShippingPage";
 import PaymentPage from "./pages/checkout/PaymentPage";
 import AccountPage from "./pages/login/AccountPage";
 import OrderConfirmationPage from "./pages/order/OrderConfirmationPage";
-import OrderHistory from "./pages/order/OrderHistory";
+import OrderHistoryPage from "./pages/order/OrderHistoryPage";
 import AddProductPage from "./pages/product/AddProductPage";
 import "./App.css";
 
@@ -37,7 +37,7 @@ function App() {
                                 path="/order-confirmation"
                                 element={<OrderConfirmationPage />}
                             />
-                            <Route path="/order-history" element={<OrderHistory />} />
+                            <Route path="/order-history" element={<OrderHistoryPage />} />
                             <Route path="/add-product" element={<AddProductPage />} />
                         </Routes>
                         <footer className="App-footer">
