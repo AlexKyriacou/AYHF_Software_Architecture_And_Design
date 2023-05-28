@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import PasswordInput from "../../components/PasswordInput";
 import { UserContext } from "../../AppContext";
 import TextInputWithValidation from '../../components/TextInputWithValidation'
@@ -11,6 +11,10 @@ const LoginPage = () => {
     const [password, setPassword] = useState("");
     const [loginError, setLoginError] = useState("");
     const { login } = useContext(UserContext);
+
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const from = queryParams.get("from");
 
     const navigate = useNavigate();
 
@@ -29,7 +33,7 @@ const LoginPage = () => {
 
             login(user);
             setLoginError("");
-            navigate("/");
+            navigate(from ? `/${from}` : "/");
 
         } catch (error) {
             setLoginError("Invalid email or password");
