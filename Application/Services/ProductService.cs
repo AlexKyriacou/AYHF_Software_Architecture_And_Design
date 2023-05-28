@@ -1,39 +1,53 @@
 using AYHF_Software_Architecture_And_Design.Domain.Entities.Model;
 using AYHF_Software_Architecture_And_Design.Infrastructure.Interfaces;
+using AYHF_Software_Architecture_And_Design.Domain.Entities.Interfaces;
 
-namespace AYHF_Software_Architecture_And_Design.Application.Services;
-
-public class OrderService
+namespace AYHF_Software_Architecture_And_Design.Application.Services
 {
-    private readonly IOrderRepository _orderRepository;
-
-    public OrderService(IOrderRepository orderRepository)
+    public class ProductService
     {
-        _orderRepository = orderRepository;
-    }
+        private readonly IProductRepository _productRepository;
+        private readonly IScraper _scraper;
 
-    public async Task<Order?> GetOrderByIdAsync(int orderId)
-    {
-        return await Task.Run(() => _orderRepository.GetOrderByIdAsync(orderId));
-    }
+        public ProductService(IProductRepository productRepository, IScraper scraper)
+        {
+            _productRepository = productRepository;
+            _scraper = scraper;
+        }
 
-    public async Task<List<Order>> GetAllOrdersAsync()
-    {
-        return await Task.Run(() => _orderRepository.GetAllOrdersAsync());
-    }
+        public async Task<Product?> GetProductByIdAsync(int productId)
+        {
+            return await _productRepository.GetProductByIdAsync(productId);
+        }
 
-    public async Task AddOrderAsync(Order order)
-    {
-        await Task.Run(() => _orderRepository.AddOrderAsync(order));
-    }
+        public async Task<List<Product>> GetAllProductsAsync()
+        {
+            return await _productRepository.GetAllProductsAsync();
+        }
 
-    public async Task UpdateOrderAsync(Order order)
-    {
-        await Task.Run(() => _orderRepository.UpdateOrderAsync(order));
-    }
+        public async Task AddProductAsync(Product product)
+        {
+            await _productRepository.AddProductAsync(product);
+        }
 
-    public async Task DeleteOrderAsync(int id)
-    {
-        await Task.Run(() => _orderRepository.DeleteOrderAsync(id));
+        public async Task UpdateProductAsync(Product product)
+        {
+            await _productRepository.UpdateProductAsync(product);
+        }
+
+        public async Task DeleteProductAsync(int id)
+        {
+            await _productRepository.DeleteProductAsync(id);
+        }
+
+        public async Task ScrapeAndAddProductsAsync()
+        {
+            var products = await _scraper.ScrapeProductsAsync();
+
+            foreach (var product in products)
+            {
+                await _productRepository.AddProductAsync(product);
+            }
+        }
     }
 }

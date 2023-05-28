@@ -3,57 +3,65 @@ using AYHF_Software_Architecture_And_Design.Application.Services;
 using AYHF_Software_Architecture_And_Design.Domain.Entities.Model;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AYHF_Software_Architecture_And_Design.Routes;
-
-public class ProductRoutes
+namespace AYHF_Software_Architecture_And_Design.Routes
 {
-    private readonly WebApplication _app;
-
-    public ProductRoutes(WebApplication app)
+    public class ProductRoutes
     {
-        _app = app;
-    }
+        private readonly WebApplication _app;
 
-    public void Configure()
-    {
-        _app.MapGet("/products",
-            async ([FromServices] ProductService productService) =>
-            {
-                return await productService.GetAllProductsAsync();
-            });
-
-        _app.MapGet("/products/{id}", async (int id, [FromServices] ProductService productService) =>
+        public ProductRoutes(WebApplication app)
         {
-            var product = await productService.GetProductByIdAsync(id);
-            return product == null ? Results.NotFound() : Results.Ok(product);
-        });
+            _app = app;
+        }
 
-        _app.MapPost("/products",
-            async ([FromBody] ProductDto productDto, [FromServices] ProductService productService) =>
+        public void Configure()
+        {
+            _app.MapGet("/products",
+                async ([FromServices] ProductService productService) =>
+                {
+                    return await productService.GetAllProductsAsync();
+                });
+
+            _app.MapGet("/products/{id}", async (int id, [FromServices] ProductService productService) =>
             {
-                var product = new Product(productDto.Id, productDto.Name, productDto.Description,
-                    productDto.LongDescription,
-                    productDto.Ingredients, productDto.Image, productDto.Rating, productDto.NumRatings,
-                    productDto.Price);
-                await productService.AddProductAsync(product);
-                return Results.Created($"/products/{product.Id}", product);
+                var product = await productService.GetProductByIdAsync(id);
+                return product == null ? Results.NotFound() : Results.Ok(product);
             });
 
-        _app.MapPut("/products/{id}",
-            async (int id, [FromBody] ProductDto productDto, [FromServices] ProductService productService) =>
+            _app.MapPost("/products",
+                async ([FromBody] ProductDto productDto, [FromServices] ProductService productService) =>
+                {
+                    var product = new Product(productDto.Id, productDto.Name, productDto.Description,
+                        productDto.LongDescription,
+                        productDto.Ingredients, productDto.Image, productDto.Rating, productDto.NumRatings,
+                        productDto.Price);
+                    await productService.AddProductAsync(product);
+                    return Results.Created($"/products/{product.Id}", product);
+                });
+
+            _app.MapPut("/products/{id}",
+                async (int id, [FromBody] ProductDto productDto, [FromServices] ProductService productService) =>
+                {
+                    var product = new Product(productDto.Id, productDto.Name, productDto.Description,
+                        productDto.LongDescription,
+                        productDto.Ingredients, productDto.Image, productDto.Rating, productDto.NumRatings,
+                        productDto.Price);
+                    await productService.UpdateProductAsync(product);
+                    return Results.NoContent();
+                });
+
+            _app.MapDelete("/products/{id}", async (int id, [FromServices] ProductService productService) =>
             {
-                var product = new Product(productDto.Id, productDto.Name, productDto.Description,
-                    productDto.LongDescription,
-                    productDto.Ingredients, productDto.Image, productDto.Rating, productDto.NumRatings,
-                    productDto.Price);
-                await productService.UpdateProductAsync(product);
+                await productService.DeleteProductAsync(id);
                 return Results.NoContent();
             });
 
-        _app.MapDelete("/products/{id}", async (int id, [FromServices] ProductService productService) =>
-        {
-            await productService.DeleteProductAsync(id);
-            return Results.NoContent();
-        });
+            _app.MapPost("/products/scrape",
+                async ([FromServices] ProductService productService) =>
+                {
+                    await productService.ScrapeAndAddProductsAsync();
+                    return Results.Accepted();
+                });
+        }
     }
 }
