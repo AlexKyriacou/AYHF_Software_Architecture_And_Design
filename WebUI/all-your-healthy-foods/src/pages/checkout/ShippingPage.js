@@ -58,6 +58,8 @@ function ShippingPage() {
             event.preventDefault();
             setFormErrorMessage("Please fill in your shipping details before proceeding to payment");
         }
+
+        //TODO: Save address info against user
     };
 
     return (
