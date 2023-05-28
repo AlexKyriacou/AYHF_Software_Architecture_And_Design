@@ -1,5 +1,9 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using AYHF_Software_Architecture_And_Design.Domain.Entities.Interfaces;
 using AYHF_Software_Architecture_And_Design.Infrastructure.Interfaces;
+using Microsoft.IdentityModel.Tokens;
 
 namespace AYHF_Software_Architecture_And_Design.Application.Services;
 
@@ -49,14 +53,37 @@ public class UserService
         await _userRepository.AddUserAsync(user);
     }
     
-    public async Task<IUser> LoginUserAsync(string email, string password)
+    public async Task<Object> LoginUserAsync(string email, string password)
     {
         var user = await _userRepository.GetUserByEmailAsync(email);
         if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.Password))
         {
             throw new ArgumentException("Invalid email or password");
         }
-        
-        return user;
+
+        var token = GenerateJwtForUser(user);
+
+        return new {user, token};
     }
+    
+    private string GenerateJwtForUser(IUser user)
+    {
+        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superduperextraultramegaSecretKey@345"));
+        var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+        var claims = new[] {
+            new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+        };
+
+        var token = new JwtSecurityToken(
+            issuer: "AYHF",
+            audience: "customers",
+            claims: claims,
+            expires: DateTime.Now.AddDays(1),
+            signingCredentials: credentials
+        );
+        
+        return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+
 }

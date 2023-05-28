@@ -35,7 +35,7 @@ public class UserRoutes
             };
             await userService.AddUserAsync(user);
             return Results.Created($"/users/{user.Id}", user);
-        });
+        }).RequireAuthorization();
 
         _app.MapPut("/users/{id}", async ([FromBody] UserDto userDto, [FromServices] UserService userService) =>
         {
@@ -46,14 +46,14 @@ public class UserRoutes
             };
             await userService.UpdateUserAsync(user);
             return Results.NoContent();
-        });
+        }).RequireAuthorization();
 
         _app.MapDelete("/users/{id}", async (int id, [FromServices] UserService userService) =>
         {
             await userService.DeleteUserAsync(id);
             return Results.NoContent();
-        });
-        
+        }).RequireAuthorization();
+
         _app.MapPost("/users/register", async ([FromBody] UserDto userDto, [FromServices] UserService userService) =>
         {
             IUser user = new User
