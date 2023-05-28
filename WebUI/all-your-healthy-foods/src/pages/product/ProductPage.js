@@ -11,7 +11,6 @@ import axios from "axios";
 function ProductPage() {
   const { products } = useContext(ProductsContext);
 
-  debugger;
   const { productName } = useParams();
   const product = products.find(product => product.name === productName);
   const productId = product.id;
@@ -76,20 +75,32 @@ function ProductPage() {
         <div className="product-overview-details">
           <div className="product-info">
             {inEditMode ? (
-              <input
-                type="text"
-                name="name"
-                value={editedProduct.name}
-                onChange={handleInputChange}
-              />
+              <div className="product-name-desc">
+                <input
+                  type="text"
+                  name="name"
+                  value={editedProduct.name}
+                  onChange={handleInputChange}
+                />
+                <input
+                  type="text"
+                  name="name"
+                  value={editedProduct.description}
+                  onChange={handleInputChange}
+                />
+              </div>
             ) : (
-              <p className="product-name-desc">
-                {product.name} {product.description}
-              </p>
+              <div className="product-name-desc">
+                <p>{product.name}</p>
+                <p>&nbsp;-&nbsp;</p>
+                <p>{product.description}</p>
+              </div>
             )}
-            <div className="product-rating">
-              <Rating rate={product.rating} /> ({product.numRatings})
-            </div>
+            {!inEditMode && (
+              <div className="product-rating">
+                <Rating rate={product.rating} /> ({product.numRatings})
+              </div>
+            )}
             {inEditMode ? (
               <input
                 type="number"
@@ -100,9 +111,11 @@ function ProductPage() {
             ) : (
               <p className="product-price">$ {(product.price).toFixed(2)}</p>
             )}
-            <button className="add-to-cart-button" onClick={handleAddToCart}>
-              Add to cart
-            </button>
+            {!inEditMode && (
+              <button className="add-to-cart-button" onClick={handleAddToCart}>
+                Add to cart
+              </button>
+            )}
           </div>
           <details open>
             <summary>Description</summary>

@@ -50,6 +50,7 @@
 .product-overview-details .product-name-desc {
     font-size: 30px;
     font-weight: bold;
+    display: -webkit-box;
 }
 
 .product-overview-details .product-rating {
