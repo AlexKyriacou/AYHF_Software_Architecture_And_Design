@@ -1,15 +1,19 @@
-import React, {useContext} from "react";
-import {UserContext} from "../../AppContext";
-import {Navigate} from "react-router-dom";
+import React, { useContext, useEffect } from "react";
+import { UserContext } from "../../AppContext";
+import { useNavigate } from "react-router-dom";
 
 const OrderHistory = () => {
-    const {loggedIn} = useContext(UserContext);
+    const { loggedIn } = useContext(UserContext);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!loggedIn) {
+            navigate("/login", { replace: true });
+        }
+    }, [loggedIn, navigate]);
 
     return (
         <div>
-            {!loggedIn && (
-                <Navigate to="/login" replace={true}/>
-            )}
             <p>These are your orders</p>
         </div>
     );

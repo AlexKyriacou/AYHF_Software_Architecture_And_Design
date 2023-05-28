@@ -1,7 +1,7 @@
-import React, {useContext, useState} from "react";
-import {Link, useNavigate} from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import PasswordInput from "../../components/PasswordInput";
-import {UserContext} from "../../AppContext";
+import { UserContext } from "../../AppContext";
 import TextInputWithValidation from '../../components/TextInputWithValidation'
 import "./Login.css";
 import axios from "axios";
@@ -10,7 +10,8 @@ const LoginPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loginError, setLoginError] = useState("");
-    const {login} = useContext(UserContext);  // Use login instead of setUser
+    const { login } = useContext(UserContext);
+
     const navigate = useNavigate();
 
     const handleSubmit = async (event) => {

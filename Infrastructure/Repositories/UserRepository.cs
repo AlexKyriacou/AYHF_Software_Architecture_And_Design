@@ -9,8 +9,9 @@ public class UserRepository : RepositoryBase, IUserRepository
 {
     public UserRepository(): base()
     {
-        AddData();
+        CreateTables();
     }
+
     public async Task<IUser?> GetUserByIdAsync(int id)
     {
         IUser? user = null;
@@ -135,16 +136,5 @@ public class UserRepository : RepositoryBase, IUserRepository
             "CREATE TABLE IF NOT EXISTS Users (Id INTEGER PRIMARY KEY AUTOINCREMENT, Name TEXT, Username TEXT, Email TEXT, Password TEXT, Role TEXT)";
         using var createTableCommand = new SqliteCommand(createTableQuery, Connection);
         createTableCommand.ExecuteNonQuery();
-    }
-
-    protected  void AddData()
-    {
-        var addDataQuery = "INSERT INTO Users (Name, Username, Email, Password, Role) " +
-                           "SELECT * FROM (VALUES " +
-                           "('Marella Admin', 'MMorad', 'marella@gmail.com', 'Test@123', 'admin')," +
-                           "('Marella Customer', 'Marella.Customer', 'marella@gmail.com', 'Test@123', 'customer')) AS Temp " +
-                           "WHERE NOT EXISTS (SELECT 1 FROM Users);";
-        using var addDataCommand = new SqliteCommand(addDataQuery, Connection);
-        addDataCommand.ExecuteNonQuery();
     }
 }
