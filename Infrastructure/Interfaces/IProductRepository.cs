@@ -4,7 +4,7 @@ namespace AYHF_Software_Architecture_And_Design.Infrastructure.Interfaces;
 
 public interface IProductRepository
 {
-    Task AddProductAsync(Product product);
+    Task<int> AddProductAsync(Product product);
     Task UpdateProductAsync(Product product);
     Task DeleteProductAsync(int id);
     Task<Product?> GetProductByIdAsync(int productId);

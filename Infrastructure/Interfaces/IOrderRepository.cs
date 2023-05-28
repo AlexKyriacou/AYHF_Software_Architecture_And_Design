@@ -4,7 +4,7 @@ namespace AYHF_Software_Architecture_And_Design.Infrastructure.Interfaces;
 
 public interface IOrderRepository
 {
-    Task AddOrderAsync(Order order);
+    Task<int> AddOrderAsync(Order order);
     Task UpdateOrderAsync(Order order);
     Task DeleteOrderAsync(int id);
     Task<Order?> GetOrderByIdAsync(int orderId);

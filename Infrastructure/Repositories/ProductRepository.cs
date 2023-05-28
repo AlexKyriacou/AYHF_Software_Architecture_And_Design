@@ -12,11 +12,13 @@ public class ProductRepository : RepositoryBase, IProductRepository
         AddData();
     }
 
-    public async Task AddProductAsync(Product product)
+    public async Task<int> AddProductAsync(Product product)
     {
         var insertQuery =
-            "INSERT INTO Products (Name, Description, LongDescription, Ingredients, Image, Rating, NumRatings, Price) " +
-            "VALUES (@name, @description, @longDescription, @ingredients, @image, @rating, @numRatings, @price)";
+            @"
+            INSERT INTO Products (Name, Description, LongDescription, Ingredients, Image, Rating, NumRatings, Price)
+            VALUES (@name, @description, @longDescription, @ingredients, @image, @rating, @numRatings, @price);
+            SELECT last_insert_rowid();"; // get the autoincrement key
 
         await using var command = new SqliteCommand(insertQuery, Connection);
         command.Parameters.AddWithValue("@name", product.Name);
@@ -25,10 +27,11 @@ public class ProductRepository : RepositoryBase, IProductRepository
         command.Parameters.AddWithValue("@ingredients", product.Ingredients);
         command.Parameters.AddWithValue("@image", product.Image);
         command.Parameters.AddWithValue("@rating", product.Rating);
-        command.Parameters.AddWithValue("@numRating", product.NumRatings);
+        command.Parameters.AddWithValue("@numRatings", product.NumRatings);
         command.Parameters.AddWithValue("@price", product.Price);
 
-        await command.ExecuteNonQueryAsync();
+        var result = await command.ExecuteScalarAsync();
+        return Convert.ToInt32(result);
     }
 
     public async Task UpdateProductAsync(Product product)

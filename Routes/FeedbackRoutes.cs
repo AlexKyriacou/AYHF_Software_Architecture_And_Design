@@ -24,16 +24,10 @@ namespace AYHF_Software_Architecture_And_Design.Routes
                 return Feedback == null ? Results.NotFound() : Results.Ok(Feedback);
             });
 
-            _app.MapGet("/Feedbacks/Product/{id}", async (int id, [FromServices] FeedbackService FeedbackService) =>
+            _app.MapGet("/Products/{id}/Feedbacks", async (int id, [FromServices] FeedbackService FeedbackService) =>
             {
                 var Feedback = await FeedbackService.GetAllFeedbackForProductAsync(id);
                 return Feedback == null ? Results.NotFound() : Results.Ok(Feedback);
-            });
-
-            _app.MapGet("/Products/Rating/{id}", async (int id, [FromServices] FeedbackService FeedbackService) =>
-            {
-                float rating = await FeedbackService.GetAverageProductRatingAsync(id);
-                return Results.Ok(rating);
             });
 
             _app.MapGet("/Feedbacks",

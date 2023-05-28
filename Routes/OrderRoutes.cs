@@ -1,6 +1,8 @@
 using AYHF_Software_Architecture_And_Design.Application.Dtos;
 using AYHF_Software_Architecture_And_Design.Application.Services;
+using AYHF_Software_Architecture_And_Design.Domain.Entities.Interfaces;
 using AYHF_Software_Architecture_And_Design.Domain.Entities.Model;
+using AYHF_Software_Architecture_And_Design.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AYHF_Software_Architecture_And_Design.Routes;
@@ -27,14 +29,20 @@ public class OrderRoutes
 
         _app.MapPost("/orders", async ([FromBody] OrderDto orderDto, [FromServices] OrderService orderService) =>
         {
-            var order = new Order(orderDto.Customer, orderDto.Products);
-            await orderService.AddOrderAsync(order);
+            var userRepo = new UserRepository();
+            IUser? user = await userRepo.GetUserByIdAsync(orderDto.CustomerId); //Check if provided user is a valid user
+            if (user == null)
+            {
+                return Results.BadRequest();
+            }
+            var order = new Order(user.Id, orderDto.Products);
+            order.Id = await orderService.AddOrderAsync(order);
             return Results.Created($"/orders/{order.Id}", order);
         }).RequireAuthorization();
 
         _app.MapPut("/orders/{id}", async ([FromBody] OrderDto orderDto, [FromServices] OrderService orderService) =>
         {
-            var order = new Order(orderDto.Customer, orderDto.Products);
+            var order = new Order(orderDto.CustomerId, orderDto.Products);
             await orderService.UpdateOrderAsync(order);
             return Results.NoContent();
         }).RequireAuthorization();

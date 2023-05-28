@@ -22,9 +22,9 @@ public class OrderService
         return await Task.Run(() => _orderRepository.GetAllOrdersAsync());
     }
 
-    public async Task AddOrderAsync(Order order)
+    public async Task<int> AddOrderAsync(Order order)
     {
-        await Task.Run(() => _orderRepository.AddOrderAsync(order));
+        return await Task.Run(() => _orderRepository.AddOrderAsync(order));
     }
 
     public async Task UpdateOrderAsync(Order order)

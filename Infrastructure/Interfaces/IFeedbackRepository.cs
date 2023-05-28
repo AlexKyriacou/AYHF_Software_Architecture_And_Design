@@ -11,7 +11,4 @@ public interface IFeedbackRepository
     Task<Feedback?> GetFeedbackByIdAsync(int feedbackId);
     Task<List<Feedback>> GetAllFeedbackAsync();
     Task<List<Feedback>> GetAllFeedbackForProductAsync(int productId);
-    Task<float> GetAverageProductRatingAsync(int productId);
-
-
 }
