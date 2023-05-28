@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
@@ -10,21 +10,34 @@ import axios from "axios";
 
 function ProductPage() {
   const { products } = useContext(ProductsContext);
+  const { addToCart } = useContext(CartContext);
+  const { loggedIn, user } = useContext(UserContext);
 
   const { productName } = useParams();
-  const product = products.find(product => product.name === productName);
+
+  const storedProduct = sessionStorage.getItem("product");
+  const product = storedProduct ? JSON.parse(storedProduct) :
+    products.find((product) => product.name === productName);
+
   const productId = product.id;
-  const { addToCart } = useContext(CartContext);
   const [editedProduct, setEditedProduct] = useState({ ...product });
+  const [inEditMode, setInEditMode] = useState(false);
+  const [initialLoad, setInitialLoad] = useState(true);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (initialLoad) {
+      sessionStorage.setItem("product", JSON.stringify(product));
+      setInEditMode(false);
+      setInitialLoad(false);
+    }
+  }, [initialLoad, product]);
 
   const handleAddToCart = () => {
     addToCart(product);
   };
 
-  const { loggedIn, user } = useContext(UserContext);
-  const [inEditMode, setInEditMode] = useState(false);
 
   const handleInputChange = (event) => {
     setEditedProduct({

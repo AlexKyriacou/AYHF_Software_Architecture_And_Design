@@ -127,14 +127,21 @@ const ProductsProvider = ({ children }) => {
             try {
                 const response = await axios.get("https://localhost:7269/products");
                 if (response.status === 200) {
-                    setProducts(response.data);
+                    const fetchedProducts = response.data;
+                    setProducts(fetchedProducts);
+                    sessionStorage.setItem("products", JSON.stringify(fetchedProducts)); // Save products to sessionStorage
                 }
             } catch (error) {
                 console.log("Error fetching products:", error);
             }
         };
 
-        fetchProducts();
+        const storedProducts = sessionStorage.getItem("products");
+        if (storedProducts) {
+            setProducts(JSON.parse(storedProducts)); // Load products from sessionStorage if available
+        } else {
+            fetchProducts(); // Fetch products if not available in sessionStorage
+        }
     }, []);
 
     return (
