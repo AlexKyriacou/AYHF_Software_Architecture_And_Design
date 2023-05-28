@@ -27,17 +27,15 @@ const LoginPage = () => {
 
             localStorage.setItem("token", token);
 
-            login(user); 
-
+            login(user);
             setLoginError("");
-
-            navigate("/home");
+            navigate("/");
 
         } catch (error) {
             setLoginError("Invalid email or password");
         }
     };
-    
+
     return (
         <div className="page-container">
             <div className="page-card">
