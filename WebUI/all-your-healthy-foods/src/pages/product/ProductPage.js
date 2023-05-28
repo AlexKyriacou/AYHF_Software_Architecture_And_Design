@@ -26,15 +26,47 @@ function ProductPage() {
         setInEditMode(true);
     };
 
-    const handleDelete = () => {
-        // Handle delete logic here
-        console.log("Delete this product: ", productName)
-    };
-
-    const handleSave = () => {
-        setInEditMode(false);
-        console.log("Saving changes to: ", productName)
-    }
+    const handleDelete = async () => {
+        try {
+          // Make a DELETE request to the API endpoint to delete the product
+          const response = await fetch(`https://localhost:7269/products/${productName}`, {
+            method: "DELETE",
+          });
+      
+          if (!response.ok) {
+            throw new Error("Request failed");
+          }
+      
+          // Redirect or perform any necessary actions after deleting the product
+          // For example, you can navigate back to the product list page
+          history.push("/products");
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      
+      const handleSave = async () => {
+        try {
+          // Make a PUT request to the API endpoint to update the product
+          const response = await fetch(`https://localhost:7269/products/${productName}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(editedProduct),
+          });
+      
+          if (!response.ok) {
+            throw new Error("Request failed");
+          }
+      
+          // Redirect or perform any necessary actions after saving the product
+          // For example, you can navigate back to the product list page
+          history.push("/products");
+        } catch (error) {
+          console.error(error);
+        }
+      };
 
     return (
         <div className="product-overview-container">
@@ -94,3 +126,17 @@ function ProductPage() {
 }
 
 export default ProductPage;
+
+
+const fetchUsers = async () => {
+    try {
+        const response = await fetch('https://localhost:7269/users');
+        if (!response.ok) {
+            throw new Error('Request failed');
+        }
+        const jsonData = await response.json();
+        setUsers(jsonData);
+    } catch (error) {
+        console.error(error);
+    }
+};
