@@ -1,6 +1,8 @@
 using AYHF_Software_Architecture_And_Design.Application.Services;
+using AYHF_Software_Architecture_And_Design.Domain.Entities.Interfaces;
 using AYHF_Software_Architecture_And_Design.Infrastructure.Interfaces;
 using AYHF_Software_Architecture_And_Design.Infrastructure.Repositories;
+using AYHF_Software_Architecture_And_Design.Infrastructure.Scrapers;
 using AYHF_Software_Architecture_And_Design.Routes;
 using Microsoft.OpenApi.Models;
 
@@ -14,6 +16,7 @@ builder.Services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo { Title
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IScraper, ColesScraper>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<OrderService>();
 builder.Services.AddScoped<ProductService>();

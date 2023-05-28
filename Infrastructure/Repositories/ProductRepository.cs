@@ -113,6 +113,29 @@ public class ProductRepository : RepositoryBase, IProductRepository
 
         return products;
     }
+    
+    public async Task BulkInsertProductsAsync(List<Product> products)
+    {
+        var insertQuery =
+            "INSERT INTO Products (Name, Description, LongDescription, Ingredients, Image, Rating, NumRatings, Price) " +
+            "VALUES (@name, @description, @longDescription, @ingredients, @image, @rating, @numRatings, @price)";
+
+        foreach (var product in products)
+        {
+            await using var command = new SqliteCommand(insertQuery, Connection);
+            command.Parameters.AddWithValue("@name", product.Name);
+            command.Parameters.AddWithValue("@description", product.Description);
+            command.Parameters.AddWithValue("@longDescription", product.LongDescription);
+            command.Parameters.AddWithValue("@ingredients", product.Ingredients);
+            command.Parameters.AddWithValue("@image", product.Image);
+            command.Parameters.AddWithValue("@rating", product.Rating);
+            command.Parameters.AddWithValue("@numRating", product.NumRatings);
+            command.Parameters.AddWithValue("@price", product.Price);
+
+            await command.ExecuteNonQueryAsync();
+        }
+    }
+
 
     protected override void CreateTables()
     {
