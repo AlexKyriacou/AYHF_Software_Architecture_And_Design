@@ -36,4 +36,27 @@ public class UserService
     {
         return _userRepository.DeleteUserAsync(id);
     }
+    
+    public async Task RegisterUserAsync(IUser user)
+    {
+        var existingUser = await _userRepository.GetUserByEmailAsync(user.Email);
+        if (existingUser != null)
+        {
+            throw new ArgumentException("User already exists");
+        }
+        
+        user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password); 
+        await _userRepository.AddUserAsync(user);
+    }
+    
+    public async Task<IUser> LoginUserAsync(string email, string password)
+    {
+        var user = await _userRepository.GetUserByEmailAsync(email);
+        if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.Password))
+        {
+            throw new ArgumentException("Invalid email or password");
+        }
+        
+        return user;
+    }
 }

@@ -53,5 +53,22 @@ public class UserRoutes
             await userService.DeleteUserAsync(id);
             return Results.NoContent();
         });
+        
+        _app.MapPost("/users/register", async ([FromBody] UserDto userDto, [FromServices] UserService userService) =>
+        {
+            IUser user = new User
+            {
+                Id = userDto.Id, Name = userDto.Name, Username = userDto.Username, Email = userDto.Email,
+                Password = userDto.Password, Role = userDto.Role
+            };
+            await userService.RegisterUserAsync(user);
+            return Results.Created($"/users/{user.Id}", user);
+        });
+        
+        _app.MapPost("/users/login", async ([FromBody] LoginDto loginDto, [FromServices] UserService userService) =>
+        {
+            await userService.LoginUserAsync(loginDto.Email, loginDto.Password);
+            return Results.Ok();
+        });
     }
 }

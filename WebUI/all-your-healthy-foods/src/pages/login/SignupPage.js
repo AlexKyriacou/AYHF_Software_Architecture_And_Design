@@ -1,10 +1,11 @@
 import React, {useContext, useEffect, useState} from "react";
-import {Link, Navigate, useLocation} from "react-router-dom";
+import {Link, Navigate, useLocation, useNavigate} from "react-router-dom";
 import {UserContext} from "../../AppContext";
 import PasswordInput from "../../components/PasswordInput";
 import TextInputWithValidation from '../../components/TextInputWithValidation'
 import "./Login.css";
 import SelectWithValidation from "../../components/SelectWithValidation";
+import axios from "axios";
 
 const SignupPage = () => {
     const [firstName, setFirstName] = useState("");
@@ -20,6 +21,8 @@ const SignupPage = () => {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const from = queryParams.get("from");
+    const navigate = useNavigate();
+
 
     const doPasswordsMatch = (password, confirmPassword) => {
         return password === confirmPassword;
@@ -38,9 +41,8 @@ const SignupPage = () => {
         generateUsername();
     }, [firstName, lastName]);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-
 
         if (doPasswordsMatch(password, confirmPassword)) {
             setPasswordError("");
@@ -53,8 +55,19 @@ const SignupPage = () => {
                 role
             };
 
-            // TODO: Send the user object to the backend and get the backend response
-            console.log("User: ", user);
+            try {
+                const response = await axios.post('https://localhost:7269/users/register', user);
+
+                if (response.status === 201) {
+                    navigate("/login");
+                } else {
+                    setPasswordError("An unexpected error occurred while registering");
+                }
+            } catch (error) {
+                console.log('Error during registration', error);
+                // Handle network error. You may want to set an error state here
+            }
+
         } else {
             setPasswordError("Passwords do not match");
         }

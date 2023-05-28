@@ -29,6 +29,33 @@ public class UserRepository : RepositoryBase, IUserRepository
 
         return user;
     }
+    
+    public async Task<IUser> GetUserByEmailAsync(string email)
+    {
+        IUser user = null;
+        var selectQuery = "SELECT * FROM Users WHERE Email = @email";
+
+        await using var selectCommand = new SqliteCommand(selectQuery, Connection);
+        selectCommand.Parameters.AddWithValue("@email", email);
+
+        await using var reader = await selectCommand.ExecuteReaderAsync();
+
+        if (await reader.ReadAsync())
+        {
+            user = new User
+            {
+                Id = reader.GetInt32(0),
+                Name = reader.GetString(1),
+                Username = reader.GetString(2),
+                Email = reader.GetString(3),
+                Password = reader.GetString(4),
+                Role = reader.GetString(5)
+            };
+        }
+
+        return user;
+    }
+
 
     public async Task AddUserAsync(IUser user)
     {
