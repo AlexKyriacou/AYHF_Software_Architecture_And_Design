@@ -28,14 +28,14 @@ public class UserRoutes
 
         _app.MapPost("/users", async ([FromBody] UserDto userDto, [FromServices] UserService userService) =>
         {
-            IUser user = new User { Id = userDto.Id, Username = userDto.Username, Password = userDto.Password, Email = userDto.Email };
+            IUser user = new User { Id = userDto.Id, Name = userDto.Name, Username = userDto.Username, Email = userDto.Email, Password = userDto.Password, Role = userDto.Role };
             await userService.AddUserAsync(user);
             return Results.Created($"/users/{user.Id}", user);
         });
 
         _app.MapPut("/users/{id}", async ([FromBody] UserDto userDto, [FromServices] UserService userService) =>
         {
-            IUser user = new User { Id = userDto.Id, Username = userDto.Username, Password = userDto.Password, Email = userDto.Email };
+            IUser user = new User { Id = userDto.Id, Name = userDto.Name, Username = userDto.Username, Email = userDto.Email , Password = userDto.Password, Role = userDto.Role };
             await userService.UpdateUserAsync(user);
             return Results.NoContent();
         });

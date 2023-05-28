@@ -17,9 +17,13 @@ namespace MyProject.Infrastructure.Repositories
             string createTableQuery = "CREATE TABLE IF NOT EXISTS Products (" +
                                       "Id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                                       "Name TEXT NOT NULL, " +
-                                      "Price REAL NOT NULL, " +
                                       "Description TEXT, " +
-                                      "Images TEXT)";
+                                      "LongDescription TEXT, " +
+                                      "Ingredients TEXT, " +
+                                      "Image TEXT, " +
+                                      "Rating INTEGER, " +
+                                      "NumRatings INTEGER, " +
+                                      "Price REAL NOT NULL)";
 
             using var createTableCommand = new SqliteCommand(createTableQuery, Connection);
             createTableCommand.ExecuteNonQuery();
@@ -27,29 +31,38 @@ namespace MyProject.Infrastructure.Repositories
 
         public async Task AddProductAsync(Product product)
         {
-            string insertQuery = "INSERT INTO Products (Name, Price, Description, Images) " +
-                                 "VALUES (@name, @price, @description, @images)";
+            string insertQuery = "INSERT INTO Products (Name, Description, LongDescription, Ingredients, Image, Rating, NumRatings, Price) " +
+                                 "VALUES (@name, @description, @longDescription, @ingredients, @image, @rating, @numRatings, @price)";
 
             await using var command = new SqliteCommand(insertQuery, Connection);
             command.Parameters.AddWithValue("@name", product.Name);
-            command.Parameters.AddWithValue("@price", product.Price);
             command.Parameters.AddWithValue("@description", product.Description);
-            command.Parameters.AddWithValue("@images", string.Join(",", product.Images));
+            command.Parameters.AddWithValue("@longDescription", product.LongDescription);
+            command.Parameters.AddWithValue("@ingredients", product.Ingredients);
+            command.Parameters.AddWithValue("@image", product.Image);
+            command.Parameters.AddWithValue("@rating", product.Rating);
+            command.Parameters.AddWithValue("@numRating", product.NumRatings);
+            command.Parameters.AddWithValue("@price", product.Price);
 
             await command.ExecuteNonQueryAsync();
         }
 
         public async Task UpdateProductAsync(Product product)
         {
-            string updateQuery = "UPDATE Products SET Name = @name, Price = @price, " +
-                                 "Description = @description, Images = @images WHERE Id = @id";
+            string updateQuery = "UPDATE Products SET Name = @name, Description = @description, " +
+                                 "LongDescription = @longDescription, Ingredients = @ingredients, " +
+                                 "Image = @image, Rating = @rating, NumRatings = @numRatings, " +
+                                 "Price = @price WHERE Id = @id";
 
             await using var command = new SqliteCommand(updateQuery, Connection);
             command.Parameters.AddWithValue("@name", product.Name);
-            command.Parameters.AddWithValue("@price", product.Price);
             command.Parameters.AddWithValue("@description", product.Description);
-            command.Parameters.AddWithValue("@images", string.Join(",", product.Images));
-            command.Parameters.AddWithValue("@id", product.Id);
+            command.Parameters.AddWithValue("@longDescription", product.LongDescription);
+            command.Parameters.AddWithValue("@ingredients", product.Ingredients);
+            command.Parameters.AddWithValue("@image", product.Image);
+            command.Parameters.AddWithValue("@rating", product.Rating);
+            command.Parameters.AddWithValue("@numRating", product.NumRatings);
+            command.Parameters.AddWithValue("@price", product.Price);
 
             await command.ExecuteNonQueryAsync();
         }
@@ -77,9 +90,13 @@ namespace MyProject.Infrastructure.Repositories
                 Product product = new Product(
                     id: reader.GetInt32(0),
                     name: reader.GetString(1),
-                    price: reader.GetDecimal(2),
-                    description: reader.GetString(3),
-                    images: reader.GetString(4).Split(','));
+                    description: reader.GetString(2),
+                    longDescription: reader.GetString(3),
+                    ingredients: reader.GetString(4),
+                    image: reader.GetString(5),
+                    rating: reader.GetInt32(6),
+                    numRatings: reader.GetInt32(7),
+                    price: reader.GetDecimal(8));
 
                 return product;
             }
@@ -100,9 +117,13 @@ namespace MyProject.Infrastructure.Repositories
                 Product product = new Product(
                     id: reader.GetInt32(0),
                     name: reader.GetString(1),
-                    price: reader.GetDecimal(2),
-                    description: reader.GetString(3),
-                    images: reader.GetString(4).Split(','));
+                    description: reader.GetString(2),
+                    longDescription: reader.GetString(3),
+                    ingredients: reader.GetString(4),
+                    image: reader.GetString(5),
+                    rating: reader.GetInt32(6),
+                    numRatings: reader.GetInt32(7),
+                    price: reader.GetDecimal(8));
 
                 products.Add(product);
             }
