@@ -54,7 +54,8 @@ function ProductPage() {
         throw new Error("Request failed");
       }
 
-      navigate("/products");
+      //TODO: update the product context on delete
+      navigate("/");
     } catch (error) {
       console.error(error);
     }
@@ -68,7 +69,8 @@ function ProductPage() {
         throw new Error("Request failed");
       }
 
-      navigate("/products");
+      //TODO: update the product context on save
+      navigate("/");
     } catch (error) {
       console.error(error);
     }
