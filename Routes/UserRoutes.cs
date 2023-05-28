@@ -64,11 +64,18 @@ public class UserRoutes
             await userService.RegisterUserAsync(user);
             return Results.Created($"/users/{user.Id}", user);
         });
-        
+
         _app.MapPost("/users/login", async ([FromBody] LoginDto loginDto, [FromServices] UserService userService) =>
         {
-            await userService.LoginUserAsync(loginDto.Email, loginDto.Password);
-            return Results.Ok();
+            try
+            {
+                var user = await userService.LoginUserAsync(loginDto.Email, loginDto.Password);
+                return Results.Ok(user);
+            }
+            catch (ArgumentException ex)
+            {
+                return Results.BadRequest(ex.Message);
+            }
         });
     }
 }
