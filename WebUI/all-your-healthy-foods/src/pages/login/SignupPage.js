@@ -1,6 +1,6 @@
-import React, {useContext, useEffect, useState} from "react";
-import {Link, Navigate, useLocation, useNavigate} from "react-router-dom";
-import {UserContext} from "../../AppContext";
+import React, { useContext, useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { UserContext } from "../../AppContext";
 import PasswordInput from "../../components/PasswordInput";
 import TextInputWithValidation from '../../components/TextInputWithValidation'
 import "./Login.css";
@@ -16,13 +16,12 @@ const SignupPage = () => {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [role, setRole] = useState("");
     const [passwordError, setPasswordError] = useState("");
-    const {loggedIn} = useContext(UserContext);
+    const { loggedIn } = useContext(UserContext);
 
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const from = queryParams.get("from");
     const navigate = useNavigate();
-
 
     const doPasswordsMatch = (password, confirmPassword) => {
         return password === confirmPassword;
@@ -56,29 +55,36 @@ const SignupPage = () => {
             };
 
             try {
-                const response = await axios.post('https://localhost:7269/users/register', user);
+                const response = await axios.post(
+                    "https://localhost:7269/users/register",
+                    user
+                );
 
                 if (response.status === 201) {
                     navigate("/login");
                 } else {
-                    setPasswordError("An unexpected error occurred while registering");
+                    setPasswordError(
+                        "An unexpected error occurred while registering"
+                    );
                 }
             } catch (error) {
-                console.log('Error during registration', error);
-                // Handle network error. You may want to set an error state here
+                setPasswordError(
+                    "An unexpected error occurred while registering, please refresh and try again."
+                );
             }
-
         } else {
             setPasswordError("Passwords do not match");
         }
-
     };
+
+    useEffect(() => {
+        if (loggedIn) {
+            navigate(from ? "/" + from : "/", { replace: true });
+        }
+    }, [loggedIn, navigate, from]);
 
     return (
         <div className="page-container">
-            {loggedIn && (
-                <Navigate to={from ? ("/" + from) : "/"} replace={true}/>
-            )}
             <div className="page-card">
                 <h2 className="page-title">Create Account</h2>
                 <form className="page-form" onSubmit={handleSubmit}>
@@ -136,8 +142,8 @@ const SignupPage = () => {
                         value={role}
                         parentOnChange={setRole}
                         options={[
-                            {label: "Customer", value: "customer"},
-                            {label: "Admin", value: "admin"}
+                            { label: "Customer", value: "customer" },
+                            { label: "Admin", value: "admin" }
                         ]}
                     />
                     <button type="submit" className="primary-button">
