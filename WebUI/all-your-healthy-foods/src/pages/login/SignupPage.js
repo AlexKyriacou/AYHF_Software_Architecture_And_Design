@@ -1,6 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { UserContext } from "../../AppContext";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import PasswordInput from "../../components/PasswordInput";
 import TextInputWithValidation from '../../components/TextInputWithValidation'
 import "./Login.css";
@@ -16,11 +15,7 @@ const SignupPage = () => {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [role, setRole] = useState("");
     const [passwordError, setPasswordError] = useState("");
-    const { loggedIn } = useContext(UserContext);
 
-    const location = useLocation();
-    const queryParams = new URLSearchParams(location.search);
-    const from = queryParams.get("from");
     const navigate = useNavigate();
 
     const doPasswordsMatch = (password, confirmPassword) => {
@@ -76,12 +71,6 @@ const SignupPage = () => {
             setPasswordError("Passwords do not match");
         }
     };
-
-    useEffect(() => {
-        if (loggedIn) {
-            navigate(from ? "/" + from : "/", { replace: true });
-        }
-    }, [loggedIn, navigate, from]);
 
     return (
         <div className="page-container">
