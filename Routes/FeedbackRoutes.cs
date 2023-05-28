@@ -58,9 +58,9 @@ namespace AYHF_Software_Architecture_And_Design.Routes
                 return Results.NoContent();
             });
 
-            _app.MapDelete("/Feedbacks/{id}", async (int id, [FromServices] FeedbackService FeedbackService) =>
+            _app.MapDelete("/Feedbacks/{id}", async (Feedback Feedback, [FromServices] FeedbackService FeedbackService) =>
             {
-                await FeedbackService.DeleteFeedbackAsync(id);
+                await FeedbackService.DeleteFeedbackAsync(Feedback);
                 return Results.NoContent();
             });
         }

@@ -32,9 +32,9 @@ namespace AYHF_Software_Architecture_And_Design.Application.Services
             await Task.Run(() => _feedbackRepository.UpdateFeedbackAsync(Feedback));
         }
 
-        public async Task DeleteFeedbackAsync(int id)
+        public async Task DeleteFeedbackAsync(Feedback Feedback)
         {
-            await Task.Run(() => _feedbackRepository.DeleteFeedbackAsync(id));
+            await Task.Run(() => _feedbackRepository.DeleteFeedbackAsync(Feedback));
         }
     }
 }
