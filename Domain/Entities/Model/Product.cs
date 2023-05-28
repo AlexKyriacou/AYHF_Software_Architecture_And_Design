@@ -2,18 +2,26 @@ namespace MyProject.Domain.Models;
 
 public class Product
 {
-    public Product(int id, string name, decimal price, string description, string[] images)
+    public Product(int id, string name, string description, string longDescription, string ingredients, string image, int rating, int numRatings, decimal price)
     {
         Id = id;
         Name = name;
-        Price = price;
         Description = description;
-        Images = images;
+        LongDescription = longDescription;
+        Ingredients = ingredients;
+        Image = image;
+        Rating = rating;
+        NumRatings = numRatings;
+        Price = price;
     }
 
     public int Id { get; set; }
     public string Name { get; set; }
-    public decimal Price { get; set; }
     public string Description { get; set; }
-    public string[] Images { get; set; }
+    public string LongDescription { get; set; }
+    public string Ingredients { get; set; }
+    public string Image { get; set; }
+    public int Rating { get; set; }
+    public int NumRatings { get; set; }
+    public decimal Price { get; set; }
 }
