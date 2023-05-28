@@ -15,9 +15,10 @@ function ProductPage() {
 
   const { productName } = useParams();
 
-  const storedProduct = sessionStorage.getItem("product");
-  const product = storedProduct ? JSON.parse(storedProduct) :
-    products.find((product) => product.name === productName);
+  const storedProduct = JSON.parse(sessionStorage.getItem("product"));
+  const product = storedProduct && storedProduct.name === productName
+    ? storedProduct
+    : products.find((product) => product.name === productName);
 
   const productId = product.id;
   const [editedProduct, setEditedProduct] = useState({ ...product });
@@ -37,7 +38,6 @@ function ProductPage() {
   const handleAddToCart = () => {
     addToCart(product);
   };
-
 
   const handleInputChange = (event) => {
     setEditedProduct({
