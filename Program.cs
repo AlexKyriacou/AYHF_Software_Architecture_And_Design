@@ -1,12 +1,28 @@
+// Add these namespaces at the top of your file
+
 using AYHF_Software_Architecture_And_Design.Application.Services;
 using AYHF_Software_Architecture_And_Design.Domain.Entities.Interfaces;
 using AYHF_Software_Architecture_And_Design.Infrastructure.Interfaces;
 using AYHF_Software_Architecture_And_Design.Infrastructure.Repositories;
 using AYHF_Software_Architecture_And_Design.Infrastructure.Scrapers;
 using AYHF_Software_Architecture_And_Design.Routes;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Add CORS services.
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("OpenCorsPolicy",
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+        });
+});
 
 // Configure services
 builder.Services.AddEndpointsApiExplorer();
@@ -22,6 +38,9 @@ builder.Services.AddScoped<OrderService>();
 builder.Services.AddScoped<ProductService>();
 
 var app = builder.Build();
+
+// Use CORS policy in your application
+app.UseCors("OpenCorsPolicy");
 
 // Define routes for Users
 var userRoutes = new UserRoutes(app);
