@@ -3,37 +3,37 @@ using AYHF_Software_Architecture_And_Design.Infrastructure.Interfaces;
 
 namespace AYHF_Software_Architecture_And_Design.Application.Services;
 
-public class OrderService
+public class ProductService
 {
-    private readonly IOrderRepository _orderRepository;
+    private readonly IProductRepository _productRepository;
 
-    public OrderService(IOrderRepository orderRepository)
+    public ProductService(IProductRepository productRepository)
     {
-        _orderRepository = orderRepository;
+        _productRepository = productRepository;
     }
 
-    public async Task<Order?> GetOrderByIdAsync(int orderId)
+    public async Task<Product?> GetProductByIdAsync(int productId)
     {
-        return await Task.Run(() => _orderRepository.GetOrderByIdAsync(orderId));
+        return await Task.Run(() => _productRepository.GetProductByIdAsync(productId));
     }
 
-    public async Task<List<Order>> GetAllOrdersAsync()
+    public async Task<List<Product>> GetAllProductsAsync()
     {
-        return await Task.Run(() => _orderRepository.GetAllOrdersAsync());
+        return await Task.Run(() => _productRepository.GetAllProductsAsync());
     }
 
-    public async Task AddOrderAsync(Order order)
+    public async Task AddProductAsync(Product product)
     {
-        await Task.Run(() => _orderRepository.AddOrderAsync(order));
+        await Task.Run(() => _productRepository.AddProductAsync(product));
     }
 
-    public async Task UpdateOrderAsync(Order order)
+    public async Task UpdateProductAsync(Product product)
     {
-        await Task.Run(() => _orderRepository.UpdateOrderAsync(order));
+        await Task.Run(() => _productRepository.UpdateProductAsync(product));
     }
 
-    public async Task DeleteOrderAsync(int id)
+    public async Task DeleteProductAsync(int id)
     {
-        await Task.Run(() => _orderRepository.DeleteOrderAsync(id));
+        await Task.Run(() => _productRepository.DeleteProductAsync(id));
     }
 }
