@@ -11,7 +11,7 @@ const HomePage = () => {
     return (
         <div>
             <p className="welcome">Welcome to All Your Healthy Foods Online Store</p>
-            {loggedIn && user.role === "admin" && (
+            {loggedIn && user.role === 0 && (
                 <div className="admin-buttons">
                     <Link to="/add-product" className="add-product link-button">
                         Add Product

@@ -58,12 +58,12 @@ const SignupPage = () => {
                 if (response.status === 201) {
                     navigate("/login");
                 } else {
-                    setPasswordError(
+                    console.error(
                         "An unexpected error occurred while registering"
                     );
                 }
             } catch (error) {
-                setPasswordError(
+                console.error(
                     "An unexpected error occurred while registering, please refresh and try again."
                 );
             }
@@ -131,8 +131,8 @@ const SignupPage = () => {
                         value={role}
                         parentOnChange={setRole}
                         options={[
-                            { label: "Customer", value: "customer" },
-                            { label: "Admin", value: "admin" }
+                            { label: "Customer", value: 1 },
+                            { label: "Admin", value: 0 }
                         ]}
                     />
                     <button type="submit" className="primary-button">

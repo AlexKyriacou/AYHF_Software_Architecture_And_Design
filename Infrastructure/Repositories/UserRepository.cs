@@ -108,27 +108,37 @@ public class UserRepository : RepositoryBase, IUserRepository
 
         if (await reader.ReadAsync())
         {
-            var role = reader.GetString(5);
-            if (role == "customer")
-                user = new Customer
+            var role = (UserRole)reader.GetInt32(5);
+            user ??= role switch
+            {
+                UserRole.Customer => new Customer
                 {
                     Id = reader.GetInt32(0),
                     Name = reader.GetString(1),
                     Username = reader.GetString(2),
                     Email = reader.GetString(3),
-                    Password = reader.GetString(4)
-                };
-            else if (role == "admin")
-                user = new Admin
+                    Password = reader.GetString(4),
+                    DeliveryAddress = !reader.IsDBNull(6)
+                        ? new DeliveryAddress(
+                            reader.GetString(6),
+                            reader.IsDBNull(7) ? null : reader.GetString(7),
+                            reader.IsDBNull(8) ? null : reader.GetString(8),
+                            reader.IsDBNull(9) ? null : reader.GetString(9)
+                        )
+                        : null,
+                    Role = role
+                },
+                UserRole.Admin => new Admin
                 {
                     Id = reader.GetInt32(0),
                     Name = reader.GetString(1),
                     Username = reader.GetString(2),
                     Email = reader.GetString(3),
-                    Password = reader.GetString(4)
-                };
-            else
-                throw new Exception("Invalid user role.");
+                    Password = reader.GetString(4),
+                    Role = role
+                },
+                _ => throw new Exception("Invalid user role.")
+            };
         }
 
         return user;
