@@ -1,17 +1,16 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import axios from "axios";
-import { UserContext } from "../../AppContext";
+import {UserContext} from "../../AppContext";
 
 function OrderHistoryPage() {
-    const { user } = useContext(UserContext);
+    const {user} = useContext(UserContext);
     const [orders, setOrders] = useState([]);
 
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                //TODO: GET THE CORRECT API CALL
                 const response = await axios.get(
-                    `https://localhost:7269/orders?customerId=${user.id}`
+                    `https://localhost:7269/orders?userId=${user.id}`
                 );
 
                 if (response.data && response.data.length > 0) {

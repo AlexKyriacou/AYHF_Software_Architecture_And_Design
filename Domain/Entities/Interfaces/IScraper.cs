@@ -1,9 +1,8 @@
 using AYHF_Software_Architecture_And_Design.Domain.Entities.Model;
 
-namespace AYHF_Software_Architecture_And_Design.Domain.Entities.Interfaces
+namespace AYHF_Software_Architecture_And_Design.Domain.Entities.Interfaces;
+
+public interface IScraper
 {
-    public interface IScraper
-    {
-        Task<List<Product>> ScrapeProductsAsync();
-    }
+    Task<List<Product>> ScrapeProductsAsync();
 }

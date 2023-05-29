@@ -1,7 +1,7 @@
-namespace AYHF_Software_Architecture_And_Design.Infrastructure.Middleware;
-
-using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+
+namespace AYHF_Software_Architecture_And_Design.Infrastructure.Middleware;
 
 public class RequiresRoleAttribute : Attribute, IAuthorizationFilter
 {
@@ -15,9 +15,6 @@ public class RequiresRoleAttribute : Attribute, IAuthorizationFilter
     public void OnAuthorization(AuthorizationFilterContext context)
     {
         var user = (dynamic)context.HttpContext.Items["User"];
-        if (user is null || user.Role != _role)
-        {
-            context.Result = new StatusCodeResult(403); // Forbidden
-        }
+        if (user is null || user.Role != _role) context.Result = new StatusCodeResult(403); // Forbidden
     }
 }

@@ -118,7 +118,35 @@ public class ProductRepository : RepositoryBase, IProductRepository
 
         return products;
     }
-    
+
+    public async Task<List<Product>> GetProductsBySearchQueryAsync(string searchQuery)
+    {
+        var products = new List<Product>();
+        var query = "SELECT * FROM Products WHERE Name LIKE @SearchQuery OR Description LIKE @SearchQuery";
+        await using var selectCommand = new SqliteCommand(query, Connection);
+        selectCommand.Parameters.AddWithValue("@SearchQuery", "%" + searchQuery + "%");
+
+        await using var reader = await selectCommand.ExecuteReaderAsync();
+
+        while (await reader.ReadAsync())
+        {
+            var product = new Product(
+                reader.GetInt32(0),
+                reader.GetString(1),
+                reader.GetString(2),
+                reader.GetString(3),
+                reader.GetString(4),
+                reader.GetString(5),
+                reader.GetInt32(6),
+                reader.GetInt32(7),
+                reader.GetDecimal(8));
+
+            products.Add(product);
+        }
+
+        return products;
+    }
+
     public async Task BulkInsertProductsAsync(List<Product> products)
     {
         var insertQuery =
@@ -157,34 +185,6 @@ public class ProductRepository : RepositoryBase, IProductRepository
 
         using var createTableCommand = new SqliteCommand(createTableQuery, Connection);
         createTableCommand.ExecuteNonQuery();
-    }
-
-    public async Task<List<Product>> GetProductsBySearchQueryAsync(string searchQuery)
-    {
-        var products = new List<Product>();
-        var query = "SELECT * FROM Products WHERE Name LIKE @SearchQuery OR Description LIKE @SearchQuery";
-        await using var selectCommand = new SqliteCommand(query, Connection);
-        selectCommand.Parameters.AddWithValue("@SearchQuery", "%" + searchQuery + "%");
-
-        await using var reader = await selectCommand.ExecuteReaderAsync();
-
-        while (await reader.ReadAsync())
-        {
-            var product = new Product(
-                reader.GetInt32(0),
-                reader.GetString(1),
-                reader.GetString(2),
-                reader.GetString(3),
-                reader.GetString(4),
-                reader.GetString(5),
-                reader.GetInt32(6),
-                reader.GetInt32(7),
-                reader.GetDecimal(8));
-
-            products.Add(product);
-        }
-
-        return products;
     }
 
     protected void AddData()
