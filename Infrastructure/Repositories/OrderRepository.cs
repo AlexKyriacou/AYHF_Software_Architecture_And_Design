@@ -37,7 +37,7 @@ public class OrderRepository : RepositoryBase, IOrderRepository
         return orders;
     }
 
-    public async Task<int> AddOrderAsync(OrderDto orderDto)
+    public async Task<Order> AddOrderAsync(OrderDto orderDto)
     {
         var order = new Order
         {
@@ -61,7 +61,7 @@ public class OrderRepository : RepositoryBase, IOrderRepository
         order.Id = orderId;
         await SaveOrderProductsAsync(order);
 
-        return orderId;
+        return order;
     }
 
     public async Task UpdateOrderAsync(Order order)
