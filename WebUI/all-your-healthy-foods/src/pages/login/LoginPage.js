@@ -21,7 +21,6 @@ const LoginPage = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            console.log({ email, password });
             const response = await axios.post('https://localhost:7269/users/login', { email, password });
 
             if (response.status !== 200) {

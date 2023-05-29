@@ -1,0 +1,42 @@
+.order-history-container {
+    max-width: 600px;
+    margin: 0 auto 100px auto;
+    padding: 20px;
+}
+  
+.no-orders {
+    font-weight: bold;
+}
+  
+.order-list {
+    list-style-type: none;
+    padding: 0;
+}
+  
+.order-id {
+    font-weight: bold;
+}
+  
+.order-date {
+    font-style: italic;
+}
+  
+.order-amount {
+    margin-bottom: 10px;
+}
+  
+.product-list {
+    list-style-type: none;
+}
+
+.product {
+    display: flex;
+    align-items: center;
+}
+
+.product img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    margin-right: 20px;
+}
