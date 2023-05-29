@@ -72,7 +72,10 @@ function ProductPage() {
       if (response.status !== 204) {
         throw new Error("Request failed");
       } else {
-        //TODO: update the product context on save
+        const updatedProducts = products.map((product) =>
+          product.id === productId ? editedProduct : product
+        );
+        setProducts(updatedProducts);
         navigate("/");
       }
     } catch (error) {

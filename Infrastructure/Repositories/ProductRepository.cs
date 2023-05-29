@@ -42,13 +42,14 @@ public class ProductRepository : RepositoryBase, IProductRepository
                           "Price = @price WHERE Id = @id";
 
         await using var command = new SqliteCommand(updateQuery, Connection);
+        command.Parameters.AddWithValue("@id", product.Id);
         command.Parameters.AddWithValue("@name", product.Name);
         command.Parameters.AddWithValue("@description", product.Description);
         command.Parameters.AddWithValue("@longDescription", product.LongDescription);
         command.Parameters.AddWithValue("@ingredients", product.Ingredients);
         command.Parameters.AddWithValue("@image", product.Image);
         command.Parameters.AddWithValue("@rating", product.Rating);
-        command.Parameters.AddWithValue("@numRating", product.NumRatings);
+        command.Parameters.AddWithValue("@numRatings", product.NumRatings);
         command.Parameters.AddWithValue("@price", product.Price);
 
         await command.ExecuteNonQueryAsync();
