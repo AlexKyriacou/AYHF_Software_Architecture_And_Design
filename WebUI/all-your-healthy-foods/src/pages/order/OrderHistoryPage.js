@@ -9,6 +9,7 @@ function OrderHistoryPage() {
     useEffect(() => {
         const fetchOrders = async () => {
             try {
+                //TODO: GET THE CORRECT API CALL
                 const response = await axios.get(
                     `https://localhost:7269/orders?customerId=${user.id}`
                 );

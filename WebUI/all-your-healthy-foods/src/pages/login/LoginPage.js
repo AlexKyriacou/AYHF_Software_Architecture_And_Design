@@ -32,6 +32,7 @@ const LoginPage = () => {
             localStorage.setItem("token", token);
 
             login(user);
+
             setLoginError("");
             navigate(from ? `/${from}` : "/");
 

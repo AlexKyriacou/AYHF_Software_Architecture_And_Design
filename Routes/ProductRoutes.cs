@@ -43,29 +43,27 @@ namespace AYHF_Software_Architecture_And_Design.Routes
                 async ([FromBody] ProductDto productDto, [FromServices] ProductService productService) =>
                 {
                     var product = new Product(productDto.Id, productDto.Name, productDto.Description,
-                        productDto.LongDescription,
-                        productDto.Ingredients, productDto.Image, productDto.Rating, productDto.NumRatings,
-                        productDto.Price);
+                        productDto.LongDescription, productDto.Ingredients, productDto.Image, 
+                        productDto.Rating, productDto.NumRatings, productDto.Price);
                     product.Id = await productService.AddProductAsync(product);
                     return Results.Created($"/products/{product.Id}", product);
-                }).RequireAuthorization();
+                });
 
             _app.MapPut("/products/{id}",
                 async (int id, [FromBody] ProductDto productDto, [FromServices] ProductService productService) =>
                 {
                     var product = new Product(productDto.Id, productDto.Name, productDto.Description,
-                        productDto.LongDescription,
-                        productDto.Ingredients, productDto.Image, productDto.Rating, productDto.NumRatings,
-                        productDto.Price);
+                        productDto.LongDescription, productDto.Ingredients, productDto.Image, 
+                        productDto.Rating, productDto.NumRatings, productDto.Price);
                     await productService.UpdateProductAsync(product);
                     return Results.NoContent();
-                }).RequireAuthorization();
+                });
 
             _app.MapDelete("/products/{id}", async (int id, [FromServices] ProductService productService) =>
             {
                 await productService.DeleteProductAsync(id);
                 return Results.NoContent();
-            }).RequireAuthorization();
+            });
 
             _app.MapPost("/products/scrape",
                 async ([FromServices] ProductService productService) =>
