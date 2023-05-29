@@ -16,7 +16,7 @@ public class FeedbackRepository : RepositoryBase, IFeedbackRepository
         var insertQuery =
             "INSERT INTO Feedbacks (UserId, ProductId, Rating, Message, FeedbackDate) VALUES (@userId, @productId, @rating, @message, @feedbackDate);";
         var updateQuery =
-            "UPDATE Products SET NumRatings = NumRatings + 1, AvgRating = ((AvgRating*NumRatings)+@rating)/NumRatings WHERE Id = @productId;";
+            "UPDATE Products SET NumRatings = NumRatings + 1, Rating = ((Rating*NumRatings)+@rating)/NumRatings WHERE Id = @productId;";
         var autoIncrement = "SELECT last_insert_rowid();";
 
         await using var command = new SqliteCommand(insertQuery + updateQuery + autoIncrement, Connection);

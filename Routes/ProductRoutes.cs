@@ -52,6 +52,7 @@ namespace AYHF_Software_Architecture_And_Design.Routes
             _app.MapPut("/products/{id}",
                 async (int id, [FromBody] ProductDto productDto, [FromServices] ProductService productService) =>
                 {
+                    if (id != productDto.Id) return Results.BadRequest();
                     var product = new Product(productDto.Id, productDto.Name, productDto.Description,
                         productDto.LongDescription, productDto.Ingredients, productDto.Image, 
                         productDto.Rating, productDto.NumRatings, productDto.Price);

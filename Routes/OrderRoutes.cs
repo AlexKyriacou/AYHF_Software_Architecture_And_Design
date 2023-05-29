@@ -33,8 +33,9 @@ public class OrderRoutes
             return Results.Created($"/orders/{orderId}", orderDto);
         });
 
-        _app.MapPut("/orders/{id}", async ([FromBody] OrderDto orderDto, [FromServices] OrderService orderService) =>
+        _app.MapPut("/orders/{id}", async (int id, [FromBody] OrderDto orderDto, [FromServices] OrderService orderService) =>
         {
+            if (id != orderDto.Id) return Results.BadRequest();
             var userRepository = new UserRepository();
             if (await userRepository.GetUserByIdAsync(orderDto.UserId) is not Customer) return Results.BadRequest();
 
