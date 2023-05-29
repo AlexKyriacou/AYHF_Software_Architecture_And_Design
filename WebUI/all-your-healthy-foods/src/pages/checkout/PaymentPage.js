@@ -146,7 +146,7 @@ function PaymentPage() {
                     customerId: user.id,
                     products: cartItems
                 });
-                debugger;
+
                 clearCart();
                 navigate(`/order-confirmation/${response.data.id}`);
             } catch (error) {

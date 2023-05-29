@@ -52,8 +52,6 @@ function AddProductPage() {
         const isValid = validateForm();
 
         if (isValid) {
-            debugger;
-
             try {
                 const response = await axios.post("https://localhost:7269/products", newProduct);
 
