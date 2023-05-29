@@ -19,7 +19,7 @@ public class UserRoutes
     public void Configure()
     {
         _app.MapGet("/users",
-            async ([FromServices] UserService userService) => { return await userService.GetUsersAsync(); });
+            async ([FromServices] UserService userService) => await userService.GetUsersAsync());
 
         _app.MapGet("/users/{id}", async (int id, [FromServices] UserService userService) =>
         {
@@ -41,7 +41,7 @@ public class UserRoutes
             return Results.Created($"/users/{user.Id}", user);
         });
 
-        _app.MapPut("/users/{id}", async ([FromBody] UserDto userDto, [FromServices] UserService userService) =>
+        _app.MapPut("/users", async ([FromBody] UserDto userDto, [FromServices] UserService userService) =>
         {
             var user = CreateUser(userDto);
             if (user == null) return Results.BadRequest("Invalid Role");

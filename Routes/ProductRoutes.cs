@@ -49,8 +49,8 @@ namespace AYHF_Software_Architecture_And_Design.Routes
                     return Results.Created($"/products/{product.Id}", product);
                 });
 
-            _app.MapPut("/products/{id}",
-                async (int id, [FromBody] ProductDto productDto, [FromServices] ProductService productService) =>
+            _app.MapPut("/products",
+                async ([FromBody] ProductDto productDto, [FromServices] ProductService productService) =>
                 {
                     var product = new Product(productDto.Id, productDto.Name, productDto.Description,
                         productDto.LongDescription, productDto.Ingredients, productDto.Image, 

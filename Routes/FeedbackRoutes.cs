@@ -17,53 +17,52 @@ public class FeedbackRoutes
 
     public void Configure()
     {
-        _app.MapGet("/Feedbacks/{id}", async (int id, [FromServices] FeedbackService FeedbackService) =>
+        _app.MapGet("/feedback/{id}", async (int id, [FromServices] FeedbackService feedbackService) =>
         {
-            var Feedback = await FeedbackService.GetFeedbackByIdAsync(id);
-            return Feedback == null ? Results.NotFound() : Results.Ok(Feedback);
+            var feedback = await feedbackService.GetFeedbackByIdAsync(id);
+            return feedback == null ? Results.NotFound() : Results.Ok(feedback);
         });
 
-        _app.MapGet("/Products/{id}/Feedbacks", async (int id, [FromServices] FeedbackService FeedbackService) =>
+        _app.MapGet("/products/{id}/feedback", async (int id, [FromServices] FeedbackService feedbackService) =>
         {
-            var Feedback = await FeedbackService.GetAllFeedbackForProductAsync(id);
-            return Feedback == null ? Results.NotFound() : Results.Ok(Feedback);
+            var feedback = await feedbackService.GetAllFeedbackForProductAsync(id);
+            return Results.Ok(feedback);
         });
 
-        _app.MapGet("/Feedbacks",
-            async ([FromServices] FeedbackService FeedbackService) =>
+        _app.MapGet("/feedback",
+            async ([FromServices] FeedbackService feedbackService) =>
             {
-                return await FeedbackService.GetAllFeedbacksAsync();
+                return await feedbackService.GetAllFeedbacksAsync();
             });
 
-        _app.MapPost("/Feedbacks",
-            async ([FromBody] FeedbackDto FeedbackDto, [FromServices] FeedbackService FeedbackService) =>
+        _app.MapPost("/feedback",
+            async ([FromBody] FeedbackDto feedbackDto, [FromServices] FeedbackService feedbackService) =>
             {
                 var userRepo = new UserRepository();
-                var user = await userRepo.GetUserByIdAsync(FeedbackDto.UserId); //Check if provided user is a valid user
+                var user = await userRepo.GetUserByIdAsync(feedbackDto.UserId);
                 if (user == null) return Results.BadRequest();
-                var feedback = new Feedback(FeedbackDto.Id, FeedbackDto.UserId, FeedbackDto.Rating,
-                    FeedbackDto.ProductId, FeedbackDto.Message, FeedbackDto.FeedbackDate);
-                feedback.Id = await FeedbackService.AddFeedbackAsync(feedback);
+                var feedback = new Feedback(feedbackDto.Id, feedbackDto.UserId, feedbackDto.Rating,
+                    feedbackDto.ProductId, feedbackDto.Message, feedbackDto.FeedbackDate);
+                var createdFeedbackId = await feedbackService.AddFeedbackAsync(feedback);
+                if (createdFeedbackId <= 0) return Results.BadRequest(); // Handle the case if Id is not returned or invalid
 
-                return Results.Created($"/Feedbacks/{feedback.Id}", feedback);
-            }).RequireAuthorization();
-
-        _app.MapPut("/Feedbacks/{id}",
-            async ([FromBody] FeedbackDto FeedbackDto, [FromServices] FeedbackService FeedbackService) =>
-            {
-                var feedback = new Feedback(FeedbackDto.Id, FeedbackDto.UserId, FeedbackDto.Rating,
-                    FeedbackDto.ProductId, FeedbackDto.Message, FeedbackDto.FeedbackDate);
-                await FeedbackService.UpdateFeedbackAsync(feedback);
-                return Results.NoContent();
-            }).RequireAuthorization();
-
-        _app.MapDelete("/Feedbacks/{id}",
-            async ([FromBody] FeedbackDto FeedbackDto, [FromServices] FeedbackService FeedbackService) =>
-            {
-                var feedback = new Feedback(FeedbackDto.Id, FeedbackDto.UserId, FeedbackDto.Rating,
-                    FeedbackDto.ProductId, FeedbackDto.Message, FeedbackDto.FeedbackDate);
-                await FeedbackService.DeleteFeedbackAsync(feedback);
-                return Results.NoContent();
+                return Results.Created($"/feedback/{createdFeedbackId}", feedback);
             });
+
+        _app.MapPut("/feedback",
+            async ([FromBody] FeedbackDto feedbackDto, [FromServices] FeedbackService feedbackService) =>
+            {
+                var feedback = new Feedback(feedbackDto.Id, feedbackDto.UserId, feedbackDto.Rating,
+                    feedbackDto.ProductId, feedbackDto.Message, feedbackDto.FeedbackDate);
+                await feedbackService.UpdateFeedbackAsync(feedback);
+                return Results.NoContent();
+            }).RequireAuthorization();
+
+        _app.MapDelete("/feedback/{id}",
+            async ([FromServices] FeedbackService feedbackService, int id) =>
+            {
+                await feedbackService.DeleteFeedbackAsync(id);
+                return Results.NoContent();
+            }).RequireAuthorization();
     }
 }
