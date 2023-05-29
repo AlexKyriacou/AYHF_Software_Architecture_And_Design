@@ -21,14 +21,16 @@ function CheckoutPage() {
                     </Link>
                 </div>
             )}
-            <OrderSummary extra={<div>
-                <Link
-                    className={`link-button ${loggedIn ? "" : "disabled"}`}
-                    to="/shipping"
-                >
-                    Go to Shipping
-                </Link>
-            </div>} />
+            <OrderSummary
+                step="checkout"
+                extra={<div>
+                    <Link
+                        className={`link-button ${loggedIn ? "" : "disabled"}`}
+                        to="/shipping"
+                    >
+                        Go to Shipping
+                    </Link>
+                </div>} />
         </div>
     );
 }

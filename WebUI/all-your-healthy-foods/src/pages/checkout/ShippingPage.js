@@ -1,12 +1,16 @@
 import React, { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import OrderSummary from "../order/OrderSummary";
 import { UserContext } from "../../AppContext";
 import TextInputWithValidation from "../../components/TextInputWithValidation";
-import './Checkout.css';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTruckFast, faShop } from '@fortawesome/free-solid-svg-icons';
 import SelectWithValidation from "../../components/SelectWithValidation";
+import './Checkout.css';
 
 function ShippingPage() {
+    const navigate = useNavigate();
+
     const { loggedIn } = useContext(UserContext);
     const [address, setAddress] = useState("");
     const [suburb, setSuburb] = useState("");
@@ -14,6 +18,10 @@ function ShippingPage() {
     const [selectedState, setSelectedState] = useState("");
     const [isPostcodeValid, setIsPostcodeValid] = useState(true);
     const [formErrorMessage, setFormErrorMessage] = useState("");
+    const [deliveryOption, setDeliveryOption] = useState("delivery");
+    const [saveShippingAddress, setSaveShippingAddress] = useState(false);
+
+    let shipping = deliveryOption === "clickAndCollect" ? 0 : 10
 
     const validatePostcode = (postcode, state) => {
         const postcodeRanges = {
@@ -44,84 +52,143 @@ function ShippingPage() {
         setIsPostcodeValid(validatePostcode(postcode, newState));
     };
 
-    const handleLinkClick = (event) => {
-        const requiredFields = [
-            address,
-            suburb,
-            postcode,
-            selectedState
-        ];
+    const handleDeliveryOptionChange = (option) => {
+        setDeliveryOption(option);
+        setFormErrorMessage("");
+    };
 
-        const isValid = requiredFields.every((value) => value);
+    const handleLinkClick = () => {
+        if (deliveryOption === "delivery") {
+            const requiredFields = [address, suburb, postcode, selectedState];
 
-        if (!isValid || !isPostcodeValid) {
-            event.preventDefault();
-            setFormErrorMessage("Please fill in your shipping details before proceeding to payment");
+            const isValid = requiredFields.every((value) => value);
+
+            if (!isValid || !isPostcodeValid) {
+                setFormErrorMessage(
+                    "Please fill in your shipping details before proceeding to payment"
+                );
+                return;
+            }
         }
 
-        //TODO: Save address info against user
+        if (saveShippingAddress) {
+            // TODO: Save address info against user
+            // Call backend API to save shipping address
+        }
+
+        navigate("/payment", { state: shipping });
     };
 
     return (
         <div className="checkout-container">
             <h2>Shipping</h2>
+            <h3>Please Select a Shipping Method</h3>
             <form className="page-form">
-                <TextInputWithValidation
-                    placeholder="Address"
-                    required={true}
-                    value={address}
-                    parentOnChange={setAddress}
-                />
-                <TextInputWithValidation
-                    placeholder="Apartment, suite, etc. (optional)"
-                />
-                <div className="input-group">
-                    <TextInputWithValidation
-                        placeholder="Suburb"
-                        required={true}
-                        value={suburb}
-                        parentOnChange={setSuburb}
-                    />
-                    <TextInputWithValidation
-                        placeholder="Postcode"
-                        required={true}
-                        value={postcode}
-                        parentOnChange={handlePostcodeChange}
-                        regex={/^\d{4}$/}
-                        regexErrorMsg="Postcode Must be exactly 4 digits long"
-                        customErrorMsg={!isPostcodeValid ? "Invalid postcode for the selected state/territory" : ""}
-                    />
+                <div className="delivery-option">
+                    <label>
+                        <input
+                            type="radio"
+                            name="deliveryOption"
+                            value="delivery"
+                            checked={deliveryOption === "delivery"}
+                            onChange={() => handleDeliveryOptionChange("delivery")}
+                        />
+                        <FontAwesomeIcon icon={faTruckFast} aria-hidden="true" /> Delivery
+                    </label>
+                    <label>
+                        <input
+                            type="radio"
+                            name="deliveryOption"
+                            value="clickAndCollect"
+                            checked={deliveryOption === "clickAndCollect"}
+                            onChange={() => handleDeliveryOptionChange("clickAndCollect")}
+                        />
+                        <FontAwesomeIcon icon={faShop} aria-hidden="true" /> Click and Collect
+                    </label>
                 </div>
-                <SelectWithValidation
-                    value={selectedState}
-                    parentOnChange={handleStateChange}
-                    placeholder="State/territory"
-                    options={[
-                        { label: "Australian Capital Territory", value: "ACT" },
-                        { label: "New South Wales", value: "NSW" },
-                        { label: "Northern Territory", value: "NT" },
-                        { label: "Queensland", value: "QLD" },
-                        { label: "South Australia", value: "SA" },
-                        { label: "Tasmania", value: "TAS" },
-                        { label: "Victoria", value: "VIC" },
-                        { label: "Western Australia", value: "WA" }
-                    ]}
-                />
-                {formErrorMessage && (<span className="error-message">{formErrorMessage}</span>)}
+                {deliveryOption === "delivery" && (
+                    <>
+                        <TextInputWithValidation
+                            placeholder="Address"
+                            required={true}
+                            value={address}
+                            parentOnChange={setAddress}
+                        />
+                        <TextInputWithValidation
+                            placeholder="Apartment, suite, etc. (optional)"
+                        />
+                        <div className="input-group">
+                            <TextInputWithValidation
+                                placeholder="Suburb"
+                                required={true}
+                                value={suburb}
+                                parentOnChange={setSuburb}
+                            />
+                            <TextInputWithValidation
+                                placeholder="Postcode"
+                                required={true}
+                                value={postcode}
+                                parentOnChange={handlePostcodeChange}
+                                regex={/^\d{4}$/}
+                                regexErrorMsg="Postcode Must be exactly 4 digits long"
+                                customErrorMsg={
+                                    !isPostcodeValid
+                                        ? "Invalid postcode for the selected state/territory"
+                                        : ""
+                                }
+                            />
+                        </div>
+                        <SelectWithValidation
+                            value={selectedState}
+                            parentOnChange={handleStateChange}
+                            placeholder="State/territory"
+                            options={[
+                                { label: "Australian Capital Territory", value: "ACT" },
+                                { label: "New South Wales", value: "NSW" },
+                                { label: "Northern Territory", value: "NT" },
+                                { label: "Queensland", value: "QLD" },
+                                { label: "South Australia", value: "SA" },
+                                { label: "Tasmania", value: "TAS" },
+                                { label: "Victoria", value: "VIC" },
+                                { label: "Western Australia", value: "WA" }
+                            ]}
+                        />
+                        <div className="save-shipping-address">
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    checked={saveShippingAddress}
+                                    onChange={(e) => setSaveShippingAddress(e.target.checked)}
+                                />
+                                Save shipping address to my account
+                            </label>
+                        </div>
+                    </>
+                )}
+                {deliveryOption === "clickAndCollect" && (
+                    <div className="click-and-collect-info">
+                        <p>
+                            You can Click & Collect for FREE from our Store on Glenferrie Road
+                        </p>
+                    </div>
+                )}
+                {formErrorMessage && (
+                    <span className="error-message">{formErrorMessage}</span>
+                )}
             </form>
             <OrderSummary
+                step="shipping"
                 extra={
                     <div>
-                        <Link
-                            className={`link-button ${loggedIn ? "" : "disabled"}`}
-                            to="/payment"
+                        <button
+                            className={`secondary-button ${loggedIn ? "" : "disabled"}`}
                             onClick={handleLinkClick}
                         >
                             Go to Payment
-                        </Link>
+                        </button>
                     </div>
                 }
-                shipping={10}
+                shipping={shipping}
             />
         </div>
     );
