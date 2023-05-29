@@ -1,3 +1,5 @@
+using AYHF_Software_Architecture_And_Design.Application.Dtos;
+using AYHF_Software_Architecture_And_Design.Domain.Entities.Enums;
 using AYHF_Software_Architecture_And_Design.Domain.Entities.Model;
 using AYHF_Software_Architecture_And_Design.Infrastructure.Interfaces;
 
@@ -6,34 +8,52 @@ namespace AYHF_Software_Architecture_And_Design.Application.Services;
 public class OrderService
 {
     private readonly IOrderRepository _orderRepository;
+    private readonly IUserRepository _userRepository;
 
-    public OrderService(IOrderRepository orderRepository)
+    public OrderService(IOrderRepository orderRepository, IUserRepository userRepository)
     {
         _orderRepository = orderRepository;
+        _userRepository = userRepository;
     }
 
-    public async Task<Order?> GetOrderByIdAsync(int orderId)
+    public async Task<Order> GetOrderByIdAsync(int orderId)
     {
-        return await Task.Run(() => _orderRepository.GetOrderByIdAsync(orderId));
+        var order = await _orderRepository.GetOrderByIdAsync(orderId) ?? throw new KeyNotFoundException();
+
+        var user = await _userRepository.GetUserByIdAsync(order.UserId);
+        if (user is not { Role: UserRole.Customer }) return order;
+
+        order.Customer = (Customer)user;
+        return order;
     }
 
     public async Task<List<Order>> GetAllOrdersAsync()
     {
-        return await Task.Run(() => _orderRepository.GetAllOrdersAsync());
+        var orders = await _orderRepository.GetAllOrdersAsync();
+
+        foreach (var order in orders)
+        {
+            var user = await _userRepository.GetUserByIdAsync(order.UserId);
+            if (user is not { Role: UserRole.Customer }) continue;
+            order.Customer = (Customer)user;
+            order.CalculateTotalAmount();
+        }
+
+        return orders;
     }
 
-    public async Task<int> AddOrderAsync(Order order)
+    public async Task<int> AddOrderAsync(OrderDto orderDto)
     {
-        return await Task.Run(() => _orderRepository.AddOrderAsync(order));
+        return await _orderRepository.AddOrderAsync(orderDto);
     }
 
     public async Task UpdateOrderAsync(Order order)
     {
-        await Task.Run(() => _orderRepository.UpdateOrderAsync(order));
+        await _orderRepository.UpdateOrderAsync(order);
     }
 
     public async Task DeleteOrderAsync(int id)
     {
-        await Task.Run(() => _orderRepository.DeleteOrderAsync(id));
+        await _orderRepository.DeleteOrderAsync(id);
     }
 }

@@ -1,6 +1,5 @@
 using AYHF_Software_Architecture_And_Design.Application.Dtos;
 using AYHF_Software_Architecture_And_Design.Application.Services;
-using AYHF_Software_Architecture_And_Design.Domain.Entities.Interfaces;
 using AYHF_Software_Architecture_And_Design.Domain.Entities.Model;
 using AYHF_Software_Architecture_And_Design.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -21,36 +20,33 @@ public class OrderRoutes
         _app.MapGet("/orders/{id}", async (int id, [FromServices] OrderService orderService) =>
         {
             var order = await orderService.GetOrderByIdAsync(id);
-            return order == null ? Results.NotFound() : Results.Ok(order);
+            return Results.Ok(order);
         });
 
         _app.MapGet("/orders",
-            async ([FromServices] OrderService orderService) => { return await orderService.GetAllOrdersAsync(); });
+            async ([FromServices] OrderService orderService) => await orderService.GetAllOrdersAsync());
 
+        var userRepository = new UserRepository();
         _app.MapPost("/orders", async ([FromBody] OrderDto orderDto, [FromServices] OrderService orderService) =>
         {
-            var userRepo = new UserRepository();
-            IUser? user = await userRepo.GetUserByIdAsync(orderDto.CustomerId); //Check if provided user is a valid user
-            if (user == null)
-            {
-                return Results.BadRequest();
-            }
-            var order = new Order(user.Id, orderDto.Products);
-            order.Id = await orderService.AddOrderAsync(order);
-            return Results.Created($"/orders/{order.Id}", order);
+            var orderId = await orderService.AddOrderAsync(orderDto);
+            return Results.Created($"/orders/{orderId}", orderDto);
         });
 
         _app.MapPut("/orders/{id}", async ([FromBody] OrderDto orderDto, [FromServices] OrderService orderService) =>
         {
-            var order = new Order(orderDto.CustomerId, orderDto.Products);
+            var userRepository = new UserRepository();
+            if (await userRepository.GetUserByIdAsync(orderDto.UserId) is not Customer) return Results.BadRequest();
+
+            var order = new Order();
             await orderService.UpdateOrderAsync(order);
             return Results.NoContent();
-        }).RequireAuthorization();
+        });
 
         _app.MapDelete("/orders/{id}", async (int id, [FromServices] OrderService orderService) =>
         {
             await orderService.DeleteOrderAsync(id);
             return Results.NoContent();
-        }).RequireAuthorization();
+        });
     }
 }

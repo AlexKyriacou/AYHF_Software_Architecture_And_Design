@@ -1,10 +1,8 @@
-using AYHF_Software_Architecture_And_Design.Domain.Entities.Interfaces;
 using AYHF_Software_Architecture_And_Design.Domain.Entities.Model;
 using AYHF_Software_Architecture_And_Design.Infrastructure.Interfaces;
 using Microsoft.Data.Sqlite;
 
 namespace AYHF_Software_Architecture_And_Design.Infrastructure.Repositories;
-
 
 public class FeedbackRepository : RepositoryBase, IFeedbackRepository
 {
@@ -15,12 +13,14 @@ public class FeedbackRepository : RepositoryBase, IFeedbackRepository
 
     public async Task<int> AddFeedbackAsync(Feedback feedback)
     {
-        var insertQuery = "INSERT INTO Feedbacks (CustomerId, ProductId, Rating, Message, FeedbackDate) VALUES (@customerId, @productId, @rating, @message, @feedbackDate);";
-        var updateQuery = "UPDATE Products SET NumRatings = NumRatings + 1, AvgRating = ((AvgRating*NumRatings)+@rating)/NumRatings WHERE Id = @productId;";
+        var insertQuery =
+            "INSERT INTO Feedbacks (UserId, ProductId, Rating, Message, FeedbackDate) VALUES (@userId, @productId, @rating, @message, @feedbackDate);";
+        var updateQuery =
+            "UPDATE Products SET NumRatings = NumRatings + 1, AvgRating = ((AvgRating*NumRatings)+@rating)/NumRatings WHERE Id = @productId;";
         var autoIncrement = "SELECT last_insert_rowid();";
 
         await using var command = new SqliteCommand(insertQuery + updateQuery + autoIncrement, Connection);
-        command.Parameters.AddWithValue("@customerId", feedback.CustomerId);
+        command.Parameters.AddWithValue("@userId", feedback.UserId);
         command.Parameters.AddWithValue("@productId", feedback.ProductId);
         command.Parameters.AddWithValue("@rating", feedback.Rating);
         command.Parameters.AddWithValue("@message", feedback.Message);
@@ -34,10 +34,10 @@ public class FeedbackRepository : RepositoryBase, IFeedbackRepository
     public async Task UpdateFeedbackAsync(Feedback feedback)
     {
         var updateQuery =
-            "UPDATE Feedbacks SET CustomerId = @customerId, ProductId = @productId, Rating = @rating, Message = @message, FeedbackDate = @feedbackDate WHERE FeedbackId = @feedbackId";
+            "UPDATE Feedbacks SET UserId = @userId, ProductId = @productId, Rating = @rating, Message = @message, FeedbackDate = @feedbackDate WHERE FeedbackId = @feedbackId";
 
         await using var updateCommand = new SqliteCommand(updateQuery, Connection);
-        updateCommand.Parameters.AddWithValue("@customerId", feedback.CustomerId);
+        updateCommand.Parameters.AddWithValue("@userId", feedback.UserId);
         updateCommand.Parameters.AddWithValue("@productId", feedback.ProductId);
         updateCommand.Parameters.AddWithValue("@rating", feedback.Rating);
         updateCommand.Parameters.AddWithValue("@message", feedback.Message);
@@ -49,7 +49,7 @@ public class FeedbackRepository : RepositoryBase, IFeedbackRepository
 
     public async Task DeleteFeedbackAsync(Feedback feedback)
     {
-        await this.DeleteFeedbackAsync(feedback.Id);
+        await DeleteFeedbackAsync(feedback.Id);
     }
 
     public async Task DeleteFeedbackAsync(int Id)
@@ -63,7 +63,8 @@ public class FeedbackRepository : RepositoryBase, IFeedbackRepository
 
     public async Task<Feedback?> GetFeedbackByIdAsync(int feedbackId)
     {
-        var selectQuery = "SELECT CustomerId, ProductId, Rating, Message, FeedbackDate FROM Feedbacks WHERE FeedbackId = @feedbackId";
+        var selectQuery =
+            "SELECT UserId, ProductId, Rating, Message, FeedbackDate FROM Feedbacks WHERE FeedbackId = @feedbackId";
 
         await using var selectCommand = new SqliteCommand(selectQuery, Connection);
         selectCommand.Parameters.AddWithValue("@feedbackId", feedbackId);
@@ -72,17 +73,18 @@ public class FeedbackRepository : RepositoryBase, IFeedbackRepository
 
         if (await reader.ReadAsync())
         {
-            var customerId = reader.GetInt32(0);
+            var userId = reader.GetInt32(0);
             var productId = reader.GetInt32(1);
             var rating = reader.GetInt32(2);
             var message = reader.GetString(3);
             var feedbackDate = reader.GetString(4);
             var customerRepository = new UserRepository();
-            var customer = await customerRepository.GetUserByIdAsync(customerId);
+            var customer = await customerRepository.GetUserByIdAsync(userId);
             if (customer != null)
             {
                 // Create a new Feedback object using the retrieved data
-                var feedback = new Feedback(feedbackId, customer.Id, productId, rating, message, DateTime.Parse(feedbackDate));
+                var feedback = new Feedback(feedbackId, customer.Id, productId, rating, message,
+                    DateTime.Parse(feedbackDate));
                 return feedback;
             }
         }
@@ -93,7 +95,8 @@ public class FeedbackRepository : RepositoryBase, IFeedbackRepository
     public async Task<List<Feedback>> GetAllFeedbackAsync()
     {
         var feedbacks = new List<Feedback>();
-        var sql = "SELECT FeedbackId, CustomerId, ProductId, Rating, Message, FeedbackDate FROM Feedbacks ORDER BY FeedbackDate DESC";
+        var sql =
+            "SELECT FeedbackId, UserId, ProductId, Rating, Message, FeedbackDate FROM Feedbacks ORDER BY FeedbackDate DESC";
 
         await using var command = new SqliteCommand(sql, Connection);
 
@@ -102,13 +105,13 @@ public class FeedbackRepository : RepositoryBase, IFeedbackRepository
         while (await reader.ReadAsync())
         {
             var feedbackId = reader.GetInt32(0);
-            var customerId = reader.GetInt32(1);
+            var userId = reader.GetInt32(1);
             var productId = reader.GetInt32(2);
             var rating = reader.GetInt32(3);
             var message = reader.GetString(4);
             var feedbackDateString = reader.GetString(5);
             var customerRepository = new UserRepository();
-            IUser? customer = await customerRepository.GetUserByIdAsync(customerId);
+            var customer = await customerRepository.GetUserByIdAsync(userId);
             if (customer != null)
             {
                 var feedback = new Feedback(feedbackId, customer.Id, productId, rating, message,
@@ -119,10 +122,12 @@ public class FeedbackRepository : RepositoryBase, IFeedbackRepository
 
         return feedbacks;
     }
+
     public async Task<List<Feedback>> GetAllFeedbackForProductAsync(int productId)
     {
         var feedbacks = new List<Feedback>();
-        var sql = "SELECT FeedbackId, CustomerId, Rating, Message, FeedbackDate FROM Feedbacks WHERE ProductId = @productId ORDER BY FeedbackDate DESC";
+        var sql =
+            "SELECT FeedbackId, UserId, Rating, Message, FeedbackDate FROM Feedbacks WHERE ProductId = @productId ORDER BY FeedbackDate DESC";
 
         await using var command = new SqliteCommand(sql, Connection);
         command.Parameters.AddWithValue("@productId", productId);
@@ -132,12 +137,12 @@ public class FeedbackRepository : RepositoryBase, IFeedbackRepository
         while (await reader.ReadAsync())
         {
             var feedbackId = reader.GetInt32(0);
-            var customerId = reader.GetInt32(1);
+            var userId = reader.GetInt32(1);
             var rating = reader.GetInt32(2);
             var message = reader.GetString(3);
             var feedbackDateString = reader.GetString(4);
             var customerRepository = new UserRepository();
-            IUser? customer = await customerRepository.GetUserByIdAsync(customerId);
+            var customer = await customerRepository.GetUserByIdAsync(userId);
             if (customer != null)
             {
                 var feedback = new Feedback(feedbackId, customer.Id, productId, rating, message,
@@ -152,7 +157,7 @@ public class FeedbackRepository : RepositoryBase, IFeedbackRepository
     protected override void CreateTables()
     {
         var createTableQuery =
-            "CREATE TABLE IF NOT EXISTS Feedbacks (CustomerId INT, FeedbackId INTEGER PRIMARY KEY AUTOINCREMENT, ProductId INT, Rating INT, Message TEXT, FeedbackDate TEXT)";
+            "CREATE TABLE IF NOT EXISTS Feedbacks (UserId INT, FeedbackId INTEGER PRIMARY KEY AUTOINCREMENT, ProductId INT, Rating INT, Message TEXT, FeedbackDate TEXT)";
         using var createTableCommand = new SqliteCommand(createTableQuery, Connection);
         createTableCommand.ExecuteNonQuery();
     }

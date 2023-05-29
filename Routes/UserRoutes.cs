@@ -1,5 +1,6 @@
 using AYHF_Software_Architecture_And_Design.Application.Dtos;
 using AYHF_Software_Architecture_And_Design.Application.Services;
+using AYHF_Software_Architecture_And_Design.Domain.Entities.Enums;
 using AYHF_Software_Architecture_And_Design.Domain.Entities.Interfaces;
 using AYHF_Software_Architecture_And_Design.Domain.Entities.Model;
 using Microsoft.AspNetCore.Mvc;
@@ -26,24 +27,24 @@ public class UserRoutes
             return Results.Ok(user);
         });
 
+        _app.MapGet("/users/{id}/orders", async (int id, [FromServices] UserService userService) =>
+        {
+            var user = await userService.GetCustomerWithOrdersByIdAsync(id);
+            return Results.Ok(user);
+        });
+
         _app.MapPost("/users", async ([FromBody] UserDto userDto, [FromServices] UserService userService) =>
         {
-            IUser? user = CreateUser(userDto);
-            if (user == null)
-            {
-                return Results.BadRequest("Invalid Role");
-            }
+            var user = CreateUser(userDto);
+            if (user == null) return Results.BadRequest("Invalid Role");
             user.Id = await userService.AddUserAsync(user);
             return Results.Created($"/users/{user.Id}", user);
         });
 
         _app.MapPut("/users/{id}", async ([FromBody] UserDto userDto, [FromServices] UserService userService) =>
         {
-            IUser? user = CreateUser(userDto);
-            if (user == null)
-            {
-                return Results.BadRequest("Invalid Role");
-            }
+            var user = CreateUser(userDto);
+            if (user == null) return Results.BadRequest("Invalid Role");
             await userService.UpdateUserAsync(user);
             return Results.NoContent();
         }).RequireAuthorization();
@@ -56,11 +57,8 @@ public class UserRoutes
 
         _app.MapPost("/users/register", async ([FromBody] UserDto userDto, [FromServices] UserService userService) =>
         {
-            IUser? user = CreateUser(userDto);
-            if (user == null)
-            {
-                return Results.BadRequest();
-            }
+            var user = CreateUser(userDto);
+            if (user == null) return Results.BadRequest();
             user.Id = await userService.RegisterUserAsync(user);
             return Results.Created($"/users/{user.Id}", user);
         });
@@ -82,31 +80,32 @@ public class UserRoutes
     private static IUser? CreateUser(UserDto userDto)
     {
         IUser user;
-        switch (userDto.Role.ToLower())
+        switch ((UserRole)userDto.Role)
         {
-            case "customer":
+            case UserRole.Customer:
                 user = new Customer
                 {
                     Name = userDto.Name,
                     Username = userDto.Username,
                     Email = userDto.Email,
                     Password = userDto.Password,
-                    Role = userDto.Role
+                    Role = (UserRole)userDto.Role
                 };
                 break;
-            case "admin":
+            case UserRole.Admin:
                 user = new Admin
                 {
                     Name = userDto.Name,
                     Username = userDto.Username,
                     Email = userDto.Email,
                     Password = userDto.Password,
-                    Role = userDto.Role
+                    Role = (UserRole)userDto.Role
                 };
                 break;
             default:
                 return null;
         }
+
         return user;
     }
 }

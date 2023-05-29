@@ -1,14 +1,13 @@
-import React, { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, {useContext, useState} from "react";
+import {Link} from "react-router-dom";
 import OrderSummary from "../order/OrderSummary";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLock } from "@fortawesome/free-solid-svg-icons";
-import { faCcMastercard, faPaypal } from "@fortawesome/free-brands-svg-icons";
-import { CartContext, UserContext } from "../../AppContext";
-import { creditCardPaymentData, paypalPaymentData } from "../../testData/paymentData"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faLock} from "@fortawesome/free-solid-svg-icons";
+import {faCcMastercard, faPaypal} from "@fortawesome/free-brands-svg-icons";
+import {CartContext, UserContext} from "../../AppContext";
+import {creditCardPaymentData, paypalPaymentData} from "../../testData/paymentData"
 import TextInputWithValidation from "../../components/TextInputWithValidation"
 import PasswordInput from "../../components/PasswordInput"
-import axios from "axios";
 import './Checkout.css';
 
 function validateForm(paymentMethod, paymentDetails) {
@@ -18,7 +17,7 @@ function validateForm(paymentMethod, paymentDetails) {
         }
 
         const isValid = paypalPaymentData.some(
-            ({ email, password }) =>
+            ({email, password}) =>
                 paymentDetails.email === email && paymentDetails.password === password
         );
 
@@ -31,7 +30,7 @@ function validateForm(paymentMethod, paymentDetails) {
         }
 
         const isValid = creditCardPaymentData.some(
-            ({ cardHolderName: dbCardHolderName, cardNumber: dbCardNumber, cvv: dbCvv }) =>
+            ({cardHolderName: dbCardHolderName, cardNumber: dbCardNumber, cvv: dbCvv}) =>
                 paymentDetails.cardHolderName === dbCardHolderName && paymentDetails.cardNumber === dbCardNumber && paymentDetails.cvv === dbCvv
         );
 
@@ -46,8 +45,8 @@ function validateForm(paymentMethod, paymentDetails) {
 }
 
 function PaymentPage() {
-    const { loggedIn, user } = useContext(UserContext);
-    const { clearCart, cartItems } = useContext(CartContext);
+    const {loggedIn} = useContext(UserContext);
+    const {clearCart, placeOrder} = useContext(CartContext);
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -57,7 +56,7 @@ function PaymentPage() {
     const [paymentMethod, setPaymentMethod] = useState(""); // State to track the selected payment method
     const [formErrorMessage, setFormErrorMessage] = useState("");
 
-    const navigate = useNavigate();
+    const [orderDetails, setOrderDetails] = useState({});
 
     const clearInputs = () => {
         setEmail("");
@@ -123,35 +122,23 @@ function PaymentPage() {
         }
     };
 
-    const handleLinkClick = async (event) => {
-        event.preventDefault();
-
+    const handleLinkClick = (event) => {
         const paymentDetails = {
             email: email,
             password: password,
             cardHolderName: cardHolderName,
             cardNumber: cardNumber,
             cvv: cvv
-        };
-
+        }
         const errorMessage = validateForm(paymentMethod, paymentDetails);
 
         if (errorMessage) {
+            event.preventDefault();
             setFormErrorMessage(errorMessage);
         } else {
             setFormErrorMessage("");
-
-            try {
-                const response = await axios.post("https://localhost:7269/orders", {
-                    customerId: user.id,
-                    products: cartItems
-                });
-
-                clearCart();
-                navigate(`/order-confirmation/${response.data.id}`);
-            } catch (error) {
-                console.error("Error occurred while placing the order:", error);
-            }
+            clearCart();
+            placeOrder(orderDetails);
         }
     };
 
@@ -169,7 +156,7 @@ function PaymentPage() {
                         checked={paymentMethod === "paypal"}
                         onChange={handlePaymentMethodChange}
                     />
-                    <label htmlFor="paypal"><FontAwesomeIcon icon={faPaypal} aria-hidden="true" /> PayPal</label>
+                    <label htmlFor="paypal"><FontAwesomeIcon icon={faPaypal} aria-hidden="true"/> PayPal</label>
                 </div>
                 <div>
                     <input
@@ -180,7 +167,7 @@ function PaymentPage() {
                         checked={paymentMethod === "creditcard"}
                         onChange={handlePaymentMethodChange}
                     />
-                    <label htmlFor="creditcard"><FontAwesomeIcon icon={faCcMastercard} aria-hidden="true" /> Credit Card</label>
+                    <label htmlFor="creditcard"><FontAwesomeIcon icon={faCcMastercard} aria-hidden="true"/> Credit Card</label>
                 </div>
             </form>
             {renderPaymentForm()}
@@ -188,15 +175,17 @@ function PaymentPage() {
             <OrderSummary
                 extra={
                     <div>
-                        <button
+                        <Link
                             className={`link-button ${(loggedIn && paymentMethod) ? "" : "disabled"}`}
                             onClick={handleLinkClick}
+                            to="/order-confirmation"
                         >
-                            <FontAwesomeIcon icon={faLock} aria-hidden="true" /> Pay Securely
-                        </button>
+                            <FontAwesomeIcon icon={faLock} aria-hidden="true"/> Pay Securely
+                        </Link>
                     </div>
                 }
                 shipping={10}
+                setOrderDetails={setOrderDetails}
             />
         </div>
     );

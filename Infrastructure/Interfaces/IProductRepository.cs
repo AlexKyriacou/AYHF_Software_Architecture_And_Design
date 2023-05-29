@@ -10,5 +10,4 @@ public interface IProductRepository
     Task<Product?> GetProductByIdAsync(int productId);
     Task<List<Product>> GetAllProductsAsync();
     Task<List<Product>> GetProductsBySearchQueryAsync(string searchQuery);
-
 }

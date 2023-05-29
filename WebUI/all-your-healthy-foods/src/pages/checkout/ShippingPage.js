@@ -1,13 +1,13 @@
-import React, { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import React, {useContext, useState} from "react";
+import {Link} from "react-router-dom";
 import OrderSummary from "../order/OrderSummary";
-import { UserContext } from "../../AppContext";
+import {UserContext} from "../../AppContext";
 import TextInputWithValidation from "../../components/TextInputWithValidation";
 import './Checkout.css';
 import SelectWithValidation from "../../components/SelectWithValidation";
 
 function ShippingPage() {
-    const { loggedIn } = useContext(UserContext);
+    const {loggedIn} = useContext(UserContext);
     const [address, setAddress] = useState("");
     const [suburb, setSuburb] = useState("");
     const [postcode, setPostcode] = useState("");
@@ -97,14 +97,14 @@ function ShippingPage() {
                     parentOnChange={handleStateChange}
                     placeholder="State/territory"
                     options={[
-                        { label: "Australian Capital Territory", value: "ACT" },
-                        { label: "New South Wales", value: "NSW" },
-                        { label: "Northern Territory", value: "NT" },
-                        { label: "Queensland", value: "QLD" },
-                        { label: "South Australia", value: "SA" },
-                        { label: "Tasmania", value: "TAS" },
-                        { label: "Victoria", value: "VIC" },
-                        { label: "Western Australia", value: "WA" }
+                        {label: "Australian Capital Territory", value: "ACT"},
+                        {label: "New South Wales", value: "NSW"},
+                        {label: "Northern Territory", value: "NT"},
+                        {label: "Queensland", value: "QLD"},
+                        {label: "South Australia", value: "SA"},
+                        {label: "Tasmania", value: "TAS"},
+                        {label: "Victoria", value: "VIC"},
+                        {label: "Western Australia", value: "WA"}
                     ]}
                 />
                 {formErrorMessage && (<span className="error-message">{formErrorMessage}</span>)}
@@ -121,7 +121,6 @@ function ShippingPage() {
                         </Link>
                     </div>
                 }
-                shipping={10}
             />
         </div>
     );
