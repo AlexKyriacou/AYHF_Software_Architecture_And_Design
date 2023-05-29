@@ -1,11 +1,11 @@
-import React, {useContext} from "react";
-import {Link} from "react-router-dom";
+import React, { useContext } from "react";
+import { Link } from "react-router-dom";
 import OrderSummary from "../order/OrderSummary";
-import {UserContext} from "../../AppContext";
+import { UserContext } from "../../AppContext";
 import './Checkout.css';
 
 function CheckoutPage() {
-    const {loggedIn} = useContext(UserContext);
+    const { loggedIn } = useContext(UserContext);
     return (
         <div className="checkout-container">
             <h2>Checkout</h2>
@@ -28,7 +28,7 @@ function CheckoutPage() {
                 >
                     Go to Shipping
                 </Link>
-            </div>}/>
+            </div>} />
         </div>
     );
 }

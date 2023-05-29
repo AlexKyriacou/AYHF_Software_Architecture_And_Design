@@ -1,11 +1,11 @@
-import React, {createContext, useEffect, useState} from "react";
+import React, { createContext, useEffect, useState } from "react";
 import axios from "axios";
 
 const CartContext = createContext();
 const UserContext = createContext();
 const ProductsContext = createContext();
 
-const CartProvider = ({children}) => {
+const CartProvider = ({ children }) => {
     const [cartCount, setCartCount] = useState(0);
     const [cartItems, setCartItems] = useState([]);
 
@@ -25,7 +25,7 @@ const CartProvider = ({children}) => {
     };
 
     const addToCart = (product) => {
-        const updatedCartItems = [...cartItems, {...product, count: 1}];
+        const updatedCartItems = [...cartItems, { ...product, count: 1 }];
         updateCartItems(updatedCartItems);
     };
 
@@ -77,41 +77,17 @@ const CartProvider = ({children}) => {
         Object.entries(groupedProducts).sort(([nameA], [nameB]) => nameA.localeCompare(nameB))
     );
 
-    const [orders, setOrders] = useState([]);
-
-    const placeOrder = (orderDetails) => {
-        //get user orders from the backend
-        const storedOrders = localStorage.getItem("orders");
-        if (storedOrders) {
-            setOrders(JSON.parse(storedOrders));
-        }
-
-        const order = [{
-            orderItems: sortedGroupedProducts,
-            orderSubTotal: orderDetails.subtotal,
-            orderPromotion: orderDetails.promotionAmount,
-            orderTotal: orderDetails.total
-        }]
-
-        orders.push(order);
-
-        setOrders(orders);
-        localStorage.setItem("orders", JSON.stringify(orders));
-    }
-
     return (
         <CartContext.Provider
             value={{
                 cartCount,
                 cartItems,
                 sortedGroupedProducts,
-                orders,
                 addToCart,
                 removeFromCart,
                 decreaseCount,
                 increaseCount,
-                clearCart,
-                placeOrder
+                clearCart
             }}
         >
             {children}
@@ -119,7 +95,7 @@ const CartProvider = ({children}) => {
     );
 };
 
-const ProductsProvider = ({children}) => {
+const ProductsProvider = ({ children }) => {
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
@@ -132,7 +108,7 @@ const ProductsProvider = ({children}) => {
                     sessionStorage.setItem("products", JSON.stringify(fetchedProducts)); // Save products to sessionStorage
                 }
             } catch (error) {
-                console.log("Error fetching products:", error);
+                console.error("Error fetching products:", error);
             }
         };
 
@@ -145,14 +121,14 @@ const ProductsProvider = ({children}) => {
     }, []);
 
     return (
-        <ProductsContext.Provider value={{products}}>
+        <ProductsContext.Provider value={{ products, setProducts }}>
             {children}
         </ProductsContext.Provider>
     );
 };
 
 
-const UserProvider = ({children}) => {
+const UserProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loggedIn, setLoggedIn] = useState(false);
 
@@ -196,4 +172,4 @@ const UserProvider = ({children}) => {
     );
 };
 
-export {CartContext, CartProvider, UserContext, UserProvider, ProductsContext, ProductsProvider};
+export { CartContext, CartProvider, UserContext, UserProvider, ProductsContext, ProductsProvider };

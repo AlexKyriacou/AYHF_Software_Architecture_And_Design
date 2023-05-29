@@ -23,4 +23,4 @@ const creditCardPaymentData = [
     }
 ];
 
-export {paypalPaymentData, creditCardPaymentData};
+export { paypalPaymentData, creditCardPaymentData };

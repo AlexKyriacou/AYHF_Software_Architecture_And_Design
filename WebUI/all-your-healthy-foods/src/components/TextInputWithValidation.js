@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import "./Input.css"
 
 function validateInput(value, required, regex, regexErrorMsg) {
@@ -12,15 +12,15 @@ function validateInput(value, required, regex, regexErrorMsg) {
 }
 
 function TextInputWithValidation({
-                                     type = "text",
-                                     placeholder,
-                                     required,
-                                     regex = "",
-                                     regexErrorMsg = "",
-                                     parentOnChange,
-                                     readonly,
-                                     customErrorMsg = ""
-                                 }) {
+    type = "text",
+    placeholder,
+    required,
+    regex = "",
+    regexErrorMsg = "",
+    parentOnChange,
+    readonly,
+    customErrorMsg = ""
+}) {
     const [value, setValue] = useState("");
     const [error, setError] = useState("");
 

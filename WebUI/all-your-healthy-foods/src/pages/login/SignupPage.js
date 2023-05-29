@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from "react";
-import {Link, useNavigate} from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import PasswordInput from "../../components/PasswordInput";
 import TextInputWithValidation from '../../components/TextInputWithValidation'
 import "./Login.css";
@@ -131,8 +131,8 @@ const SignupPage = () => {
                         value={role}
                         parentOnChange={setRole}
                         options={[
-                            {label: "Customer", value: "customer"},
-                            {label: "Admin", value: "admin"}
+                            { label: "Customer", value: "customer" },
+                            { label: "Admin", value: "admin" }
                         ]}
                     />
                     <button type="submit" className="primary-button">

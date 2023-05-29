@@ -1,10 +1,10 @@
-import React, {useEffect, useRef, useState} from "react";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faEye, faEyeSlash, faInfoCircle} from "@fortawesome/free-solid-svg-icons";
+import React, { useEffect, useRef, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import TextInputWithValidation from "./TextInputWithValidation"
 import './Input.css'
 
-const PasswordInput = ({placeholder, showInfo, onChange, checkPattern, value, passwordError}) => {
+const PasswordInput = ({ placeholder, showInfo, onChange, checkPattern, value, passwordError }) => {
     const [passwordShown, setPasswordShown] = useState(false);
     const [passwordPolicyVisible, setPasswordPolicyVisible] = useState(false);
     const passwordContainerRef = useRef(null);
