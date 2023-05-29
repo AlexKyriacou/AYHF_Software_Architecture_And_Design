@@ -146,8 +146,6 @@ function PaymentPage() {
                     userId: user.id,
                     products: cartItems
                 });
-                
-                console.log(response);
 
                 clearCart();
                 navigate(`/order-confirmation/${response.data.id}`);
