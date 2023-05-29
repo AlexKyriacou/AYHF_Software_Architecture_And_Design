@@ -49,9 +49,10 @@ public class FeedbackRoutes
                 return Results.Created($"/feedback/{createdFeedbackId}", feedback);
             });
 
-        _app.MapPut("/feedback",
-            async ([FromBody] FeedbackDto feedbackDto, [FromServices] FeedbackService feedbackService) =>
+        _app.MapPut("/feedback/{id}",
+            async (int id, [FromBody] FeedbackDto feedbackDto, [FromServices] FeedbackService feedbackService) =>
             {
+                if (id != feedbackDto.Id) return Results.BadRequest();
                 var feedback = new Feedback(feedbackDto.Id, feedbackDto.UserId, feedbackDto.Rating,
                     feedbackDto.ProductId, feedbackDto.Message, feedbackDto.FeedbackDate);
                 await feedbackService.UpdateFeedbackAsync(feedback);
