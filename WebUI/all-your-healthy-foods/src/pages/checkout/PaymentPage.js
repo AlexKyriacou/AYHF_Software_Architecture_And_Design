@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import OrderSummary from "../order/OrderSummary";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
@@ -8,6 +8,7 @@ import { CartContext, UserContext } from "../../AppContext";
 import { creditCardPaymentData, paypalPaymentData } from "../../testData/paymentData"
 import TextInputWithValidation from "../../components/TextInputWithValidation"
 import PasswordInput from "../../components/PasswordInput"
+import axios from "axios";
 import './Checkout.css';
 
 function validateForm(paymentMethod, paymentDetails) {
@@ -45,8 +46,8 @@ function validateForm(paymentMethod, paymentDetails) {
 }
 
 function PaymentPage() {
-    const { loggedIn } = useContext(UserContext);
-    const { clearCart, placeOrder } = useContext(CartContext);
+    const { loggedIn, user } = useContext(UserContext);
+    const { clearCart, cartItems } = useContext(CartContext);
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -56,7 +57,7 @@ function PaymentPage() {
     const [paymentMethod, setPaymentMethod] = useState(""); // State to track the selected payment method
     const [formErrorMessage, setFormErrorMessage] = useState("");
 
-    const [orderDetails, setOrderDetails] = useState({});
+    const navigate = useNavigate();
 
     const clearInputs = () => {
         setEmail("");
@@ -122,23 +123,35 @@ function PaymentPage() {
         }
     };
 
-    const handleLinkClick = (event) => {
+    const handleLinkClick = async (event) => {
+        event.preventDefault();
+
         const paymentDetails = {
             email: email,
             password: password,
             cardHolderName: cardHolderName,
             cardNumber: cardNumber,
             cvv: cvv
-        }
+        };
+
         const errorMessage = validateForm(paymentMethod, paymentDetails);
 
         if (errorMessage) {
-            event.preventDefault();
             setFormErrorMessage(errorMessage);
         } else {
             setFormErrorMessage("");
-            clearCart();
-            placeOrder(orderDetails);
+
+            try {
+                const response = await axios.post("https://localhost:7269/orders", {
+                    customerId: user.id,
+                    products: cartItems
+                });
+
+                clearCart();
+                navigate(`/order-confirmation/${response.data.id}`);
+            } catch (error) {
+                console.error("Error occurred while placing the order:", error);
+            }
         }
     };
 
@@ -175,17 +188,15 @@ function PaymentPage() {
             <OrderSummary
                 extra={
                     <div>
-                        <Link
+                        <button
                             className={`link-button ${(loggedIn && paymentMethod) ? "" : "disabled"}`}
                             onClick={handleLinkClick}
-                            to="/order-confirmation"
                         >
                             <FontAwesomeIcon icon={faLock} aria-hidden="true" /> Pay Securely
-                        </Link>
+                        </button>
                     </div>
                 }
                 shipping={10}
-                setOrderDetails={setOrderDetails}
             />
         </div>
     );

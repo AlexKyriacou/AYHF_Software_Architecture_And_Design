@@ -121,6 +121,7 @@ function ShippingPage() {
                         </Link>
                     </div>
                 }
+                shipping={10}
             />
         </div>
     );

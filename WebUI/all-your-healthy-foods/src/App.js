@@ -35,7 +35,7 @@ function App() {
                             <Route path="/shipping" element={<ShippingPage />} />
                             <Route path="/payment" element={<PaymentPage />} />
                             <Route
-                                path="/order-confirmation"
+                                path="/order-confirmation/:orderId"
                                 element={<OrderConfirmationPage />}
                             />
                             <Route path="/order-history" element={<OrderHistoryPage />} />

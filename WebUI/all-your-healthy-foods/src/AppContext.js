@@ -77,41 +77,17 @@ const CartProvider = ({ children }) => {
         Object.entries(groupedProducts).sort(([nameA], [nameB]) => nameA.localeCompare(nameB))
     );
 
-    const [orders, setOrders] = useState([]);
-
-    const placeOrder = (orderDetails) => {
-        //get user orders from the backend
-        const storedOrders = localStorage.getItem("orders");
-        if (storedOrders) {
-            setOrders(JSON.parse(storedOrders));
-        }
-
-        const order = [{
-            orderItems: sortedGroupedProducts,
-            orderSubTotal: orderDetails.subtotal,
-            orderPromotion: orderDetails.promotionAmount,
-            orderTotal: orderDetails.total
-        }]
-
-        orders.push(order);
-
-        setOrders(orders);
-        localStorage.setItem("orders", JSON.stringify(orders));
-    }
-
     return (
         <CartContext.Provider
             value={{
                 cartCount,
                 cartItems,
                 sortedGroupedProducts,
-                orders,
                 addToCart,
                 removeFromCart,
                 decreaseCount,
                 increaseCount,
-                clearCart,
-                placeOrder
+                clearCart
             }}
         >
             {children}
@@ -132,7 +108,7 @@ const ProductsProvider = ({ children }) => {
                     sessionStorage.setItem("products", JSON.stringify(fetchedProducts)); // Save products to sessionStorage
                 }
             } catch (error) {
-                console.log("Error fetching products:", error);
+                console.error("Error fetching products:", error);
             }
         };
 
