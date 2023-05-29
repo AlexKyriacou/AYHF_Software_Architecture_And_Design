@@ -9,7 +9,7 @@ import "./ProductPage.css";
 import axios from "axios";
 
 function ProductPage() {
-  const { products } = useContext(ProductsContext);
+  const { products, setProducts } = useContext(ProductsContext);
   const { addToCart } = useContext(CartContext);
   const { loggedIn, user } = useContext(UserContext);
 
@@ -50,12 +50,16 @@ function ProductPage() {
     try {
       const response = await axios.delete(`https://localhost:7269/products/${productId}`);
 
-      if (!response.ok) {
+      if (response.status !== 204) {
         throw new Error("Request failed");
-      }
+      } else {
+        const updatedProducts = products.filter(
+          (product) => product.id !== productId
+        );
 
-      //TODO: update the product context on delete
-      navigate("/");
+        setProducts(updatedProducts);
+        navigate("/");
+      }
     } catch (error) {
       console.error(error);
     }
@@ -65,12 +69,12 @@ function ProductPage() {
     try {
       const response = await axios.put(`https://localhost:7269/products/${productId}`, editedProduct);
 
-      if (!response.ok) {
+      if (response.status !== 204) {
         throw new Error("Request failed");
+      } else {
+        //TODO: update the product context on save
+        navigate("/");
       }
-
-      //TODO: update the product context on save
-      navigate("/");
     } catch (error) {
       console.error(error);
     }
