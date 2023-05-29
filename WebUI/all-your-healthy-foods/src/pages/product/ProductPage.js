@@ -95,7 +95,7 @@ function ProductPage() {
                     <img className="large-view" src={product.image} alt={product.name} />
                 </div>
                 <div className="product-overview-details">
-                    {loggedIn && user.role === "admin" && (
+                    {loggedIn && user.role === 0 && (
                         <div className="admin-buttons">
                             {!inEditMode && (
                                 <>

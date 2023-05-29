@@ -52,8 +52,6 @@ function AddProductPage() {
         const isValid = validateForm();
 
         if (isValid) {
-            debugger;
-
             try {
                 const response = await axios.post("https://localhost:7269/products", newProduct);
 
@@ -81,7 +79,7 @@ function AddProductPage() {
                     <FontAwesomeIcon icon={faArrowLeft} /> Back
                 </Link>
                 <div className="add-product">
-                    {loggedIn && user.role === "admin" && (
+                    {loggedIn && user.role === 0 && (
                         <div className="admin-buttons">
                             <button className="primary-button" onClick={handleSave}>
                                 Save
