@@ -42,7 +42,7 @@ public class OrderService
         return orders;
     }
 
-    public async Task<int> AddOrderAsync(OrderDto orderDto)
+    public async Task<Order> AddOrderAsync(OrderDto orderDto)
     {
         return await _orderRepository.AddOrderAsync(orderDto);
     }

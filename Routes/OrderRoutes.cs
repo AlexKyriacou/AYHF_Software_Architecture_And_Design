@@ -29,8 +29,8 @@ public class OrderRoutes
         var userRepository = new UserRepository();
         _app.MapPost("/orders", async ([FromBody] OrderDto orderDto, [FromServices] OrderService orderService) =>
         {
-            var orderId = await orderService.AddOrderAsync(orderDto);
-            return Results.Created($"/orders/{orderId}", orderDto);
+            var order = await orderService.AddOrderAsync(orderDto);
+            return Results.Created($"/orders/{order.Id}", order);
         });
 
         _app.MapPut("/orders/{id}", async (int id, [FromBody] OrderDto orderDto, [FromServices] OrderService orderService) =>
