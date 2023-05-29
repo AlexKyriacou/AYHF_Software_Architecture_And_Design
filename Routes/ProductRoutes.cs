@@ -16,11 +16,22 @@ namespace AYHF_Software_Architecture_And_Design.Routes
 
         public void Configure()
         {
-            _app.MapGet("/products",
-                async ([FromServices] ProductService productService) =>
+            _app.MapGet("/products", async context =>
+            {
+                var search = context.Request.Query["search"];
+                var productService = context.RequestServices.GetRequiredService<ProductService>();
+
+                if (string.IsNullOrEmpty(search))
                 {
-                    return await productService.GetAllProductsAsync();
-                });
+                    var products = await productService.GetAllProductsAsync();
+                    await context.Response.WriteAsJsonAsync(products);
+                }
+                else
+                {
+                    var products = await productService.GetProductsBySearchQueryAsync(search);
+                    await context.Response.WriteAsJsonAsync(products);
+                }
+            });
 
             _app.MapGet("/products/{id}", async (int id, [FromServices] ProductService productService) =>
             {

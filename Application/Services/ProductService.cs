@@ -49,5 +49,10 @@ namespace AYHF_Software_Architecture_And_Design.Application.Services
                 await _productRepository.AddProductAsync(product);
             }
         }
+        public async Task<List<Product>> GetProductsBySearchQueryAsync(string searchQuery)
+        {
+            return await _productRepository.GetProductsBySearchQueryAsync(searchQuery);
+        }
+
     }
 }
