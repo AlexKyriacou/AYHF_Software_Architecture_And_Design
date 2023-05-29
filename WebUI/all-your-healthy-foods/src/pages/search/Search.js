@@ -11,9 +11,9 @@ const Search = ({onSearch}) => {
         setSearchQuery(query);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        onSearch(searchQuery);
+        await onSearch(searchQuery);
     };
 
     return (
