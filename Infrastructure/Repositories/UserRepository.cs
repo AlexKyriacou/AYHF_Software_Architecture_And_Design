@@ -2,6 +2,7 @@ using AYHF_Software_Architecture_And_Design.Domain.Entities.Interfaces;
 using AYHF_Software_Architecture_And_Design.Domain.Entities.Model;
 using AYHF_Software_Architecture_And_Design.Infrastructure.Interfaces;
 using Microsoft.Data.Sqlite;
+using System.Data;
 
 namespace AYHF_Software_Architecture_And_Design.Infrastructure.Repositories;
 
@@ -77,7 +78,8 @@ public class UserRepository : RepositoryBase, IUserRepository
                     Name = reader.GetString(1),
                     Username = reader.GetString(2),
                     Email = reader.GetString(3),
-                    Password = reader.GetString(4)
+                    Password = reader.GetString(4),
+                    Role = role
                 };
             }
             else if (role == "admin")
@@ -88,7 +90,8 @@ public class UserRepository : RepositoryBase, IUserRepository
                     Name = reader.GetString(1),
                     Username = reader.GetString(2),
                     Email = reader.GetString(3),
-                    Password = reader.GetString(4)
+                    Password = reader.GetString(4),
+                    Role = role
                 };
             }
             else
