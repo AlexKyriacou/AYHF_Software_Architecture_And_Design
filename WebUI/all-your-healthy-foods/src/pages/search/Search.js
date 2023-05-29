@@ -1,9 +1,9 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import "./Search.css";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faSearch} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
-const Search = ({onSearch}) => {
+const Search = ({ onSearch }) => {
     const [searchQuery, setSearchQuery] = useState("");
 
     const handleSearchChange = (e) => {
@@ -11,9 +11,9 @@ const Search = ({onSearch}) => {
         setSearchQuery(query);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        onSearch(searchQuery);
+        await onSearch(searchQuery);
     };
 
     return (
