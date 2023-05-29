@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Search from "../../pages/search/Search";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPagelines } from "@fortawesome/free-brands-svg-icons";
@@ -11,6 +11,7 @@ import "./Navbar.css";
 function Navbar() {
     const { cartCount } = useContext(CartContext);
     const { loggedIn, user } = useContext(UserContext);
+    const navigate = useNavigate();
 
     const handleSearch = async (searchQuery) => {
         try {
@@ -19,6 +20,7 @@ function Navbar() {
                     search: searchQuery,
                 },
             });
+            navigate("/search-results", { state: response.data });
         } catch (error) {
             console.error("Error occurred during search:", error);
         }
@@ -30,7 +32,7 @@ function Navbar() {
                 <FontAwesomeIcon icon={faPagelines} className="App-header" aria-hidden="true" />
                 <a href="/" className="App-header"> All Your Healthy Foods</a>
             </span>
-            <Search />
+            <Search onSearch={handleSearch} />
             <div className="icons">
                 {loggedIn ? (
                     <Link className="links" to="account">
