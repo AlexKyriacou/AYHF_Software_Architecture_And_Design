@@ -18,3 +18,9 @@
     border: none;
     box-shadow: none;
 }
+
+.message {
+    font-size: large;
+    font-weight: bold;
+    padding-left: 10px;
+}
