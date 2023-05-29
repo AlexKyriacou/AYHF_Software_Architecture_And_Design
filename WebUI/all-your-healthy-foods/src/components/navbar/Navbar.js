@@ -5,11 +5,24 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPagelines } from "@fortawesome/free-brands-svg-icons";
 import { faShoppingCart, faSignInAlt, faUser } from "@fortawesome/free-solid-svg-icons";
 import { CartContext, UserContext } from "../../AppContext";
+import axios from "axios";
 import "./Navbar.css";
 
 function Navbar() {
     const { cartCount } = useContext(CartContext);
     const { loggedIn, user } = useContext(UserContext);
+
+    const handleSearch = async (searchQuery) => {
+        try {
+            const response = await axios.get("https://localhost:7269/products", {
+                params: {
+                    search: searchQuery,
+                },
+            });
+        } catch (error) {
+            console.error("Error occurred during search:", error);
+        }
+    };
 
     return (
         <nav className="navbar">
