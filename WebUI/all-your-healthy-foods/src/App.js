@@ -10,6 +10,7 @@ import ProductPage from "./pages/product/ProductPage";
 import CheckoutPage from "./pages/checkout/CheckoutPage";
 import ShippingPage from "./pages/checkout/ShippingPage";
 import PaymentPage from "./pages/checkout/PaymentPage";
+import Feedback from "./pages/feedback/Feedback";
 import AccountPage from "./pages/login/AccountPage";
 import OrderConfirmationPage from "./pages/order/OrderConfirmationPage";
 import OrderHistoryPage from "./pages/order/OrderHistoryPage";
@@ -40,6 +41,7 @@ function App() {
                             />
                             <Route path="/order-history" element={<OrderHistoryPage/>}/>
                             <Route path="/add-product" element={<AddProductPage/>}/>
+                            <Route path="/feedback" element={<Feedback/>}/>
                             <Route path="/search-results" element={<SearchResultsPage/>}/>
                         </Routes>
                         <footer className="App-footer">
