@@ -26,17 +26,13 @@
 }
 
 .primary-button {
-    background-color: black;
+    background-color: var(--dark-shade);
     color: white;
     border: none;
     border-radius: 4px;
     padding: 10px;
     margin-bottom: 10px;
     cursor: pointer;
-}
-
-.primary-button {
-    background-color: var(--dark-shade);
 }
 
 .switch {

@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import OrderSummary from "../order/OrderSummary";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
@@ -48,6 +48,9 @@ function validateForm(paymentMethod, paymentDetails) {
 function PaymentPage() {
     const { loggedIn, user } = useContext(UserContext);
     const { clearCart, cartItems } = useContext(CartContext);
+
+    const location = useLocation();
+    const shipping = location.state;
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -186,17 +189,18 @@ function PaymentPage() {
             {renderPaymentForm()}
             {formErrorMessage && (<span className="error-message">{formErrorMessage}</span>)}
             <OrderSummary
+                step="payment"
                 extra={
                     <div>
                         <button
-                            className={`link-button ${(loggedIn && paymentMethod) ? "" : "disabled"}`}
+                            className={`secondary-button ${(loggedIn && paymentMethod) ? "" : "disabled"}`}
                             onClick={handleLinkClick}
                         >
                             <FontAwesomeIcon icon={faLock} aria-hidden="true" /> Pay Securely
                         </button>
                     </div>
                 }
-                shipping={10}
+                shipping={shipping}
             />
         </div>
     );
