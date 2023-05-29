@@ -1,6 +1,6 @@
 import React from "react";
-import './Checkout.css';
-import {Link} from "react-router-dom";
+import '../checkout/Checkout.css';
+import { Link } from "react-router-dom";
 
 function OrderConfirmationPage() {
     return (

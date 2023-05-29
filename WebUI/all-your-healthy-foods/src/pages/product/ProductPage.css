@@ -48,7 +48,6 @@
 }
 
 .product-overview-details .product-name-desc {
-    font-size: 30px;
     font-weight: bold;
 }
 
@@ -66,6 +65,16 @@ details {
     text-align: start;
 }
 
+.product-name-desc p:first-child {
+    font-size: xx-large;
+    margin: 0;
+}
+
+.product-name-desc p:nth-child(2) {
+    font-size: x-large;
+    margin-top: 5px;
+}
+
 details summary {
     margin-top: 10px;
     cursor: pointer;
@@ -76,6 +85,42 @@ details p {
     margin-top: 5px;
 }
 
+.admin-buttons {
+    display: flex;
+    justify-content: flex-end;
+}
+
 .admin-buttons button:not(:last-child) {
     margin-right: 10px;
 }
+
+.field-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 10px;
+}
+  
+.field-container label {
+    font-weight: bold;
+    font-size: medium;
+    text-align: start;
+    flex: 1;
+    margin-bottom: 10px;
+}
+  
+.field-container input,
+.field-container textarea {
+    padding: 10px;
+    border: 1px solid var(--light-shade);
+    border-radius: 4px;
+    margin: 0px 0px 10px 10px;
+    flex: 2;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.field-container textarea {
+    min-height: 10vw;
+}
+  

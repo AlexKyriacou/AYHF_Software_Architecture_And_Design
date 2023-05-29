@@ -7,3 +7,7 @@
     display: flex;
     flex-wrap: wrap;
 }
+
+.add-product {
+    margin-right: 20px;
+}
