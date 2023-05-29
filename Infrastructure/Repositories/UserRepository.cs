@@ -24,15 +24,33 @@ public class UserRepository : RepositoryBase, IUserRepository
 
         if (await reader.ReadAsync())
         {
-            user = new User
+            string role = reader.GetString(5);
+            if (role == "customer")
             {
-                Id = reader.GetInt32(0),
-                Name = reader.GetString(1),
-                Username = reader.GetString(2),
-                Email = reader.GetString(3),
-                Password = reader.GetString(4),
-                Role = reader.GetString(5)
-            };
+                user = new Customer
+                {
+                    Id = reader.GetInt32(0),
+                    Name = reader.GetString(1),
+                    Username = reader.GetString(2),
+                    Email = reader.GetString(3),
+                    Password = reader.GetString(4)
+                };
+            }
+            else if (role == "admin")
+            {
+                user = new Admin
+                {
+                    Id = reader.GetInt32(0),
+                    Name = reader.GetString(1),
+                    Username = reader.GetString(2),
+                    Email = reader.GetString(3),
+                    Password = reader.GetString(4)
+                };
+            }
+            else
+            {
+                throw new Exception("Invalid user role.");
+            }
         }
 
         return user;
@@ -50,25 +68,44 @@ public class UserRepository : RepositoryBase, IUserRepository
 
         if (await reader.ReadAsync())
         {
-            user = new User
+            string role = reader.GetString(5);
+            if (role == "customer")
             {
-                Id = reader.GetInt32(0),
-                Name = reader.GetString(1),
-                Username = reader.GetString(2),
-                Email = reader.GetString(3),
-                Password = reader.GetString(4),
-                Role = reader.GetString(5)
-            };
+                user = new Customer
+                {
+                    Id = reader.GetInt32(0),
+                    Name = reader.GetString(1),
+                    Username = reader.GetString(2),
+                    Email = reader.GetString(3),
+                    Password = reader.GetString(4)
+                };
+            }
+            else if (role == "admin")
+            {
+                user = new Admin
+                {
+                    Id = reader.GetInt32(0),
+                    Name = reader.GetString(1),
+                    Username = reader.GetString(2),
+                    Email = reader.GetString(3),
+                    Password = reader.GetString(4)
+                };
+            }
+            else
+            {
+                throw new Exception("Invalid user role.");
+            }
         }
 
         return user;
     }
 
 
-    public async Task AddUserAsync(IUser user)
+    public async Task<int> AddUserAsync(IUser user)
     {
         var insertQuery =
-            "INSERT INTO Users (Name, Username, Email, Password, Role) VALUES (@name, @username, @email, @password, @role)";
+            "INSERT INTO Users (Name, Username, Email, Password, Role) VALUES (@name, @username, @email, @password, @role);" +
+            "SELECT last_insert_rowid();";
         await using var insertCommand = new SqliteCommand(insertQuery, Connection);
         insertCommand.Parameters.AddWithValue("@name", user.Name);
         insertCommand.Parameters.AddWithValue("@username", user.Username);
@@ -76,8 +113,10 @@ public class UserRepository : RepositoryBase, IUserRepository
         insertCommand.Parameters.AddWithValue("@email", user.Email);
         insertCommand.Parameters.AddWithValue("@role", user.Role);
 
-        await insertCommand.ExecuteNonQueryAsync();
+        int userId = Convert.ToInt32(await insertCommand.ExecuteScalarAsync());
+        return userId;
     }
+
 
     public async Task<List<IUser>> GetUsersAsync()
     {
@@ -90,17 +129,29 @@ public class UserRepository : RepositoryBase, IUserRepository
 
         while (await reader.ReadAsync())
         {
-            IUser user = new User
+            IUser user;
+            string role = reader.GetString(5);
+            if (role == "customer")
             {
-                Id = !reader.IsDBNull(0) ? reader.GetInt32(0) : 0,
-                Name = !reader.IsDBNull(1) ? reader.GetString(1) : string.Empty,
-                Username = !reader.IsDBNull(2) ? reader.GetString(2) : string.Empty,
-                Email = !reader.IsDBNull(4) ? reader.GetString(3) : string.Empty,
-                Password = !reader.IsDBNull(3) ? reader.GetString(4) : string.Empty,
-                Role = !reader.IsDBNull(5) ? reader.GetString(5) : string.Empty
-            };
+                user = new Customer();
+            }
+            else if (role == "admin")
+            {
+                user = new Admin();
+            }
+            else
+            {
+                throw new Exception("Invalid user role.");
+            }
+            user.Id = !reader.IsDBNull(0) ? reader.GetInt32(0) : 0;
+            user.Name = !reader.IsDBNull(1) ? reader.GetString(1) : string.Empty;
+            user.Username = !reader.IsDBNull(2) ? reader.GetString(2) : string.Empty;
+            user.Email = !reader.IsDBNull(4) ? reader.GetString(3) : string.Empty;
+            user.Password = !reader.IsDBNull(3) ? reader.GetString(4) : string.Empty;
+            user.Role = !reader.IsDBNull(5) ? reader.GetString(5) : string.Empty;
             users.Add(user);
         }
+
 
         return users;
     }

@@ -28,22 +28,22 @@ public class UserRoutes
 
         _app.MapPost("/users", async ([FromBody] UserDto userDto, [FromServices] UserService userService) =>
         {
-            IUser user = new User
+            IUser? user = CreateUser(userDto);
+            if (user == null)
             {
-                Id = userDto.Id, Name = userDto.Name, Username = userDto.Username, Email = userDto.Email,
-                Password = userDto.Password, Role = userDto.Role
-            };
-            await userService.AddUserAsync(user);
+                return Results.BadRequest("Invalid Role");
+            }
+            user.Id = await userService.AddUserAsync(user);
             return Results.Created($"/users/{user.Id}", user);
-        }).RequireAuthorization();
+        });
 
         _app.MapPut("/users/{id}", async ([FromBody] UserDto userDto, [FromServices] UserService userService) =>
         {
-            IUser user = new User
+            IUser? user = CreateUser(userDto);
+            if (user == null)
             {
-                Id = userDto.Id, Name = userDto.Name, Username = userDto.Username, Email = userDto.Email,
-                Password = userDto.Password, Role = userDto.Role
-            };
+                return Results.BadRequest("Invalid Role");
+            }
             await userService.UpdateUserAsync(user);
             return Results.NoContent();
         }).RequireAuthorization();
@@ -56,12 +56,12 @@ public class UserRoutes
 
         _app.MapPost("/users/register", async ([FromBody] UserDto userDto, [FromServices] UserService userService) =>
         {
-            IUser user = new User
+            IUser? user = CreateUser(userDto);
+            if (user == null)
             {
-                Id = userDto.Id, Name = userDto.Name, Username = userDto.Username, Email = userDto.Email,
-                Password = userDto.Password, Role = userDto.Role
-            };
-            await userService.RegisterUserAsync(user);
+                return Results.BadRequest();
+            }
+            user.Id = await userService.RegisterUserAsync(user);
             return Results.Created($"/users/{user.Id}", user);
         });
 
@@ -77,5 +77,36 @@ public class UserRoutes
                 return Results.BadRequest(ex.Message);
             }
         });
+    }
+
+    private static IUser? CreateUser(UserDto userDto)
+    {
+        IUser user;
+        switch (userDto.Role.ToLower())
+        {
+            case "customer":
+                user = new Customer
+                {
+                    Name = userDto.Name,
+                    Username = userDto.Username,
+                    Email = userDto.Email,
+                    Password = userDto.Password,
+                    Role = userDto.Role
+                };
+                break;
+            case "admin":
+                user = new Admin
+                {
+                    Name = userDto.Name,
+                    Username = userDto.Username,
+                    Email = userDto.Email,
+                    Password = userDto.Password,
+                    Role = userDto.Role
+                };
+                break;
+            default:
+                return null;
+        }
+        return user;
     }
 }

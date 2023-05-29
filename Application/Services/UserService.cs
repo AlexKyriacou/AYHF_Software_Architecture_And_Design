@@ -26,7 +26,7 @@ public class UserService
         return _userRepository.GetUserByIdAsync(id);
     }
 
-    public Task AddUserAsync(IUser user)
+    public Task<int> AddUserAsync(IUser user)
     {
         return _userRepository.AddUserAsync(user);
     }
@@ -41,7 +41,7 @@ public class UserService
         return _userRepository.DeleteUserAsync(id);
     }
     
-    public async Task RegisterUserAsync(IUser user)
+    public async Task<int> RegisterUserAsync(IUser user)
     {
         var existingUser = await _userRepository.GetUserByEmailAsync(user.Email);
         if (existingUser != null)
@@ -50,7 +50,7 @@ public class UserService
         }
         
         user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password); 
-        await _userRepository.AddUserAsync(user);
+        return await _userRepository.AddUserAsync(user);
     }
     
     public async Task<Object> LoginUserAsync(string email, string password)
