@@ -143,7 +143,7 @@ function PaymentPage() {
 
             try {
                 const response = await axios.post("https://localhost:7269/orders", {
-                    customerId: user.id,
+                    userId: user.id,
                     products: cartItems
                 });
 
