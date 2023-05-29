@@ -20,7 +20,7 @@ function ProductCard({product}) {
                 <p className="product-name">{product.name}</p>
                 <p className="product-desc">{product.description}</p>
                 <div className="product-rating"><Rating rate={product.rating}/> 
-                <Link to={`/product/${product.name}/feedbacks`}>
+                <Link to={`/feedback`}>
                     ({product.numRatings})
                 </Link>
                 </div>
