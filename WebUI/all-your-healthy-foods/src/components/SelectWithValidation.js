@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import "./Input.css"
 
 function validateInput(value, required) {
@@ -8,12 +8,12 @@ function validateInput(value, required) {
 }
 
 function SelectWithValidation({
-                                  required,
-                                  placeholder,
-                                  parentOnChange,
-                                  readonly,
-                                  options
-                              }) {
+    required,
+    placeholder,
+    parentOnChange,
+    readonly,
+    options
+}) {
     const [value, setValue] = useState("");
     const [error, setError] = useState("");
 

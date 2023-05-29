@@ -1,14 +1,14 @@
-import React, {useContext, useState} from "react";
-import {Link, useNavigate} from "react-router-dom";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faArrowLeft} from "@fortawesome/free-solid-svg-icons";
-import {ProductsContext, UserContext} from "../../AppContext";
-import "./ProductPage.css";
+import React, { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { UserContext, ProductsContext } from "../../AppContext";
 import axios from "axios";
+import "./ProductPage.css";
 
 function AddProductPage() {
-    const {loggedIn, user} = useContext(UserContext);
-    const {products, setProducts} = useContext(ProductsContext);
+    const { loggedIn, user } = useContext(UserContext);
+    const { products, setProducts } = useContext(ProductsContext);
 
     const [newProduct, setNewProduct] = useState({
         name: "",
@@ -21,6 +21,7 @@ function AddProductPage() {
         numRatings: 0
     });
 
+    const [formErrorMessage, setFormErrorMessage] = useState(""); // State variable for form error message
     const navigate = useNavigate();
 
     const handleInputChange = (event) => {
@@ -30,20 +31,46 @@ function AddProductPage() {
         });
     };
 
-    const handleSave = async () => {
-        try {
-            const response = await axios.post("https://localhost:7269/products", newProduct);
+    const validateForm = () => {
+        if (
+            !newProduct.name ||
+            !newProduct.description ||
+            !newProduct.price ||
+            !newProduct.longDescription ||
+            !newProduct.ingredients ||
+            !newProduct.image
+        ) {
+            setFormErrorMessage("Please fill out all the fields.");
+            return false;
+        }
 
-            if (response.status === 200) {
-                const newProductData = response.data;
-                setProducts([...products, newProductData]); // Update the products in ProductsContext
-                sessionStorage.setItem("products", JSON.stringify([...products, newProductData])); // Update the products in sessionStorage
-                navigate("/");
-            } else {
-                throw new Error("Request failed");
+        setFormErrorMessage(""); // Clear the error message if all fields are filled out
+        return true;
+    };
+
+    const handleSave = async () => {
+        const isValid = validateForm();
+
+        if (isValid) {
+            debugger;
+
+            try {
+                const response = await axios.post("https://localhost:7269/products", newProduct);
+
+                if (response.status === 201) {
+                    const newProductData = response.data;
+                    setProducts([...products, newProductData]);
+                    sessionStorage.setItem(
+                        "products",
+                        JSON.stringify([...products, newProductData])
+                    );
+                    navigate("/");
+                } else {
+                    throw new Error("Request failed");
+                }
+            } catch (error) {
+                console.error(error);
             }
-        } catch (error) {
-            console.error(error);
         }
     };
 
@@ -51,7 +78,7 @@ function AddProductPage() {
         <div className="add-product-container">
             <div className="add-product-card">
                 <Link to="/" className="back-link">
-                    <FontAwesomeIcon icon={faArrowLeft}/> Back
+                    <FontAwesomeIcon icon={faArrowLeft} /> Back
                 </Link>
                 <div className="add-product">
                     {loggedIn && user.role === "admin" && (
@@ -120,6 +147,9 @@ function AddProductPage() {
                             </div>
                         </div>
                     </div>
+                    {formErrorMessage && (
+                        <span className="error-message">{formErrorMessage}</span>
+                    )}
                 </div>
             </div>
         </div>

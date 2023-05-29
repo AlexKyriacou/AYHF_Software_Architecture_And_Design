@@ -1,9 +1,9 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
-import {UserContext} from "../../AppContext";
+import { UserContext } from "../../AppContext";
 
 function OrderHistoryPage() {
-    const {user} = useContext(UserContext);
+    const { user } = useContext(UserContext);
     const [orders, setOrders] = useState([]);
 
     useEffect(() => {
