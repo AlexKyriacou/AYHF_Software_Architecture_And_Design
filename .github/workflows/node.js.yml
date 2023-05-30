@@ -23,6 +23,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+        cache-dependency-path: WebUI/all-your-healthy-foods/package-lock.json
     - run: cd WebUI/all-your-healthy-foods
     - run: npm install
     - run: npm run build --if-present
