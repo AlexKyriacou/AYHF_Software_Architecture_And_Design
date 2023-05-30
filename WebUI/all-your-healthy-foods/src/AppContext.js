@@ -1,20 +1,20 @@
-import React, {createContext, useEffect, useState} from "react";
+import React, { createContext, useEffect, useState } from "react";
 import axios from "axios";
 
 const CartContext = createContext();
 const UserContext = createContext();
 const ProductsContext = createContext();
 
-const CartProvider = ({children}) => {
+const CartProvider = ({ children }) => {
     const [cartCount, setCartCount] = useState(0);
     const [cartItems, setCartItems] = useState([]);
 
     useEffect(() => {
-        // Load cart items from local storage when the component mounts
         const storedCartItems = localStorage.getItem("cartItems");
         if (storedCartItems) {
-            setCartItems(JSON.parse(storedCartItems));
-            setCartCount(JSON.parse(storedCartItems).length);
+            const parsedCartItems = JSON.parse(storedCartItems);
+            setCartItems(parsedCartItems);
+            setCartCount(parsedCartItems.length);
         }
     }, []);
 
@@ -25,7 +25,7 @@ const CartProvider = ({children}) => {
     };
 
     const addToCart = (product) => {
-        const updatedCartItems = [...cartItems, {...product, count: 1}];
+        const updatedCartItems = [...cartItems, { ...product, count: 1 }];
         updateCartItems(updatedCartItems);
     };
 
@@ -38,21 +38,19 @@ const CartProvider = ({children}) => {
 
     const increaseCount = (itemName) => {
         const updatedCartItems = [...cartItems];
-        const foundItem = updatedCartItems.find((cartItem) => cartItem.name === itemName);
+        const foundItem = updatedCartItems.find(
+            (cartItem) => cartItem.name === itemName
+        );
         if (foundItem) {
             addToCart(foundItem);
         }
     };
 
     const decreaseCount = (itemName) => {
-        const updatedCartItems = [...cartItems];
-        const foundItemIndex = updatedCartItems.findIndex((cartItem) => cartItem.name === itemName);
-        if (foundItemIndex !== -1) {
-            updatedCartItems.splice(foundItemIndex, 1);
-            setCartItems(updatedCartItems);
-            setCartCount(cartCount - 1);
-            updateCartItems(updatedCartItems);
-        }
+        const updatedCartItems = cartItems.filter(
+            (cartItem) => cartItem.name !== itemName
+        );
+        updateCartItems(updatedCartItems);
     };
 
     const clearCart = () => {
@@ -63,10 +61,7 @@ const CartProvider = ({children}) => {
 
     const groupedProducts = cartItems.reduce((grouped, item) => {
         if (!grouped[item.name]) {
-            grouped[item.name] = {
-                ...item,
-                count: 1,
-            };
+            grouped[item.name] = { ...item, count: 1 };
         } else {
             grouped[item.name].count += 1;
         }
@@ -74,7 +69,9 @@ const CartProvider = ({children}) => {
     }, {});
 
     const sortedGroupedProducts = Object.fromEntries(
-        Object.entries(groupedProducts).sort(([nameA], [nameB]) => nameA.localeCompare(nameB))
+        Object.entries(groupedProducts).sort(([nameA], [nameB]) =>
+            nameA.localeCompare(nameB)
+        )
     );
 
     return (
@@ -87,7 +84,7 @@ const CartProvider = ({children}) => {
                 removeFromCart,
                 decreaseCount,
                 increaseCount,
-                clearCart
+                clearCart,
             }}
         >
             {children}
@@ -95,7 +92,7 @@ const CartProvider = ({children}) => {
     );
 };
 
-const ProductsProvider = ({children}) => {
+const ProductsProvider = ({ children }) => {
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
@@ -105,7 +102,7 @@ const ProductsProvider = ({children}) => {
                 if (response.status === 200) {
                     const fetchedProducts = response.data;
                     setProducts(fetchedProducts);
-                    sessionStorage.setItem("products", JSON.stringify(fetchedProducts)); // Save products to sessionStorage
+                    sessionStorage.setItem("products", JSON.stringify(fetchedProducts));
                 }
             } catch (error) {
                 console.error("Error fetching products:", error);
@@ -114,21 +111,20 @@ const ProductsProvider = ({children}) => {
 
         const storedProducts = sessionStorage.getItem("products");
         if (storedProducts) {
-            setProducts(JSON.parse(storedProducts)); // Load products from sessionStorage if available
+            setProducts(JSON.parse(storedProducts));
         } else {
-            fetchProducts(); // Fetch products if not available in sessionStorage
+            fetchProducts();
         }
     }, []);
 
     return (
-        <ProductsContext.Provider value={{products, setProducts}}>
+        <ProductsContext.Provider value={{ products, setProducts }}>
             {children}
         </ProductsContext.Provider>
     );
 };
 
-
-const UserProvider = ({children}) => {
+const UserProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loggedIn, setLoggedIn] = useState(false);
 
@@ -141,35 +137,32 @@ const UserProvider = ({children}) => {
 
     const logout = () => {
         setUser(null);
-        sessionStorage.setItem("user", null);
+        sessionStorage.removeItem("user");
         setLoggedIn(false);
         sessionStorage.setItem("loggedIn", "false");
     };
 
     useEffect(() => {
-        // Load user details from Session storage
         const loggedInValue = sessionStorage.getItem("loggedIn");
         const loggedInUser = sessionStorage.getItem("user");
-        if (loggedInValue === "true") {
+        if (loggedInValue === "true" && loggedInUser) {
             setUser(JSON.parse(loggedInUser));
             setLoggedIn(true);
         }
     }, []);
 
     return (
-        <UserContext.Provider
-            value={{
-                user,
-                loggedIn,
-                login,
-                logout,
-            }}
-        >
-            <CartProvider>
-                {children}
-            </CartProvider>
+        <UserContext.Provider value={{ user, loggedIn, login, logout }}>
+            <CartProvider>{children}</CartProvider>
         </UserContext.Provider>
     );
 };
 
-export {CartContext, CartProvider, UserContext, UserProvider, ProductsContext, ProductsProvider};
+export {
+    CartContext,
+    CartProvider,
+    UserContext,
+    UserProvider,
+    ProductsContext,
+    ProductsProvider,
+};
