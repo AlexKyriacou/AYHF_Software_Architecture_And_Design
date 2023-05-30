@@ -6,17 +6,30 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace AYHF_Software_Architecture_And_Design.Infrastructure.Middleware;
 
+/// <summary>
+/// Middleware that adds JWT authentication to incoming requests.
+/// </summary>
 public class JwtAuthenticationMiddleware
 {
     private readonly RequestDelegate _next;
     private readonly string _secretKey;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="JwtAuthenticationMiddleware"/> class.
+    /// </summary>
+    /// <param name="next">The next middleware in the pipeline.</param>
+    /// <param name="jwtSettings">The JSON web token (JWT) settings.</param>
     public JwtAuthenticationMiddleware(RequestDelegate next, IOptions<JwtSettings> jwtSettings)
     {
         _next = next;
         _secretKey = jwtSettings.Value.SecretKey;
     }
 
+    /// <summary>
+    /// Invokes the middleware to add JWT authentication to incoming requests.
+    /// </summary>
+    /// <param name="context">The context containing the request and response objects.</param>
+    /// <returns>A task that represents the completion of this middleware.</returns>
     public async Task Invoke(HttpContext context)
     {
         var endpoint = context.GetEndpoint();

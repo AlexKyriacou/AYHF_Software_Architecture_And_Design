@@ -6,15 +6,25 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AYHF_Software_Architecture_And_Design.Routes;
 
+/// <summary>
+/// This class contains routes related to orders.
+/// </summary>
 public class OrderRoutes
 {
     private readonly WebApplication _app;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="OrderRoutes"/> class.
+    /// </summary>
+    /// <param name="app">The <see cref="WebApplication"/> object.</param>
     public OrderRoutes(WebApplication app)
     {
         _app = app;
     }
 
+    /// <summary>
+    /// Configures the order routes.
+    /// </summary>
     public void Configure()
     {
         _app.MapGet("/orders/{id}", async (int id, [FromServices] OrderService orderService) =>

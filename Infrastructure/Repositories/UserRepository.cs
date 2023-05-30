@@ -6,13 +6,24 @@ using Microsoft.Data.Sqlite;
 
 namespace AYHF_Software_Architecture_And_Design.Infrastructure.Repositories;
 
+/// <summary>
+/// Contains methods for managing user data.
+/// </summary>
 public class UserRepository : RepositoryBase, IUserRepository
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="UserRepository"/> class.
+    /// </summary>
     public UserRepository()
     {
         CreateTables();
     }
 
+    /// <summary>
+    /// Retrieves a user by their ID.
+    /// </summary>
+    /// <param name="id">The ID of the user to retrieve.</param>
+    /// <returns>The user with the specified ID.</returns>
     public async Task<IUser?> GetUserByIdAsync(int id)
     {
         var selectQuery = @"
@@ -67,6 +78,10 @@ public class UserRepository : RepositoryBase, IUserRepository
         return user;
     }
 
+    /// <summary>
+    /// Retrieves a list of all users.
+    /// </summary>
+    /// <returns>A list of all users.</returns>
     public async Task<List<IUser>> GetUsersAsync()
     {
         var users = new List<IUser>();
@@ -96,6 +111,11 @@ public class UserRepository : RepositoryBase, IUserRepository
         return users;
     }
 
+    /// <summary>
+    /// Retrieves a user by their email address.
+    /// </summary>
+    /// <param name="email">The email address of the user to retrieve.</param>
+    /// <returns>The user with the specified email address.</returns>
     public async Task<IUser?> GetUserByEmailAsync(string email)
     {
         IUser? user = null;
@@ -144,7 +164,11 @@ public class UserRepository : RepositoryBase, IUserRepository
         return user;
     }
 
-
+    /// <summary>
+    /// Adds a new user.
+    /// </summary>
+    /// <param name="user">The user to add.</param>
+    /// <returns>The ID of the added user.</returns>
     public async Task<int> AddUserAsync(IUser user)
     {
         var insertQuery =
@@ -161,6 +185,10 @@ public class UserRepository : RepositoryBase, IUserRepository
         return userId;
     }
 
+    /// <summary>
+    /// Updates an existing user.
+    /// </summary>
+    /// <param name="user">The user to update.</param>
     public async Task UpdateUserAsync(IUser user)
     {
         var updateQuery =
@@ -176,6 +204,10 @@ public class UserRepository : RepositoryBase, IUserRepository
         await updateCommand.ExecuteNonQueryAsync();
     }
 
+    /// <summary>
+    /// Deletes a user.
+    /// </summary>
+    /// <param name="id">The ID of the user to delete.</param>
     public async Task DeleteUserAsync(int id)
     {
         var deleteQuery = "DELETE FROM Users WHERE Id = @userId";
@@ -185,6 +217,12 @@ public class UserRepository : RepositoryBase, IUserRepository
         await deleteCommand.ExecuteNonQueryAsync();
     }
 
+    /// <summary>
+    /// Retrieves the delivery address of the user with the given ID from the database.
+    /// </summary>
+    /// <param name="userId">The ID of the user whose delivery address is requested.</param>
+    /// <returns>The delivery address of the user with the given ID, or null if the user doesn't exist or doesn't have a delivery address.</returns>
+    /// <exception cref="SqliteException">Thrown when there is an error with the SQLite command.</exception>
     private async Task<DeliveryAddress> GetDeliveryAddressByUserId(int userId)
     {
         DeliveryAddress deliveryAddress = null;
@@ -206,6 +244,12 @@ public class UserRepository : RepositoryBase, IUserRepository
         return deliveryAddress;
     }
 
+    /// <summary>
+    /// Retrieves list of orders from database with user id.
+    /// </summary>
+    /// <param name="customer">The user who owns the requested orders.</orderId>
+    /// <returns>List of retrieved orders.</returns>
+    /// <exception cref="SqliteException">Thrown when there is an error with the SQLite command.</exception>
     private async Task<List<Order>> GetOrdersByUserId(Customer customer)
     {
         var orders = new List<Order>();
@@ -235,14 +279,20 @@ public class UserRepository : RepositoryBase, IUserRepository
         return orders;
     }
 
+    /// <summary>
+    /// Retrieves list of products from database with order id.
+    /// </summary>
+    /// <param name="orderId">Identifier of requested products.</param>
+    /// <returns>List of retrieved products.</returns>
+    /// <exception cref="SqliteException">Thrown when there is an error with the SQLite command.</exception>
     private async Task<List<Product>> GetProductsByOrderId(int orderId)
     {
         var products = new List<Product>();
         var selectQuery = @"
-    SELECT Products.*
-    FROM OrderProducts
-    JOIN Products ON OrderProducts.ProductId = Products.Id
-    WHERE OrderProducts.OrderId = @orderId";
+        SELECT Products.*
+        FROM OrderProducts
+        JOIN Products ON OrderProducts.ProductId = Products.Id
+        WHERE OrderProducts.OrderId = @orderId";
 
         await using var selectCommand = new SqliteCommand(selectQuery, Connection);
         selectCommand.Parameters.AddWithValue("@orderId", orderId);
@@ -269,6 +319,9 @@ public class UserRepository : RepositoryBase, IUserRepository
         return products;
     }
 
+    /// <summary>
+    /// Creates the Users table in the database if it doesn't already exist.
+    /// </summary>
     protected override void CreateTables()
     {
         var createTableQuery =

@@ -4,13 +4,24 @@ using Microsoft.Data.Sqlite;
 
 namespace AYHF_Software_Architecture_And_Design.Infrastructure.Repositories;
 
+/// <summary>
+/// Represents a repository for managing feedback data.
+/// </summary>
 public class FeedbackRepository : RepositoryBase, IFeedbackRepository
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="FeedbackRepository"/> class.
+    /// </summary>
     public FeedbackRepository()
     {
         CreateTables();
     }
 
+    /// <summary>
+    /// Adds a new feedback to the repository.
+    /// </summary>
+    /// <param name="feedback">The feedback to add.</param>
+    /// <returns>The ID of the added feedback.</returns>
     public async Task<int> AddFeedbackAsync(Feedback feedback)
     {
         var insertQuery =
@@ -31,6 +42,10 @@ public class FeedbackRepository : RepositoryBase, IFeedbackRepository
     }
 
 
+    /// <summary>
+    /// Updates an existing feedback in the repository.
+    /// </summary>
+    /// <param name="feedback">The feedback to update.</param>
     public async Task UpdateFeedbackAsync(Feedback feedback)
     {
         var updateQuery =
@@ -47,11 +62,19 @@ public class FeedbackRepository : RepositoryBase, IFeedbackRepository
         await updateCommand.ExecuteNonQueryAsync();
     }
 
+    /// <summary>
+    /// Deletes a feedback from the repository.
+    /// </summary>
+    /// <param name="feedback">The feedback to delete.</param>
     public async Task DeleteFeedbackAsync(Feedback feedback)
     {
         await DeleteFeedbackAsync(feedback.Id);
     }
 
+    /// <summary>
+    /// Deletes a feedback from the repository by ID.
+    /// </summary>
+    /// <param name="Id">The ID of the feedback to delete.</param>
     public async Task DeleteFeedbackAsync(int Id)
     {
         var deleteQuery = "DELETE FROM Feedbacks WHERE FeedbackId = @feedbackId";
@@ -61,6 +84,11 @@ public class FeedbackRepository : RepositoryBase, IFeedbackRepository
         await deleteCommand.ExecuteNonQueryAsync();
     }
 
+    /// <summary>
+    /// Gets a feedback from the repository by ID.
+    /// </summary>
+    /// <param name="feedbackId">The ID of the feedback to retrieve.</param>
+    /// <returns>The feedback with the specified ID.</returns>
     public async Task<Feedback?> GetFeedbackByIdAsync(int feedbackId)
     {
         var selectQuery =
@@ -92,6 +120,10 @@ public class FeedbackRepository : RepositoryBase, IFeedbackRepository
         return null; // Feedback not found
     }
 
+    /// <summary>
+    /// Gets a list of all feedbacks from the repository.
+    /// </summary>
+    /// <returns>The list of all feedbacks in the repository.</returns>
     public async Task<List<Feedback>> GetAllFeedbackAsync()
     {
         var feedbacks = new List<Feedback>();
@@ -123,6 +155,11 @@ public class FeedbackRepository : RepositoryBase, IFeedbackRepository
         return feedbacks;
     }
 
+    /// <summary>
+    /// Gets a list of all feedbacks for a specific product from the repository.
+    /// </summary>
+    /// <param name="productId">The ID of the product for which to retrieve feedbacks.</param>
+    /// <returns>The list of all feedbacks for the specified product.</returns>
     public async Task<List<Feedback>> GetAllFeedbackForProductAsync(int productId)
     {
         var feedbacks = new List<Feedback>();
@@ -154,6 +191,9 @@ public class FeedbackRepository : RepositoryBase, IFeedbackRepository
         return feedbacks;
     }
 
+    /// <summary>
+    /// Creates the Feedbacks table in the database if it does not already exist.
+    /// </summary>
     protected override void CreateTables()
     {
         var createTableQuery =

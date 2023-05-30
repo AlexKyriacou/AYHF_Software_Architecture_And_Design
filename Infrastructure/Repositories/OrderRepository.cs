@@ -5,13 +5,24 @@ using Microsoft.Data.Sqlite;
 
 namespace AYHF_Software_Architecture_And_Design.Infrastructure.Repositories;
 
+/// <summary>
+/// Repository for managing orders in the database.
+/// </summary>
 public class OrderRepository : RepositoryBase, IOrderRepository
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="OrderRepository"/> class and creates the Orders table.
+    /// </summary>
     public OrderRepository()
     {
         CreateTables();
     }
 
+    /// <summary>
+    /// Gets all orders for a particular user from the Orders table.
+    /// </summary>
+    /// <param name="userId">The id of the user.</param>
+    /// <returns>A list of orders for the user.</returns>
     public async Task<List<Order>> GetAllOrdersByUserIdAsync(int userId)
     {
         var orders = new List<Order>();
@@ -37,6 +48,11 @@ public class OrderRepository : RepositoryBase, IOrderRepository
         return orders;
     }
 
+    /// <summary>
+    /// Adds a new order to the Orders table.
+    /// </summary>
+    /// <param name="orderDto">The order details to add.</param>
+    /// <returns>The added order.</returns>
     public async Task<Order> AddOrderAsync(OrderDto orderDto)
     {
         var order = new Order
@@ -64,6 +80,10 @@ public class OrderRepository : RepositoryBase, IOrderRepository
         return order;
     }
 
+    /// <summary>
+    /// Updates an existing order in the Orders table.
+    /// </summary>
+    /// <param name="order">The order to update.</param>
     public async Task UpdateOrderAsync(Order order)
     {
         var updateQuery = "UPDATE Orders SET userId = @userId, OrderDate = @orderDate, " +
@@ -80,6 +100,10 @@ public class OrderRepository : RepositoryBase, IOrderRepository
         await SaveOrderProductsAsync(order);
     }
 
+    /// <summary>
+    /// Deletes an order from the Orders table.
+    /// </summary>
+    /// <param name="id">The id of the order to delete.</param>
     public async Task DeleteOrderAsync(int id)
     {
         var deleteQuery = "DELETE FROM Orders WHERE OrderId = @id";
@@ -89,6 +113,11 @@ public class OrderRepository : RepositoryBase, IOrderRepository
         await deleteCommand.ExecuteNonQueryAsync();
     }
 
+    /// <summary>
+    /// Gets an order by its id from the Orders table.
+    /// </summary>
+    /// <param name="orderId">The id of the order to get.</param>
+    /// <returns>The order with the specified id or null if it does not exist.</returns>
     public async Task<Order?> GetOrderByIdAsync(int orderId)
     {
         var selectQuery = "SELECT * FROM Orders WHERE OrderId = @orderId";
@@ -118,6 +147,10 @@ public class OrderRepository : RepositoryBase, IOrderRepository
         return null;
     }
 
+    /// <summary>
+    /// Gets all orders from the Orders table.
+    /// </summary>
+    /// <returns>A list of all orders in the table.</returns>
     public async Task<List<Order>> GetAllOrdersAsync()
     {
         var orders = new List<Order>();
@@ -193,6 +226,9 @@ public class OrderRepository : RepositoryBase, IOrderRepository
         return products;
     }
 
+    /// <summary>
+    /// Creates the orders table if it does not already exist.
+    /// </summary>
     protected override void CreateTables()
     {
         var createOrdersTableQuery = "CREATE TABLE IF NOT EXISTS Orders (" +
@@ -204,42 +240,5 @@ public class OrderRepository : RepositoryBase, IOrderRepository
 
         using var createOrdersTableCommand = new SqliteCommand(createOrdersTableQuery, Connection);
         createOrdersTableCommand.ExecuteNonQuery();
-
-        var createOrderProductsTableQuery = "CREATE TABLE IF NOT EXISTS OrderProducts (" +
-                                            "OrderId INTEGER, " +
-                                            "ProductId INTEGER, " +
-                                            "PRIMARY KEY (OrderId, ProductId))";
-
-        using var createOrderProductsTableCommand = new SqliteCommand(createOrderProductsTableQuery, Connection);
-        createOrderProductsTableCommand.ExecuteNonQuery();
-
-        var createDeliveryAddressesTableQuery = "CREATE TABLE IF NOT EXISTS DeliveryAddresses (" +
-                                                "Id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                                                "userId INTEGER, " +
-                                                "Street TEXT, " +
-                                                "City TEXT, " +
-                                                "State TEXT, " +
-                                                "PostalCode TEXT)";
-
-        using var createDeliveryAddressesTableCommand =
-            new SqliteCommand(createDeliveryAddressesTableQuery, Connection);
-        createDeliveryAddressesTableCommand.ExecuteNonQuery();
-    }
-
-    private async Task SaveOrderProductsAsync(Order order)
-    {
-        var insertQuery =
-            "INSERT OR IGNORE INTO OrderProducts (OrderId, ProductId) VALUES (@orderId, @productId)"; // Change 'ProductId' to 'Id'
-
-        await using var insertCommand = new SqliteCommand(insertQuery, Connection);
-
-        foreach (var product in order.Products)
-        {
-            insertCommand.Parameters.Clear();
-            insertCommand.Parameters.AddWithValue("@orderId", order.Id);
-            insertCommand.Parameters.AddWithValue("@productId", product.Id);
-
-            await insertCommand.ExecuteNonQueryAsync();
-        }
     }
 }
