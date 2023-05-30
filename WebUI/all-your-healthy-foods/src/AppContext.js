@@ -47,10 +47,14 @@ const CartProvider = ({ children }) => {
     };
 
     const decreaseCount = (itemName) => {
-        const updatedCartItems = cartItems.filter(
-            (cartItem) => cartItem.name !== itemName
-        );
-        updateCartItems(updatedCartItems);
+        const updatedCartItems = [...cartItems];
+        const foundItemIndex = updatedCartItems.findIndex((cartItem) => cartItem.name === itemName);
+        if (foundItemIndex !== -1) {
+            updatedCartItems.splice(foundItemIndex, 1);
+            setCartItems(updatedCartItems);
+            setCartCount(cartCount - 1);
+            updateCartItems(updatedCartItems);
+        }
     };
 
     const clearCart = () => {
@@ -117,8 +121,40 @@ const ProductsProvider = ({ children }) => {
         }
     }, []);
 
+
+    const fetchProductFeedbacks = async (product) => {
+        try {
+            const response = await axios.get(
+                `https://localhost:7269/Products/${product.id}/feedback`
+            );
+            if (response.status === 200) {
+                return response.data;
+            } else {
+                throw new Error("Failed to fetch feedbacks");
+            }
+        } catch (error) {
+            console.error(error);
+            throw error; // Rethrow the error to propagate it to the caller
+        }
+    };
+
+    const getProductFeedbacks = async (product) => {
+        try {
+            const feedbacks = await fetchProductFeedbacks(product);
+            const totalRating = feedbacks.reduce(
+                (total, feedback) => total + feedback.rating,
+                0
+            );
+            const averageRating = totalRating / feedbacks.length;
+            return { feedbacks, averageRating };
+        } catch (error) {
+            console.error(error);
+            return { feedbacks: [], averageRating: 0 }; // Return an empty array as a fallback in case of an error
+        }
+    };
+
     return (
-        <ProductsContext.Provider value={{ products, setProducts }}>
+        <ProductsContext.Provider value={{ products, setProducts, getProductFeedbacks }}>
             {children}
         </ProductsContext.Provider>
     );
