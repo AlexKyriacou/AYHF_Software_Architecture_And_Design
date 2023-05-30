@@ -1,23 +1,52 @@
-import React, {useEffect, useRef, useState} from "react";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faEye, faEyeSlash, faInfoCircle} from "@fortawesome/free-solid-svg-icons";
+/**
+ * This file contains the PasswordInput component.
+ * It exports a functional React component that renders a password input with validation and various options for password visibility.
+ * @module components/PasswordInput
+ */
+
+import React, { useEffect, useRef, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import TextInputWithValidation from "./TextInputWithValidation"
 import './Input.css'
 
-const PasswordInput = ({placeholder, showInfo, onChange, checkPattern, value, passwordError}) => {
+/**
+ * A functional React component that renders a password input with validation and various options for password visibility.
+ * @function
+ * @param {Object} props - The props for the component.
+ * @param {string} props.placeholder - The placeholder text for the input.
+ * @param {boolean} props.showInfo - A flag to show or hide the password policy.
+ * @param {Function} props.onChange - The function to handle input change.
+ * @param {boolean} props.checkPattern - A flag to check if the password meets the specified policy.
+ * @param {string} props.value - The value of the input.
+ * @param {string} props.passwordError - The custom error message for the password input.
+ * @returns {JSX.Element}
+ */
+const PasswordInput = ({ placeholder, showInfo, onChange, checkPattern, value, passwordError }) => {
     const [passwordShown, setPasswordShown] = useState(false);
     const [passwordPolicyVisible, setPasswordPolicyVisible] = useState(false);
     const passwordContainerRef = useRef(null);
     const isEdgeBrowser = navigator.userAgent.indexOf("Edg") !== -1;
 
+    /**
+     * Toggles the visibility of the password.
+     * @function
+     */
     const togglePasswordVisibility = () => {
         setPasswordShown(!passwordShown);
     };
 
+    /**
+     * Toggles the visibility of the password policy.
+     * @function
+     */
     const togglePasswordPolicyVisibility = () => {
         setPasswordPolicyVisible(!passwordPolicyVisible);
     };
 
+    /**
+     * Adds a listener to hide the password policy when user clicks outside the password input container.
+     */
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (
@@ -35,6 +64,9 @@ const PasswordInput = ({placeholder, showInfo, onChange, checkPattern, value, pa
         };
     }, []);
 
+    /**
+     * Renders the password input with validation and various options for password visibility.
+     */
     return (
         <div className="password-container" ref={passwordContainerRef}>
             <TextInputWithValidation

@@ -1,11 +1,24 @@
-import React, {useContext} from "react";
-import {Link} from "react-router-dom";
+/**
+ * This module contains the CheckoutPage component, which provides functionality for checking out for logged-in users.
+ * If a user is not logged in, they are prompted to log in or sign up before continuing.
+ *
+ * @module CheckoutPage
+ */
+
+import React, { useContext } from "react";
+import { Link } from "react-router-dom";
 import OrderSummary from "../order/OrderSummary";
-import {UserContext} from "../../AppContext";
+import { UserContext } from "../../AppContext";
 import './Checkout.css';
 
+/**
+ * A stateless functional component that renders a page displaying the user's order summary and prompts them to proceed to shipping.
+ * If the user is not logged in, they are prompted to log in or sign up in order to proceed.
+ *
+ * @returns {JSX.Element} - The rendered CheckoutPage component
+ */
 function CheckoutPage() {
-    const {loggedIn} = useContext(UserContext);
+    const { loggedIn } = useContext(UserContext);
     return (
         <div className="checkout-container">
             <h2>Checkout</h2>
@@ -30,9 +43,10 @@ function CheckoutPage() {
                     >
                         Go to Shipping
                     </Link>
-                </div>}/>
+                </div>} />
         </div>
     );
 }
 
 export default CheckoutPage;
+

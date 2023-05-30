@@ -11,39 +11,39 @@ import PasswordInput from "../../components/PasswordInput"
 import axios from "axios";
 import './Checkout.css';
 
-function validateForm(paymentMethod, paymentDetails) {
-    if (paymentMethod === "paypal") {
-        if (!paymentDetails.email || !paymentDetails.password) {
-            return "Please provide email and password for PayPal.";
+    function validateForm(paymentMethod, paymentDetails) {
+        if (paymentMethod === "paypal") {
+            if (!paymentDetails.email || !paymentDetails.password) {
+                return "Please provide email and password for PayPal.";
+            }
+
+            const isValid = paypalPaymentData.some(
+                ({ email, password }) =>
+                    paymentDetails.email === email && paymentDetails.password === password
+            );
+
+            if (!isValid) {
+                return "Invalid Email Or Password, please try again.";
+            }
+        } else if (paymentMethod === "creditcard") {
+            if (!paymentDetails.cardHolderName || !paymentDetails.cardNumber || !paymentDetails.cvv) {
+                return "Please provide all required information for Credit Card.";
+            }
+
+            const isValid = creditCardPaymentData.some(
+                ({ cardHolderName: dbCardHolderName, cardNumber: dbCardNumber, cvv: dbCvv }) =>
+                    paymentDetails.cardHolderName === dbCardHolderName && paymentDetails.cardNumber === dbCardNumber && paymentDetails.cvv === dbCvv
+            );
+
+            if (!isValid) {
+                return "Invalid Credit Card information, please try again.";
+            }
+        } else {
+            return "Please select a payment method.";
         }
 
-        const isValid = paypalPaymentData.some(
-            ({email, password}) =>
-                paymentDetails.email === email && paymentDetails.password === password
-        );
-
-        if (!isValid) {
-            return "Invalid Email Or Password, please try again.";
-        }
-    } else if (paymentMethod === "creditcard") {
-        if (!paymentDetails.cardHolderName || !paymentDetails.cardNumber || !paymentDetails.cvv) {
-            return "Please provide all required information for Credit Card.";
-        }
-
-        const isValid = creditCardPaymentData.some(
-            ({cardHolderName: dbCardHolderName, cardNumber: dbCardNumber, cvv: dbCvv}) =>
-                paymentDetails.cardHolderName === dbCardHolderName && paymentDetails.cardNumber === dbCardNumber && paymentDetails.cvv === dbCvv
-        );
-
-        if (!isValid) {
-            return "Invalid Credit Card information, please try again.";
-        }
-    } else {
-        return "Please select a payment method.";
+        return ""; // Return empty string if form is valid
     }
-
-    return ""; // Return empty string if form is valid
-}
 
 function PaymentPage() {
     const {loggedIn, user} = useContext(UserContext);
@@ -76,6 +76,12 @@ function PaymentPage() {
         setPaymentMethod(event.target.value);
     };
 
+    /**
+     * Renders the payment form for the selected payment method.
+     *
+     * @function renderPaymentForm
+     * @returns {JSX.Element} - The rendered form for the selected payment method
+     */
     const renderPaymentForm = () => {
         if (paymentMethod === "paypal") {
             return (
@@ -126,6 +132,12 @@ function PaymentPage() {
         }
     };
 
+    /**
+     * Handles navigation and ordering functionality when the user clicks the 'Pay Securely' button.
+     *
+     * @function handleLinkClick
+     * @param {object} event - The DOM event that triggered this function
+     */
     const handleLinkClick = async (event) => {
         event.preventDefault();
 
@@ -172,7 +184,7 @@ function PaymentPage() {
                         checked={paymentMethod === "paypal"}
                         onChange={handlePaymentMethodChange}
                     />
-                    <label htmlFor="paypal"><FontAwesomeIcon icon={faPaypal} aria-hidden="true"/> PayPal</label>
+                    <label htmlFor="paypal"><FontAwesomeIcon icon={faPaypal} aria-hidden="true" /> PayPal</label>
                 </div>
                 <div>
                     <input
@@ -183,7 +195,7 @@ function PaymentPage() {
                         checked={paymentMethod === "creditcard"}
                         onChange={handlePaymentMethodChange}
                     />
-                    <label htmlFor="creditcard"><FontAwesomeIcon icon={faCcMastercard} aria-hidden="true"/> Credit Card</label>
+                    <label htmlFor="creditcard"><FontAwesomeIcon icon={faCcMastercard} aria-hidden="true" /> Credit Card</label>
                 </div>
             </form>
             {renderPaymentForm()}
@@ -196,7 +208,7 @@ function PaymentPage() {
                             className={`secondary-button ${(loggedIn && paymentMethod) ? "" : "disabled"}`}
                             onClick={handleLinkClick}
                         >
-                            <FontAwesomeIcon icon={faLock} aria-hidden="true"/> Pay Securely
+                            <FontAwesomeIcon icon={faLock} aria-hidden="true" /> Pay Securely
                         </button>
                     </div>
                 }

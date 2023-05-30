@@ -1,11 +1,32 @@
-import React, {createContext, useEffect, useState} from "react";
+/**
+ * @fileoverview Defines the context providers for the application.
+ */
+
+
+import React, { createContext, useEffect, useState } from "react";
 import axios from "axios";
 
+/**
+ * Context to provide information about the cart.
+ */
 const CartContext = createContext();
+
+/**
+ * Context to provide information about the user.
+ */
 const UserContext = createContext();
+
+/**
+ * Context to provide information about the products.
+ */
 const ProductsContext = createContext();
 
-const CartProvider = ({children}) => {
+/**
+ * Component to provide value to the CartContext.
+ * @param {Object} param0 The props for the component.
+ * @returns The component.
+ */
+const CartProvider = ({ children }) => {
     const [cartCount, setCartCount] = useState(0);
     const [cartItems, setCartItems] = useState([]);
 
@@ -18,17 +39,29 @@ const CartProvider = ({children}) => {
         }
     }, []);
 
+    /**
+     * Updates the cart items in state and in local storage.
+     * @param {Array} updatedItems The updated cart items to set.
+     */
     const updateCartItems = (updatedItems) => {
         setCartItems(updatedItems);
         setCartCount(updatedItems.length);
         localStorage.setItem("cartItems", JSON.stringify(updatedItems));
     };
 
+    /**
+     * Adds a product to the cart.
+     * @param {Object} product The product to add.
+     */
     const addToCart = (product) => {
-        const updatedCartItems = [...cartItems, {...product, count: 1}];
+        const updatedCartItems = [...cartItems, { ...product, count: 1 }];
         updateCartItems(updatedCartItems);
     };
 
+    /**
+     * Removes an item from the cart.
+     * @param {Object} item The item to remove.
+     */
     const removeFromCart = (item) => {
         const updatedCartItems = cartItems.filter(
             (cartItem) => cartItem.name !== item.name
@@ -36,6 +69,10 @@ const CartProvider = ({children}) => {
         updateCartItems(updatedCartItems);
     };
 
+    /**
+     * Increases the count of an item in the cart.
+     * @param {String} itemName The name of the item to increase count for.
+     */
     const increaseCount = (itemName) => {
         const updatedCartItems = [...cartItems];
         const foundItem = updatedCartItems.find((cartItem) => cartItem.name === itemName);
@@ -44,6 +81,10 @@ const CartProvider = ({children}) => {
         }
     };
 
+    /**
+     * Decreases the count of an item in the cart.
+     * @param {String} itemName The name of the item to decrease count for.
+     */
     const decreaseCount = (itemName) => {
         const updatedCartItems = [...cartItems];
         const foundItemIndex = updatedCartItems.findIndex((cartItem) => cartItem.name === itemName);
@@ -55,12 +96,16 @@ const CartProvider = ({children}) => {
         }
     };
 
+    /**
+     * Clears the cart.
+     */
     const clearCart = () => {
         setCartItems([]);
         setCartCount(0);
         localStorage.setItem("cartItems", JSON.stringify([]));
     };
 
+    // Group cart items by product name and count how many of each product there are
     const groupedProducts = cartItems.reduce((grouped, item) => {
         if (!grouped[item.name]) {
             grouped[item.name] = {
@@ -73,6 +118,7 @@ const CartProvider = ({children}) => {
         return grouped;
     }, {});
 
+    // Sort grouped products by name
     const sortedGroupedProducts = Object.fromEntries(
         Object.entries(groupedProducts).sort(([nameA], [nameB]) => nameA.localeCompare(nameB))
     );
@@ -95,7 +141,12 @@ const CartProvider = ({children}) => {
     );
 };
 
-const ProductsProvider = ({children}) => {
+/**
+ * Component to provide value to the ProductsContext.
+ * @param {Object} props The props for the component.
+ * @returns The component.
+ */
+const ProductsProvider = ({ children }) => {
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
@@ -121,17 +172,26 @@ const ProductsProvider = ({children}) => {
     }, []);
 
     return (
-        <ProductsContext.Provider value={{products, setProducts}}>
+        <ProductsContext.Provider value={{ products, setProducts }}>
             {children}
         </ProductsContext.Provider>
     );
 };
 
 
-const UserProvider = ({children}) => {
+/**
+ * Component to provide value to the UserContext.
+ * @param {Object} props The props for the component.
+ * @returns The component.
+ */
+const UserProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loggedIn, setLoggedIn] = useState(false);
 
+    /**
+     * Logs a user in.
+     * @param {Object} userData The user to log in.
+     */
     const login = (userData) => {
         setUser(userData);
         sessionStorage.setItem("user", JSON.stringify(userData));
@@ -139,6 +199,9 @@ const UserProvider = ({children}) => {
         sessionStorage.setItem("loggedIn", "true");
     };
 
+    /**
+     * Logs a user out.
+     */
     const logout = () => {
         setUser(null);
         sessionStorage.setItem("user", null);
@@ -172,4 +235,4 @@ const UserProvider = ({children}) => {
     );
 };
 
-export {CartContext, CartProvider, UserContext, UserProvider, ProductsContext, ProductsProvider};
+export { CartContext, CartProvider, UserContext, UserProvider, ProductsContext, ProductsProvider };

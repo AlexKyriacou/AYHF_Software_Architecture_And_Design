@@ -240,5 +240,42 @@ public class OrderRepository : RepositoryBase, IOrderRepository
 
         using var createOrdersTableCommand = new SqliteCommand(createOrdersTableQuery, Connection);
         createOrdersTableCommand.ExecuteNonQuery();
+
+        var createOrderProductsTableQuery = "CREATE TABLE IF NOT EXISTS OrderProducts (" +
+                                            "OrderId INTEGER, " +
+                                            "ProductId INTEGER, " +
+                                            "PRIMARY KEY (OrderId, ProductId))";
+
+        using var createOrderProductsTableCommand = new SqliteCommand(createOrderProductsTableQuery, Connection);
+        createOrderProductsTableCommand.ExecuteNonQuery();
+
+        var createDeliveryAddressesTableQuery = "CREATE TABLE IF NOT EXISTS DeliveryAddresses (" +
+                                                "Id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                                                "userId INTEGER, " +
+                                                "Street TEXT, " +
+                                                "City TEXT, " +
+                                                "State TEXT, " +
+                                                "PostalCode TEXT)";
+
+        using var createDeliveryAddressesTableCommand =
+            new SqliteCommand(createDeliveryAddressesTableQuery, Connection);
+        createDeliveryAddressesTableCommand.ExecuteNonQuery();
+    }
+
+    private async Task SaveOrderProductsAsync(Order order)
+    {
+        var insertQuery =
+            "INSERT OR IGNORE INTO OrderProducts (OrderId, ProductId) VALUES (@orderId, @productId)"; // Change 'ProductId' to 'Id'
+
+        await using var insertCommand = new SqliteCommand(insertQuery, Connection);
+
+        foreach (var product in order.Products)
+        {
+            insertCommand.Parameters.Clear();
+            insertCommand.Parameters.AddWithValue("@orderId", order.Id);
+            insertCommand.Parameters.AddWithValue("@productId", product.Id);
+
+            await insertCommand.ExecuteNonQueryAsync();
+        }
     }
 }
