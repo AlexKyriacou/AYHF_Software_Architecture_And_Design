@@ -31,7 +31,7 @@ public class OrderRoutes
         {
             var order = await orderService.AddOrderAsync(orderDto);
             return Results.Created($"/orders/{order.Id}", order);
-        });
+        }).RequireAuthorization();
 
         _app.MapPut("/orders/{id}",
             async (int id, [FromBody] OrderDto orderDto, [FromServices] OrderService orderService) =>
