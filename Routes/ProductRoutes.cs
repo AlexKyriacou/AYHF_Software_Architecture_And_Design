@@ -47,7 +47,7 @@ public class ProductRoutes
                     productDto.Rating, productDto.NumRatings, productDto.Price);
                 product.Id = await productService.AddProductAsync(product);
                 return Results.Created($"/products/{product.Id}", product);
-            });
+            }).RequireAuthorization();
 
         _app.MapPut("/products/{id}",
             async (int id, [FromBody] ProductDto productDto, [FromServices] ProductService productService) =>

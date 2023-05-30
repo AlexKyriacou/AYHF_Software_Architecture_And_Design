@@ -53,7 +53,13 @@ function AddProductPage() {
 
         if (isValid) {
             try {
-                const response = await axios.post("https://localhost:7269/products", newProduct);
+                const token = localStorage.getItem('token');
+
+                const response = await axios.post('https://localhost:7269/products', newProduct, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
 
                 if (response.status === 201) {
                     const newProductData = response.data;

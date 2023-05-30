@@ -89,8 +89,7 @@ var app = builder.Build();
 // Use CORS policy in your application
 app.UseCors("OpenCorsPolicy");
 
-// Use authentication and the JwtAuthenticationMiddleware
-app.UseAuthentication();
+// Use the JwtAuthenticationMiddleware
 app.UseMiddleware<JwtAuthenticationMiddleware>();
 
 // Define routes for Users
