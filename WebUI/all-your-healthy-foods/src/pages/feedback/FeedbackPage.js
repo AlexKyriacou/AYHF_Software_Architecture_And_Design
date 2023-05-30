@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { ProductsContext } from "../../AppContext";
-import axios from "axios";
 import "./Feedback.css";
 
 function Feedback() {
@@ -9,6 +8,7 @@ function Feedback() {
     const { products } = useContext(ProductsContext);
     const [product, setProduct] = useState(null);
     const [feedbacks, setFeedbacks] = useState([]);
+    const { getProductFeedbacks } = useContext(ProductsContext);
 
     useEffect(() => {
         const selectedProduct = products.find((product) => product.name === productName);
@@ -18,24 +18,12 @@ function Feedback() {
     useEffect(() => {
         if (product) {
             const fetchFeedbacks = async () => {
-                try {
-                    const response = await axios.get(
-                        `https://localhost:7269/Products/${product.id}/feedback`
-                    );
-
-                    if (response.status === 200) {
-                        setFeedbacks(response.data);
-                    } else {
-                        throw new Error("Failed to fetch feedbacks");
-                    }
-                } catch (error) {
-                    console.error(error);
-                }
+                const feedbackData = await getProductFeedbacks(product);
+                setFeedbacks(feedbackData.feedbacks);
             };
-
             fetchFeedbacks();
         }
-    }, [product]);
+    }, [getProductFeedbacks, product]);
 
     const formatDate = (dateString) => {
         const options = { year: "numeric", month: "long", day: "numeric" };
@@ -50,9 +38,9 @@ function Feedback() {
                 {product && (
                     <div className="product-details">
                         <h2 className="product-name">{product.name}</h2>
-                        <div className="product-image">
+                        <Link to={`/product/${product.name}`}>
                             <img src={product.image} alt={product.name} />
-                        </div>
+                        </Link>
                         <p className="product-description">{product.description}</p>
                     </div>
                 )}
