@@ -1,16 +1,16 @@
-import React, { useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { UserContext } from "../../AppContext";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
+import React, {useContext} from "react";
+import {Link, useNavigate} from "react-router-dom";
+import {UserContext} from "../../AppContext";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faSignOutAlt} from "@fortawesome/free-solid-svg-icons";
 import "./Login.css";
 
 const AccountPage = () => {
-    const { user, loggedIn, logout } = useContext(UserContext);
+    const {user, loggedIn, logout} = useContext(UserContext);
     const navigate = useNavigate();
 
     if (!loggedIn) {
-        navigate("/login", { replace: true });
+        navigate("/login", {replace: true});
         return null;
     }
 
@@ -28,7 +28,7 @@ const AccountPage = () => {
                 </Link>
             </div>
             <button className="primary-button" onClick={handleLogout}>
-                <FontAwesomeIcon className="logout-icon" icon={faSignOutAlt} /> Logout
+                <FontAwesomeIcon className="logout-icon" icon={faSignOutAlt}/> Logout
             </button>
         </div>
     );

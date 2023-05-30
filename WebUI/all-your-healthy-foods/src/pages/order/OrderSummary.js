@@ -1,5 +1,5 @@
-import React, { useContext } from "react";
-import { CartContext } from "../../AppContext";
+import React, {useContext} from "react";
+import {CartContext} from "../../AppContext";
 import "../cart/Cart.css";
 
 function calculateTotal(cartItems, promotionPercentage, shipping) {
@@ -22,10 +22,10 @@ function calculateTotal(cartItems, promotionPercentage, shipping) {
     };
 }
 
-function OrderSummary({ extra, shipping, step }) {
-    const { cartItems, sortedGroupedProducts } = useContext(CartContext);
+function OrderSummary({extra, shipping, step}) {
+    const {cartItems, sortedGroupedProducts} = useContext(CartContext);
     const promotionPercentage = 10; // Assuming a 10% promotion for this example
-    const { subtotal, promotionAmount, total } = calculateTotal(Object.values(cartItems), promotionPercentage, shipping);
+    const {subtotal, promotionAmount, total} = calculateTotal(Object.values(cartItems), promotionPercentage, shipping);
 
     let shippingText;
     if (step === "checkout") {
@@ -46,7 +46,7 @@ function OrderSummary({ extra, shipping, step }) {
                     <span className="item-price">${(item.price * item.count).toFixed(2)}</span>
                 </div>
             ))}
-            <hr />
+            <hr/>
             <div className="summary-row">
                 <span>Subtotal</span>
                 <span>${subtotal}</span>
@@ -59,7 +59,7 @@ function OrderSummary({ extra, shipping, step }) {
                 <span>Shipping</span>
                 <span>{shippingText}</span>
             </div>
-            <hr />
+            <hr/>
             <div className="summary-row">
                 <span>Total</span>
                 <span>${total}</span>

@@ -1,7 +1,7 @@
-import React, { useContext, useState } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import React, {useContext, useState} from "react";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import PasswordInput from "../../components/PasswordInput";
-import { UserContext } from "../../AppContext";
+import {UserContext} from "../../AppContext";
 import TextInputWithValidation from '../../components/TextInputWithValidation'
 import "./Login.css";
 import axios from "axios";
@@ -10,7 +10,7 @@ const LoginPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loginError, setLoginError] = useState("");
-    const { login } = useContext(UserContext);
+    const {login} = useContext(UserContext);
 
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
@@ -21,13 +21,13 @@ const LoginPage = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.post('https://localhost:7269/users/login', { email, password });
+            const response = await axios.post('https://localhost:7269/users/login', {email, password});
 
             if (response.status !== 200) {
                 throw new Error('Network response was not ok');
             }
 
-            const { token, user } = response.data;
+            const {token, user} = response.data;
 
             localStorage.setItem("token", token);
 

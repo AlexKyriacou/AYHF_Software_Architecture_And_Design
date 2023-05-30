@@ -33,16 +33,17 @@ public class OrderRoutes
             return Results.Created($"/orders/{order.Id}", order);
         });
 
-        _app.MapPut("/orders/{id}", async (int id, [FromBody] OrderDto orderDto, [FromServices] OrderService orderService) =>
-        {
-            if (id != orderDto.Id) return Results.BadRequest();
-            var userRepository = new UserRepository();
-            if (await userRepository.GetUserByIdAsync(orderDto.UserId) is not Customer) return Results.BadRequest();
+        _app.MapPut("/orders/{id}",
+            async (int id, [FromBody] OrderDto orderDto, [FromServices] OrderService orderService) =>
+            {
+                if (id != orderDto.Id) return Results.BadRequest();
+                var userRepository = new UserRepository();
+                if (await userRepository.GetUserByIdAsync(orderDto.UserId) is not Customer) return Results.BadRequest();
 
-            var order = new Order();
-            await orderService.UpdateOrderAsync(order);
-            return Results.NoContent();
-        });
+                var order = new Order();
+                await orderService.UpdateOrderAsync(order);
+                return Results.NoContent();
+            });
 
         _app.MapDelete("/orders/{id}", async (int id, [FromServices] OrderService orderService) =>
         {

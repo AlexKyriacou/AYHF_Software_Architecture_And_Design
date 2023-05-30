@@ -1,17 +1,17 @@
-import React, { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, {useContext, useState} from "react";
+import {useNavigate} from "react-router-dom";
 import OrderSummary from "../order/OrderSummary";
-import { UserContext } from "../../AppContext";
+import {UserContext} from "../../AppContext";
 import TextInputWithValidation from "../../components/TextInputWithValidation";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTruckFast, faShop } from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faShop, faTruckFast} from '@fortawesome/free-solid-svg-icons';
 import SelectWithValidation from "../../components/SelectWithValidation";
 import './Checkout.css';
 
 function ShippingPage() {
     const navigate = useNavigate();
 
-    const { loggedIn } = useContext(UserContext);
+    const {loggedIn} = useContext(UserContext);
     const [address, setAddress] = useState("");
     const [suburb, setSuburb] = useState("");
     const [postcode, setPostcode] = useState("");
@@ -76,7 +76,7 @@ function ShippingPage() {
             // Call backend API to save shipping address
         }
 
-        navigate("/payment", { state: shipping });
+        navigate("/payment", {state: shipping});
     };
 
     return (
@@ -93,7 +93,7 @@ function ShippingPage() {
                             checked={deliveryOption === "delivery"}
                             onChange={() => handleDeliveryOptionChange("delivery")}
                         />
-                        <FontAwesomeIcon icon={faTruckFast} aria-hidden="true" /> Delivery
+                        <FontAwesomeIcon icon={faTruckFast} aria-hidden="true"/> Delivery
                     </label>
                     <label>
                         <input
@@ -103,7 +103,7 @@ function ShippingPage() {
                             checked={deliveryOption === "clickAndCollect"}
                             onChange={() => handleDeliveryOptionChange("clickAndCollect")}
                         />
-                        <FontAwesomeIcon icon={faShop} aria-hidden="true" /> Click and Collect
+                        <FontAwesomeIcon icon={faShop} aria-hidden="true"/> Click and Collect
                     </label>
                 </div>
                 {deliveryOption === "delivery" && (
@@ -143,14 +143,14 @@ function ShippingPage() {
                             parentOnChange={handleStateChange}
                             placeholder="State/territory"
                             options={[
-                                { label: "Australian Capital Territory", value: "ACT" },
-                                { label: "New South Wales", value: "NSW" },
-                                { label: "Northern Territory", value: "NT" },
-                                { label: "Queensland", value: "QLD" },
-                                { label: "South Australia", value: "SA" },
-                                { label: "Tasmania", value: "TAS" },
-                                { label: "Victoria", value: "VIC" },
-                                { label: "Western Australia", value: "WA" }
+                                {label: "Australian Capital Territory", value: "ACT"},
+                                {label: "New South Wales", value: "NSW"},
+                                {label: "Northern Territory", value: "NT"},
+                                {label: "Queensland", value: "QLD"},
+                                {label: "South Australia", value: "SA"},
+                                {label: "Tasmania", value: "TAS"},
+                                {label: "Victoria", value: "VIC"},
+                                {label: "Western Australia", value: "WA"}
                             ]}
                         />
                         <div className="save-shipping-address">

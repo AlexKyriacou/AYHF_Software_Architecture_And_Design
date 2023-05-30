@@ -1,11 +1,11 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import axios from "axios";
-import { UserContext } from "../../AppContext";
-import { Link } from "react-router-dom";
+import {UserContext} from "../../AppContext";
+import {Link} from "react-router-dom";
 import "./Order.css";
 
 function OrderHistoryPage() {
-    const { user } = useContext(UserContext);
+    const {user} = useContext(UserContext);
     const [orders, setOrders] = useState([]);
 
     useEffect(() => {
@@ -45,14 +45,14 @@ function OrderHistoryPage() {
                                     <li key={product.id}>
                                         <div className="product">
                                             <Link to={`/product/${product.name}`}>
-                                                <img src={product.image} alt={product.name} />
+                                                <img src={product.image} alt={product.name}/>
                                             </Link>
                                             <p>{product.name}</p>
                                         </div>
                                     </li>
                                 ))}
                             </ul>
-                            <hr />
+                            <hr/>
                         </li>
                     ))}
                 </ul>

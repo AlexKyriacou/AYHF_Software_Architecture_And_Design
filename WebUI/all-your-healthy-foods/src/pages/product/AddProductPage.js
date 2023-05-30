@@ -1,14 +1,14 @@
-import React, { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { UserContext, ProductsContext } from "../../AppContext";
+import React, {useContext, useState} from "react";
+import {Link, useNavigate} from "react-router-dom";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faArrowLeft} from "@fortawesome/free-solid-svg-icons";
+import {ProductsContext, UserContext} from "../../AppContext";
 import axios from "axios";
 import "./ProductPage.css";
 
 function AddProductPage() {
-    const { loggedIn, user } = useContext(UserContext);
-    const { products, setProducts } = useContext(ProductsContext);
+    const {loggedIn, user} = useContext(UserContext);
+    const {products, setProducts} = useContext(ProductsContext);
 
     const [newProduct, setNewProduct] = useState({
         name: "",
@@ -76,7 +76,7 @@ function AddProductPage() {
         <div className="add-product-container">
             <div className="add-product-card">
                 <Link to="/" className="back-link">
-                    <FontAwesomeIcon icon={faArrowLeft} /> Back
+                    <FontAwesomeIcon icon={faArrowLeft}/> Back
                 </Link>
                 <div className="add-product">
                     {loggedIn && user.role === 0 && (
