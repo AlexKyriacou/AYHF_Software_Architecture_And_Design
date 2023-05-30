@@ -7,6 +7,7 @@
     background-color: #f1f1f1;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 80px;
 }
 
 .feedback-box {
@@ -30,14 +31,14 @@
     animation: slideIn 0.5s ease-in-out;
 }
 
-.product-name {
+.product-details .product-name {
     font-size: 1.8rem;
     color: #3a9631;
     font-weight: bold;
     margin-bottom: 0.5rem;
 }
 
-.product-description {
+.product-details .product-description {
     color: #555;
     margin-bottom: 0.5rem;
 }
@@ -85,6 +86,7 @@
 .feedback-item .feedback-date {
     color: #777;
 }
+
 @keyframes fadeIn {
     0% {
         opacity: 0;
