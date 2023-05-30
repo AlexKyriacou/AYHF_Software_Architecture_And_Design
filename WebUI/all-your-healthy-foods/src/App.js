@@ -41,7 +41,7 @@ function App() {
                             />
                             <Route path="/order-history" element={<OrderHistoryPage/>}/>
                             <Route path="/add-product" element={<AddProductPage/>}/>
-                            <Route path="/feedback" element={<Feedback/>}/>
+                            <Route path="/product/:productname/feedbacks" element={<Feedback />} />
                             <Route path="/search-results" element={<SearchResultsPage/>}/>
                         </Routes>
                         <footer className="App-footer">
