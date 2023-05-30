@@ -4,7 +4,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowLeft} from "@fortawesome/free-solid-svg-icons";
 import {ProductsContext, UserContext} from "../../AppContext";
 import axios from "axios";
-import "./ProductPage.css";
+import "./Product.css";
 
 function AddProductPage() {
     const {loggedIn, user} = useContext(UserContext);
