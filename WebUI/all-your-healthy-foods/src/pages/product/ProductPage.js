@@ -1,19 +1,19 @@
-import React, { useContext, useState, useEffect } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import React, {useContext, useEffect, useState} from "react";
+import {Link, useNavigate, useParams} from "react-router-dom";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faArrowLeft} from "@fortawesome/free-solid-svg-icons";
 import Rating from "../rating/Rating";
-import { CartContext, UserContext, ProductsContext } from "../../AppContext";
+import {CartContext, ProductsContext, UserContext} from "../../AppContext";
 import "./ProductCard.css";
 import "./ProductPage.css";
 import axios from "axios";
 
 function ProductPage() {
-    const { products, setProducts } = useContext(ProductsContext);
-    const { addToCart } = useContext(CartContext);
-    const { loggedIn, user } = useContext(UserContext);
+    const {products, setProducts} = useContext(ProductsContext);
+    const {addToCart} = useContext(CartContext);
+    const {loggedIn, user} = useContext(UserContext);
 
-    const { productName } = useParams();
+    const {productName} = useParams();
 
     const storedProduct = JSON.parse(sessionStorage.getItem("product"));
     const product = storedProduct && storedProduct.name === productName
@@ -21,7 +21,7 @@ function ProductPage() {
         : products.find((product) => product.name === productName);
 
     const productId = product.id;
-    const [editedProduct, setEditedProduct] = useState({ ...product });
+    const [editedProduct, setEditedProduct] = useState({...product});
     const [inEditMode, setInEditMode] = useState(false);
     const [initialLoad, setInitialLoad] = useState(true);
 
@@ -89,10 +89,10 @@ function ProductPage() {
                 <div className="image-container">
                     <div className="back-link-container">
                         <Link to="/" className="back-link">
-                            <FontAwesomeIcon icon={faArrowLeft} /> Back
+                            <FontAwesomeIcon icon={faArrowLeft}/> Back
                         </Link>
                     </div>
-                    <img className="large-view" src={product.image} alt={product.name} />
+                    <img className="large-view" src={product.image} alt={product.name}/>
                 </div>
                 <div className="product-overview-details">
                     {loggedIn && user.role === 0 && (
@@ -173,7 +173,7 @@ function ProductPage() {
                                     <p>{product.description}</p>
                                 </div>
                                 <div className="product-rating">
-                                    <Rating rate={product.rating} /> ({product.numRatings})
+                                    <Rating rate={product.rating}/> ({product.numRatings})
                                 </div>
                                 <p className="product-price">$ {(product.price).toFixed(2)}</p>
                                 <button className="add-to-cart-button" onClick={handleAddToCart}>

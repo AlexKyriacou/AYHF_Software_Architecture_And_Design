@@ -100,7 +100,7 @@ details p {
     width: 100%;
     margin-bottom: 10px;
 }
-  
+
 .field-container label {
     font-weight: bold;
     font-size: medium;
@@ -108,7 +108,7 @@ details p {
     flex: 1;
     margin-bottom: 10px;
 }
-  
+
 .field-container input,
 .field-container textarea {
     padding: 10px;

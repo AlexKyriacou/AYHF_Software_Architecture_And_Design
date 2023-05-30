@@ -1,11 +1,11 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, {createContext, useEffect, useState} from "react";
 import axios from "axios";
 
 const CartContext = createContext();
 const UserContext = createContext();
 const ProductsContext = createContext();
 
-const CartProvider = ({ children }) => {
+const CartProvider = ({children}) => {
     const [cartCount, setCartCount] = useState(0);
     const [cartItems, setCartItems] = useState([]);
 
@@ -25,7 +25,7 @@ const CartProvider = ({ children }) => {
     };
 
     const addToCart = (product) => {
-        const updatedCartItems = [...cartItems, { ...product, count: 1 }];
+        const updatedCartItems = [...cartItems, {...product, count: 1}];
         updateCartItems(updatedCartItems);
     };
 
@@ -95,7 +95,7 @@ const CartProvider = ({ children }) => {
     );
 };
 
-const ProductsProvider = ({ children }) => {
+const ProductsProvider = ({children}) => {
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
@@ -121,14 +121,14 @@ const ProductsProvider = ({ children }) => {
     }, []);
 
     return (
-        <ProductsContext.Provider value={{ products, setProducts }}>
+        <ProductsContext.Provider value={{products, setProducts}}>
             {children}
         </ProductsContext.Provider>
     );
 };
 
 
-const UserProvider = ({ children }) => {
+const UserProvider = ({children}) => {
     const [user, setUser] = useState(null);
     const [loggedIn, setLoggedIn] = useState(false);
 
@@ -172,4 +172,4 @@ const UserProvider = ({ children }) => {
     );
 };
 
-export { CartContext, CartProvider, UserContext, UserProvider, ProductsContext, ProductsProvider };
+export {CartContext, CartProvider, UserContext, UserProvider, ProductsContext, ProductsProvider};

@@ -1,13 +1,13 @@
-import React, { useContext } from "react";
-import { Link } from "react-router-dom";
-import { CartContext } from "../../AppContext";
+import React, {useContext} from "react";
+import {Link} from "react-router-dom";
+import {CartContext} from "../../AppContext";
 import OrderSummary from "../order/OrderSummary";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMinus, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faMinus, faPlus, faTrash} from "@fortawesome/free-solid-svg-icons";
 import "./Cart.css";
 
 function CartPage() {
-    const { sortedGroupedProducts, removeFromCart, increaseCount, decreaseCount } = useContext(CartContext);
+    const {sortedGroupedProducts, removeFromCart, increaseCount, decreaseCount} = useContext(CartContext);
 
     const handleRemoveItem = (item) => {
         removeFromCart(item);
@@ -35,7 +35,7 @@ function CartPage() {
                         <li key={index}>
                             <div className="item-container">
                                 <Link to={`/product/${item.name}`}>
-                                    <img src={item.image} alt={item.name} />
+                                    <img src={item.image} alt={item.name}/>
                                 </Link>
                                 <p><strong>{name}</strong> - {item.description}</p>
                                 <div className="count-buttons">
@@ -44,15 +44,15 @@ function CartPage() {
                                         onClick={() => handleDecreaseCount(item.name)}
                                         disabled={item.count === 1}
                                     >
-                                        <FontAwesomeIcon icon={faMinus} />
+                                        <FontAwesomeIcon icon={faMinus}/>
                                     </button>
                                     <span className="count">{item.count}</span>
                                     <button className="count-button" onClick={() => handleIncreaseCount(item.name)}>
-                                        <FontAwesomeIcon icon={faPlus} />
+                                        <FontAwesomeIcon icon={faPlus}/>
                                     </button>
                                 </div>
                                 <button className="remove-button" onClick={() => handleRemoveItem(item)}>
-                                    <FontAwesomeIcon icon={faTrash} />
+                                    <FontAwesomeIcon icon={faTrash}/>
                                     Remove
                                 </button>
                                 <div>$ {(item.price * item.count).toFixed(2)}</div>
@@ -65,7 +65,7 @@ function CartPage() {
                 <OrderSummary extra={<div>
                     <Link className="link-button" to="/checkout">Checkout</Link>
                     <Link className="link-button" to="/">Continue Shopping</Link>
-                </div>} />
+                </div>}/>
             )}
         </div>
     );

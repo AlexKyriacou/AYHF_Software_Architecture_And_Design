@@ -36,7 +36,7 @@ public class FeedbackService
     {
         await Task.Run(() => _feedbackRepository.DeleteFeedbackAsync(id));
     }
-    
+
     public async Task<List<Feedback>> GetAllFeedbackForProductAsync(int id)
     {
         return await Task.Run(() => _feedbackRepository.GetAllFeedbackForProductAsync(id));
