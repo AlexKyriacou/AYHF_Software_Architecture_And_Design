@@ -44,7 +44,8 @@ public class FeedbackRoutes
                 var feedback = new Feedback(feedbackDto.Id, feedbackDto.UserId, feedbackDto.Rating,
                     feedbackDto.ProductId, feedbackDto.Message, feedbackDto.FeedbackDate);
                 var createdFeedbackId = await feedbackService.AddFeedbackAsync(feedback);
-                if (createdFeedbackId <= 0) return Results.BadRequest(); // Handle the case if Id is not returned or invalid
+                if (createdFeedbackId <= 0)
+                    return Results.BadRequest(); // Handle the case if Id is not returned or invalid
 
                 return Results.Created($"/feedback/{createdFeedbackId}", feedback);
             });

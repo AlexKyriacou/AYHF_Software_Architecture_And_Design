@@ -1,9 +1,9 @@
 import React from "react";
 import '../checkout/Checkout.css';
-import { Link, useParams } from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 
 function OrderConfirmationPage() {
-    const { orderId } = useParams();
+    const {orderId} = useParams();
 
     return (
         <div className="checkout-container">

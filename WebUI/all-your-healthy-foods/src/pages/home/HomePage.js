@@ -1,12 +1,12 @@
-import React, { useContext } from "react";
+import React, {useContext} from "react";
 import ProductCard from "../product/ProductCard";
-import { ProductsContext, UserContext } from "../../AppContext";
-import { Link } from "react-router-dom";
+import {ProductsContext, UserContext} from "../../AppContext";
+import {Link} from "react-router-dom";
 import "./Home.css";
 
 const HomePage = () => {
-    const { products } = useContext(ProductsContext);
-    const { loggedIn, user } = useContext(UserContext);
+    const {products} = useContext(ProductsContext);
+    const {loggedIn, user} = useContext(UserContext);
 
     return (
         <div>
@@ -20,7 +20,7 @@ const HomePage = () => {
             )}
             <div className="products-container">
                 {products.map((product, index) => (
-                    <ProductCard key={index} product={product} />
+                    <ProductCard key={index} product={product}/>
                 ))}
             </div>
         </div>
