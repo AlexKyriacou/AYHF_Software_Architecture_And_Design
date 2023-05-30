@@ -4,12 +4,13 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowLeft} from "@fortawesome/free-solid-svg-icons";
 import Rating from "../rating/Rating";
 import {CartContext, ProductsContext, UserContext} from "../../AppContext";
-import "./ProductCard.css";
-import "./ProductPage.css";
+import "./Product.css";
 import axios from "axios";
 
 function ProductPage() {
-    const {products, setProducts} = useContext(ProductsContext);
+    const {products, setProducts, getProductFeedbacks} = useContext(
+        ProductsContext
+    );
     const {addToCart} = useContext(CartContext);
     const {loggedIn, user} = useContext(UserContext);
 
@@ -17,15 +18,30 @@ function ProductPage() {
 
     const storedProduct = JSON.parse(sessionStorage.getItem("product"));
     const product = storedProduct && storedProduct.name === productName
-        ? storedProduct
-        : products.find((product) => product.name === productName);
+            ? storedProduct
+            : products.find((product) => product.name === productName);
 
     const productId = product.id;
     const [editedProduct, setEditedProduct] = useState({...product});
     const [inEditMode, setInEditMode] = useState(false);
     const [initialLoad, setInitialLoad] = useState(true);
+    const [leaveFeedback, setLeaveFeedback] = useState(false);
+    const [hasLeftFeedback, setHasLeftFeedback] = useState(false);
+    const [rating, setRating] = useState(0);
+    const [feedbackMessage, setFeedbackMessage] = useState("");
+    const [productFeedbacks, setProductFeedbacks] = useState([]);
+    const [averageRating, setAverageRating] = useState(0);
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchFeedbacks = async () => {
+            const feedbackData = await getProductFeedbacks(product);
+            setProductFeedbacks(feedbackData.feedbacks);
+            setAverageRating(feedbackData.averageRating);
+        };
+        fetchFeedbacks();
+    }, [getProductFeedbacks, product]);
 
     useEffect(() => {
         if (initialLoad) {
@@ -34,6 +50,16 @@ function ProductPage() {
             setInitialLoad(false);
         }
     }, [initialLoad, product]);
+
+    useEffect(() => {
+        if (user) {
+            const userFeedback = productFeedbacks.find(
+                (feedback) =>
+                    feedback.productId === productId && feedback.userId === user.id
+            );
+            setHasLeftFeedback(!!userFeedback);
+        }
+    }, [productFeedbacks, productId, user]);
 
     const handleAddToCart = () => {
         addToCart(product);
@@ -77,6 +103,48 @@ function ProductPage() {
                 );
                 setProducts(updatedProducts);
                 navigate("/");
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const handleFeedbackCheckboxChange = () => {
+        setLeaveFeedback(!leaveFeedback);
+    };
+
+    const handleRatingChange = (event) => {
+        setRating(parseInt(event.target.value));
+    };
+
+    const handleFeedbackMessageChange = (event) => {
+        setFeedbackMessage(event.target.value);
+    };
+
+    const handleLeaveReview = async () => {
+        try {
+            const feedbackData = {
+                id: 0,
+                userId: user?.id,
+                rating: rating,
+                productId: productId,
+                message: feedbackMessage,
+                feedbackDate: new Date().toISOString(),
+            };
+
+            const response = await axios.post(
+                "https://localhost:7269/feedback",
+                feedbackData
+            );
+
+            if (response.status !== 201) {
+                throw new Error("Request failed");
+            } else {
+                const updatedFeedbacks = [...productFeedbacks, feedbackData];
+                setProductFeedbacks(updatedFeedbacks);
+                setLeaveFeedback(false);
+                setRating(0);
+                setFeedbackMessage("");
             }
         } catch (error) {
             console.error(error);
@@ -173,10 +241,30 @@ function ProductPage() {
                                     <p>{product.description}</p>
                                 </div>
                                 <div className="product-rating">
-                                    <Rating rate={product.rating}/> ({product.numRatings})
+                                    <Rating rate={averageRating} />
+                                    <Link to={`/product/${product.name}/feedbacks`}>
+                                        ({productFeedbacks.length})
+                                    </Link>
                                 </div>
-                                <p className="product-price">$ {(product.price).toFixed(2)}</p>
-                                <button className="add-to-cart-button" onClick={handleAddToCart}>
+                                {loggedIn && !hasLeftFeedback && (
+                                    <div className="leave-feedback">
+                                        <label>
+                                            <input
+                                                type="checkbox"
+                                                checked={leaveFeedback}
+                                                onChange={handleFeedbackCheckboxChange}
+                                            />
+                                            Leave Feedback?
+                                        </label>
+                                    </div>
+                                )}
+                                <p className="product-price">
+                                    $ {(product.price).toFixed(2)}
+                                </p>
+                                <button
+                                    className="add-to-cart-button"
+                                    onClick={handleAddToCart}
+                                >
                                     Add to cart
                                 </button>
                                 <details open>
@@ -187,6 +275,36 @@ function ProductPage() {
                                     <summary>Ingredients</summary>
                                     <p>{product.ingredients}</p>
                                 </details>
+                                {leaveFeedback && (
+                                    <div className="feedback-fields">
+                                        <div className="field-container">
+                                            <label>Rating:</label>
+                                            <input
+                                                type="number"
+                                                name="rating"
+                                                value={rating}
+                                                onChange={handleRatingChange}
+                                                min="1"
+                                                max="5"
+                                                required
+                                            />
+                                        </div>
+                                        <div className="field-container">
+                                            <label>Feedback Message:</label>
+                                            <textarea
+                                                name="feedbackMessage"
+                                                value={feedbackMessage}
+                                                onChange={handleFeedbackMessageChange}
+                                            />
+                                        </div>
+                                        <button
+                                            className="primary-button"
+                                            onClick={handleLeaveReview}
+                                        >
+                                            Save
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         )}
                     </div>
