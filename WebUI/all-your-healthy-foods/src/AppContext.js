@@ -145,10 +145,10 @@ const ProductsProvider = ({ children }) => {
             if (response.status === 200) {
                 return response.data;
             } else {
-                throw new Error("Failed to fetch feedbacks");
+                throw new Error("Failed to fetch feedbacks. Unexpected status code: " + response.status);
             }
         } catch (error) {
-            console.error(error);
+            console.error("Error fetching feedbacks:", error);
             throw error; // Rethrow the error to propagate it to the caller
         }
     };
