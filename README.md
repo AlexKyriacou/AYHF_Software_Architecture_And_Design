@@ -25,9 +25,9 @@ AYHF is a Progressive Web App (PWA) designed to provide a nationwide online shop
 
 ### Instructions
 1. Clone the repository
-2. Navigate to the `backend` directory and run `dotnet restore` to install the backend dependencies
+2. Navigate to the `backend` directory (the root folder of this project) and run `dotnet restore` to install the backend dependencies
 3. Run `dotnet run` to start the backend server
-4. Navigate to the `frontend` directory and run `npm install` to install the frontend dependencies
+4. Navigate to the `frontend` directory (WebUI/all-your-healthy-foods) and run `npm install` to install the frontend dependencies
 5. Run `npm start` to launch the frontend
 6. Open your web browser and navigate to `http://localhost:3000` (or whichever port your React app is running on)
 
