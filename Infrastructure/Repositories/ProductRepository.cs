@@ -4,14 +4,25 @@ using Microsoft.Data.Sqlite;
 
 namespace AYHF_Software_Architecture_And_Design.Infrastructure.Repositories;
 
+/// <summary>
+/// Repository for managing products.
+/// </summary>
 public class ProductRepository : RepositoryBase, IProductRepository
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ProductRepository"/> class.
+    /// </summary>
     public ProductRepository()
     {
         CreateTables();
         AddData();
     }
 
+    /// <summary>
+    /// Asynchronously adds a product.
+    /// </summary>
+    /// <param name="product">The product to add.</param>
+    /// <returns>The number of rows affected.</returns>
     public async Task<int> AddProductAsync(Product product)
     {
         var insertQuery =
@@ -34,6 +45,10 @@ public class ProductRepository : RepositoryBase, IProductRepository
         return Convert.ToInt32(result);
     }
 
+    /// <summary>
+    /// Asynchronously updates a product.
+    /// </summary>
+    /// <param name="product">The product to update.</param>
     public async Task UpdateProductAsync(Product product)
     {
         var updateQuery = "UPDATE Products SET Name = @name, Description = @description, " +
@@ -55,6 +70,10 @@ public class ProductRepository : RepositoryBase, IProductRepository
         await command.ExecuteNonQueryAsync();
     }
 
+    /// <summary>
+    /// Asynchronously deletes a product by id.
+    /// </summary>
+    /// <param name="id">The id of the product to delete.</param>
     public async Task DeleteProductAsync(int id)
     {
         var deleteQuery = "DELETE FROM Products WHERE Id = @id";
@@ -64,6 +83,11 @@ public class ProductRepository : RepositoryBase, IProductRepository
         await deleteCommand.ExecuteNonQueryAsync();
     }
 
+    /// <summary>
+    /// Asynchronously gets a product by id.
+    /// </summary>
+    /// <param name="productId">The id of the product to get.</param>
+    /// <returns>The product if found, null otherwise.</returns>
     public async Task<Product?> GetProductByIdAsync(int productId)
     {
         var selectQuery = "SELECT * FROM Products WHERE Id = @productId";
@@ -92,6 +116,10 @@ public class ProductRepository : RepositoryBase, IProductRepository
         return null; // Return null if the product with the given ID is not found
     }
 
+    /// <summary>
+    /// Asynchronously gets all products.
+    /// </summary>
+    /// <returns>A list of all products.</returns>
     public async Task<List<Product>> GetAllProductsAsync()
     {
         var products = new List<Product>();
@@ -119,6 +147,11 @@ public class ProductRepository : RepositoryBase, IProductRepository
         return products;
     }
 
+    /// <summary>
+    /// Asynchronously searches for products by query.
+    /// </summary>
+    /// <param name="searchQuery">The search query.</param>
+    /// <returns>A list of matching products.</returns>
     public async Task<List<Product>> GetProductsBySearchQueryAsync(string searchQuery)
     {
         var products = new List<Product>();
@@ -147,6 +180,10 @@ public class ProductRepository : RepositoryBase, IProductRepository
         return products;
     }
 
+    /// <summary>
+    /// Asynchronously bulk inserts products.
+    /// </summary>
+    /// <param name="products">The products to insert.</param>
     public async Task BulkInsertProductsAsync(List<Product> products)
     {
         var insertQuery =
@@ -170,6 +207,9 @@ public class ProductRepository : RepositoryBase, IProductRepository
     }
 
 
+    /// <summary>
+    /// Creates the tables required for this repository.
+    /// </summary>
     protected override void CreateTables()
     {
         var createTableQuery = "CREATE TABLE IF NOT EXISTS Products (" +
@@ -187,6 +227,9 @@ public class ProductRepository : RepositoryBase, IProductRepository
         createTableCommand.ExecuteNonQuery();
     }
 
+    /// <summary>
+    /// Adds data to the tables.
+    /// </summary>
     protected void AddData()
     {
         var addDataQuery =

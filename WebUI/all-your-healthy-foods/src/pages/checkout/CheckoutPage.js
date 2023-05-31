@@ -4,6 +4,10 @@ import OrderSummary from "../order/OrderSummary";
 import {UserContext} from "../../AppContext";
 import './Checkout.css';
 
+/**
+ * Renders the checkout page with order summary and links for login/signup.
+ * @returns {JSX.Element} The rendered CheckoutPage component.
+ */
 function CheckoutPage() {
     const {loggedIn} = useContext(UserContext);
     return (

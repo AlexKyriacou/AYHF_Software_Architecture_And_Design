@@ -6,17 +6,33 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMinus, faPlus, faTrash} from "@fortawesome/free-solid-svg-icons";
 import "./Cart.css";
 
+/**
+ * Renders the CartPage component and handles product removal, count updates, and checkout functionality.
+ * @returns {JSX.Element} CartPage JSX element
+ */
 function CartPage() {
     const {sortedGroupedProducts, removeFromCart, increaseCount, decreaseCount} = useContext(CartContext);
 
+    /**
+     * Handles removing a product item from the cart.
+     * @param {Object} item - The product being removed from the cart
+     */
     const handleRemoveItem = (item) => {
         removeFromCart(item);
     };
 
+    /**
+     * Handles increasing the count of a product item in the cart.
+     * @param {string} itemName - The name of the product being updated
+     */
     const handleIncreaseCount = (itemName) => {
         increaseCount(itemName);
     };
 
+    /**
+     * Handles decreasing the count of a product item in the cart.
+     * @param {string} itemName - The name of the product being updated
+     */
     const handleDecreaseCount = (itemName) => {
         decreaseCount(itemName);
     };

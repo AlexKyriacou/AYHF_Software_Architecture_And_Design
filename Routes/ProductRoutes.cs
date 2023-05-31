@@ -5,15 +5,25 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AYHF_Software_Architecture_And_Design.Routes;
 
+/// <summary>
+/// This class contains routes related to products.
+/// </summary>
 public class ProductRoutes
 {
     private readonly WebApplication _app;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ProductRoutes"/> class with the specified <paramref name="app"/>.
+    /// </summary>
+    /// <param name="app">The <see cref="WebApplication"/> object.</param>
     public ProductRoutes(WebApplication app)
     {
         _app = app;
     }
 
+    /// <summary>
+    /// Configures the product routes.
+    /// </summary>
     public void Configure()
     {
         _app.MapGet("/products", async context =>

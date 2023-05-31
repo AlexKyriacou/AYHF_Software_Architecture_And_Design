@@ -7,15 +7,25 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AYHF_Software_Architecture_And_Design.Routes;
 
+/// <summary>
+/// This class contains routes related to users.
+/// </summary>
 public class UserRoutes
 {
     private readonly WebApplication _app;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="UserRoutes"/> class.
+    /// </summary>
+    /// <param name="app">The <see cref="WebApplication"/> object.</param>
     public UserRoutes(WebApplication app)
     {
         _app = app;
     }
 
+    /// <summary>
+    /// Configures the user routes.
+    /// </summary>
     public void Configure()
     {
         _app.MapGet("/users",

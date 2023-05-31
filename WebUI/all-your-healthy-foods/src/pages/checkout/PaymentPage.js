@@ -11,6 +11,13 @@ import PasswordInput from "../../components/PasswordInput"
 import axios from "axios";
 import './Checkout.css';
 
+/**
+* Validates the payment form based on selected payment method.
+* 
+* @param {string} paymentMethod - Selected payment method.
+* @param {Object} paymentDetails - An object containing payment details.
+* @returns {string} An error message, if any.
+*/
 function validateForm(paymentMethod, paymentDetails) {
     if (paymentMethod === "paypal") {
         if (!paymentDetails.email || !paymentDetails.password) {
@@ -45,6 +52,10 @@ function validateForm(paymentMethod, paymentDetails) {
     return ""; // Return empty string if form is valid
 }
 
+/**
+ * Renders the payment page with payment form based on selected payment method.
+ * @returns {JSX.Element} The rendered PaymentPage component.
+ */
 function PaymentPage() {
     const {loggedIn, user} = useContext(UserContext);
     const {clearCart, cartItems} = useContext(CartContext);

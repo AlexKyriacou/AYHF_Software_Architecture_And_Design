@@ -5,13 +5,24 @@ using Microsoft.Data.Sqlite;
 
 namespace AYHF_Software_Architecture_And_Design.Infrastructure.Repositories;
 
+/// <summary>
+/// Repository for managing orders in the database.
+/// </summary>
 public class OrderRepository : RepositoryBase, IOrderRepository
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="OrderRepository"/> class and creates the Orders table.
+    /// </summary>
     public OrderRepository()
     {
         CreateTables();
     }
 
+    /// <summary>
+    /// Gets all orders for a particular user from the Orders table.
+    /// </summary>
+    /// <param name="userId">The id of the user.</param>
+    /// <returns>A list of orders for the user.</returns>
     public async Task<List<Order>> GetAllOrdersByUserIdAsync(int userId)
     {
         var orders = new List<Order>();
@@ -37,6 +48,11 @@ public class OrderRepository : RepositoryBase, IOrderRepository
         return orders;
     }
 
+    /// <summary>
+    /// Adds a new order to the Orders table.
+    /// </summary>
+    /// <param name="orderDto">The order details to add.</param>
+    /// <returns>The added order.</returns>
     public async Task<Order> AddOrderAsync(OrderDto orderDto)
     {
         var order = new Order
@@ -64,6 +80,10 @@ public class OrderRepository : RepositoryBase, IOrderRepository
         return order;
     }
 
+    /// <summary>
+    /// Updates an existing order in the Orders table.
+    /// </summary>
+    /// <param name="order">The order to update.</param>
     public async Task UpdateOrderAsync(Order order)
     {
         var updateQuery = "UPDATE Orders SET userId = @userId, OrderDate = @orderDate, " +
@@ -80,6 +100,10 @@ public class OrderRepository : RepositoryBase, IOrderRepository
         await SaveOrderProductsAsync(order);
     }
 
+    /// <summary>
+    /// Deletes an order from the Orders table.
+    /// </summary>
+    /// <param name="id">The id of the order to delete.</param>
     public async Task DeleteOrderAsync(int id)
     {
         var deleteQuery = "DELETE FROM Orders WHERE OrderId = @id";
@@ -89,6 +113,11 @@ public class OrderRepository : RepositoryBase, IOrderRepository
         await deleteCommand.ExecuteNonQueryAsync();
     }
 
+    /// <summary>
+    /// Gets an order by its id from the Orders table.
+    /// </summary>
+    /// <param name="orderId">The id of the order to get.</param>
+    /// <returns>The order with the specified id or null if it does not exist.</returns>
     public async Task<Order?> GetOrderByIdAsync(int orderId)
     {
         var selectQuery = "SELECT * FROM Orders WHERE OrderId = @orderId";
@@ -118,6 +147,10 @@ public class OrderRepository : RepositoryBase, IOrderRepository
         return null;
     }
 
+    /// <summary>
+    /// Gets all orders from the Orders table.
+    /// </summary>
+    /// <returns>A list of all orders in the table.</returns>
     public async Task<List<Order>> GetAllOrdersAsync()
     {
         var orders = new List<Order>();
@@ -146,6 +179,11 @@ public class OrderRepository : RepositoryBase, IOrderRepository
         return orders;
     }
 
+    /// <summary>
+    /// Retrieves the list of product IDs associated with the given order ID.
+    /// </summary>
+    /// <param name="orderId">The ID of the order.</param>
+    /// <returns>A list of product IDs.</returns>
     private async Task<List<int>> GetOrderProductIdsAsync(int orderId)
     {
         var productIds = new List<int>();
@@ -161,6 +199,11 @@ public class OrderRepository : RepositoryBase, IOrderRepository
         return productIds;
     }
 
+    /// <summary>
+    /// Retrieves a list of products based on a list of product IDs.
+    /// </summary>
+    /// <param name="productIds">List of product IDs.</param>
+    /// <returns>List of products.</returns>
     private async Task<List<Product>> GetOrderProductsAsync(List<int> productIds)
     {
         var products = new List<Product>();
@@ -193,6 +236,9 @@ public class OrderRepository : RepositoryBase, IOrderRepository
         return products;
     }
 
+    /// <summary>
+    /// Creates the necessary tables if they don't already exist
+    /// </summary>
     protected override void CreateTables()
     {
         var createOrdersTableQuery = "CREATE TABLE IF NOT EXISTS Orders (" +
@@ -226,6 +272,11 @@ public class OrderRepository : RepositoryBase, IOrderRepository
         createDeliveryAddressesTableCommand.ExecuteNonQuery();
     }
 
+    /// <summary>
+    /// Saves the order products to the database.
+    /// </summary>
+    /// <param name="order">The order to save the products for.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
     private async Task SaveOrderProductsAsync(Order order)
     {
         var insertQuery =

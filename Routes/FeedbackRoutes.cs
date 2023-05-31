@@ -6,15 +6,25 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AYHF_Software_Architecture_And_Design.Routes;
 
+/// <summary>
+/// This class contains routes related to feedback.
+/// </summary>
 public class FeedbackRoutes
 {
     private readonly WebApplication _app;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="FeedbackRoutes"/> class with the specified <paramref name="app"/>.
+    /// </summary>
+    /// <param name="app">The <see cref="WebApplication"/> object.</param>
     public FeedbackRoutes(WebApplication app)
     {
         _app = app;
     }
 
+    /// <summary>
+    /// Configures the feedback routes.
+    /// </summary>
     public void Configure()
     {
         _app.MapGet("/feedback/{id}", async (int id, [FromServices] FeedbackService feedbackService) =>
