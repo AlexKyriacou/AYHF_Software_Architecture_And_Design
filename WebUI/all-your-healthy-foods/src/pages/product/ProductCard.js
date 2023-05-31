@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
-import {Link} from "react-router-dom";
-import Rating from "../rating/Rating"
-import {CartContext, ProductsContext} from "../../AppContext";
+import { Link } from "react-router-dom";
+import Rating from "../rating/Rating";
+import { CartContext, ProductsContext } from "../../AppContext";
 import "./Product.css";
 
 function ProductCard({ product }) {
@@ -12,6 +12,7 @@ function ProductCard({ product }) {
     const [averageRating, setAverageRating] = useState(0);
 
     useEffect(() => {
+        // Fetch product feedbacks and average rating when the component mounts or product prop changes
         const fetchFeedbacks = async () => {
             const feedbackData = await getProductFeedbacks(product);
             setProductFeedbacks(feedbackData.feedbacks);
@@ -21,6 +22,7 @@ function ProductCard({ product }) {
     }, [getProductFeedbacks, product]);
 
     const handleAddToCart = () => {
+        // Add product to the cart
         addToCart(product);
     };
 
@@ -32,13 +34,16 @@ function ProductCard({ product }) {
                 </Link>
                 <p className="product-name">{product.name}</p>
                 <p className="product-desc">{product.description}</p>
-                <div className="product-rating"><Rating rate={averageRating} />
+                <div className="product-rating">
+                    <Rating rate={averageRating} />
                     <Link to={`/product/${product.name}/feedbacks`}>
                         ({productFeedbacks.length})
                     </Link>
                 </div>
                 <p className="product-price">$ {(product.price).toFixed(2)}</p>
-                <button className="add-to-cart-button" onClick={handleAddToCart}>Add to cart</button>
+                <button className="add-to-cart-button" onClick={handleAddToCart}>
+                    Add to cart
+                </button>
             </div>
         </div>
     );
