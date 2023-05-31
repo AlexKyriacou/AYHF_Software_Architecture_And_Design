@@ -4,31 +4,34 @@ import { ProductsContext } from "../../AppContext";
 import "./Feedback.css";
 
 function Feedback() {
-    const { productName } = useParams();
-    const { products } = useContext(ProductsContext);
-    const [product, setProduct] = useState(null);
-    const [feedbacks, setFeedbacks] = useState([]);
-    const { getProductFeedbacks } = useContext(ProductsContext);
+    const { productName } = useParams(); // Access the "productName" parameter from the URL
+    const { products } = useContext(ProductsContext); // Access the "products" context from the "ProductsContext"
+    const [product, setProduct] = useState(null); // Define state variable "product" and its setter function
+    const [feedbacks, setFeedbacks] = useState([]); // Define state variable "feedbacks" and its setter function
+    const { getProductFeedbacks } = useContext(ProductsContext); // Access the "getProductFeedbacks" function from the "ProductsContext"
 
     useEffect(() => {
-        const selectedProduct = products.find((product) => product.name === productName);
-        setProduct(selectedProduct);
+        // This effect runs when the "products" or "productName" values change
+        const selectedProduct = products.find((product) => product.name === productName); // Find the product object that matches the "productName"
+        setProduct(selectedProduct); // Update the "product" state with the selected product
     }, [products, productName]);
 
     useEffect(() => {
+        // This effect runs when the "product" value changes
         if (product) {
             const fetchFeedbacks = async () => {
-                const feedbackData = await getProductFeedbacks(product);
-                setFeedbacks(feedbackData.feedbacks);
+                const feedbackData = await getProductFeedbacks(product); // Fetch feedbacks for the selected product
+                setFeedbacks(feedbackData.feedbacks); // Update the "feedbacks" state with the fetched feedbacks
             };
-            fetchFeedbacks();
+            fetchFeedbacks(); // Call the fetchFeedbacks function
         }
     }, [getProductFeedbacks, product]);
 
     const formatDate = (dateString) => {
+        // Function to format a date string
         const options = { year: "numeric", month: "long", day: "numeric" };
         const date = new Date(dateString);
-        return date.toLocaleDateString(undefined, options);
+        return date.toLocaleDateString(undefined, options); // Format the date according to the specified options
     };
 
     return (
@@ -47,6 +50,7 @@ function Feedback() {
             </div>
             <ul className="feedback-list">
                 {feedbacks.map((feedback) => (
+                    // Render each feedback in the "feedbacks" array as a list item
                     <li key={feedback.id} className="feedback-item">
                         <p className="customer-id">Customer ID: {feedback.userId}</p>
                         <p className="rating">Rating: {feedback.rating}</p>
