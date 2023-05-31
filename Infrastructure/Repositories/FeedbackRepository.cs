@@ -106,8 +106,8 @@ public class FeedbackRepository : RepositoryBase, IFeedbackRepository
         {
             var feedbackId = reader.GetInt32(0);
             var userId = reader.GetInt32(1);
-            var productId = reader.GetInt32(2);
-            var rating = reader.GetInt32(3);
+            var rating = reader.GetInt32(2);
+            var productId = reader.GetInt32(3);
             var message = reader.GetString(4);
             var feedbackDateString = reader.GetString(5);
             var customerRepository = new UserRepository();
@@ -145,7 +145,7 @@ public class FeedbackRepository : RepositoryBase, IFeedbackRepository
             var customer = await customerRepository.GetUserByIdAsync(userId);
             if (customer != null)
             {
-                var feedback = new Feedback(feedbackId, customer.Id, productId, rating, message,
+                var feedback = new Feedback(feedbackId, customer.Id, rating, productId, message,
                     DateTime.Parse(feedbackDateString));
                 feedbacks.Add(feedback);
             }

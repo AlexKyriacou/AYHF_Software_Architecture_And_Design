@@ -118,14 +118,6 @@ public class UserRepository : RepositoryBase, IUserRepository
                     Username = reader.GetString(2),
                     Email = reader.GetString(3),
                     Password = reader.GetString(4),
-                    DeliveryAddress = !reader.IsDBNull(6)
-                        ? new DeliveryAddress(
-                            reader.GetString(6),
-                            reader.IsDBNull(7) ? null : reader.GetString(7),
-                            reader.IsDBNull(8) ? null : reader.GetString(8),
-                            reader.IsDBNull(9) ? null : reader.GetString(9)
-                        )
-                        : null,
                     Role = role
                 },
                 UserRole.Admin => new Admin
