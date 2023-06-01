@@ -1,12 +1,24 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import ProductCard from "../product/ProductCard";
-import {ProductsContext, UserContext} from "../../AppContext";
-import {Link} from "react-router-dom";
+import { ProductsContext, UserContext } from "../../AppContext";
+import { Link } from "react-router-dom";
 import "./Home.css";
 
 const HomePage = () => {
-    const {products} = useContext(ProductsContext);
-    const {loggedIn, user} = useContext(UserContext);
+    const { products, feedback } = useContext(ProductsContext);
+    const { loggedIn, user } = useContext(UserContext);
+
+    const addFeedbackToProducts = () => {
+        if (products.length > 0 && feedback.length > 0) {
+            const productsWithFeedback = products.map((product) => ({
+                ...product,
+                feedback: feedback.filter((item) => item.productId === product.id),
+            }));
+            return productsWithFeedback;
+        } else {
+            return [];
+        }
+    };
 
     return (
         <div>
@@ -19,8 +31,8 @@ const HomePage = () => {
                 </div>
             )}
             <div className="products-container">
-                {products.map((product, index) => (
-                    <ProductCard key={index} product={product}/>
+                {addFeedbackToProducts().map((product, index) => (
+                    <ProductCard key={index} product={product} />
                 ))}
             </div>
         </div>

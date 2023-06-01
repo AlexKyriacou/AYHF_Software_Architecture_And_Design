@@ -112,6 +112,7 @@ const CartProvider = ({ children }) => {
 // Define the ProductsProvider component
 const ProductsProvider = ({ children }) => {
     const [products, setProducts] = useState([]);
+    const [feedback, setFeedback] = useState([]);
 
     useEffect(() => {
         // Fetch products from API or retrieve from session storage
@@ -136,41 +137,31 @@ const ProductsProvider = ({ children }) => {
         }
     }, []);
 
-    // Fetch product feedbacks from the API
-    const fetchProductFeedbacks = async (product) => {
-        try {
-            const response = await axios.get(
-                `https://localhost:7269/Products/${product.id}/feedback`
-            );
-            if (response.status === 200) {
-                return response.data;
-            } else {
-                throw new Error("Failed to fetch feedbacks. Unexpected status code: " + response.status);
+    useEffect(() => {
+        // Fetch feedback from API or retrieve from session storage
+        const fetchFeedback = async () => {
+            try {
+                const response = await axios.get("https://localhost:7269/feedback");
+                if (response.status === 200) {
+                    const fetchedFeedback = response.data;
+                    setFeedback(fetchedFeedback);
+                    sessionStorage.setItem("feedback", JSON.stringify(fetchedFeedback));
+                }
+            } catch (error) {
+                console.error("Error fetching feedback", error);
             }
-        } catch (error) {
-            console.error("Error fetching feedbacks:", error);
-            throw error; // Rethrow the error to propagate it to the caller
-        }
-    };
+        };
 
-    // Get product feedbacks and calculate average rating
-    const getProductFeedbacks = async (product) => {
-        try {
-            const feedbacks = await fetchProductFeedbacks(product);
-            const totalRating = feedbacks.reduce(
-                (total, feedback) => total + feedback.rating,
-                0
-            );
-            const averageRating = totalRating / feedbacks.length;
-            return { feedbacks, averageRating };
-        } catch (error) {
-            console.error(error);
-            return { feedbacks: [], averageRating: 0 }; // Return an empty array as a fallback in case of an error
+        const storedFeedback = sessionStorage.getItem("feedback");
+        if (storedFeedback) {
+            setFeedback(JSON.parse(storedFeedback));
+        } else {
+            fetchFeedback();
         }
-    };
+    }, []);
 
     return (
-        <ProductsContext.Provider value={{ products, setProducts, getProductFeedbacks }}>
+        <ProductsContext.Provider value={{ products, setProducts, feedback, setFeedback }}>
             {children}
         </ProductsContext.Provider>
     );

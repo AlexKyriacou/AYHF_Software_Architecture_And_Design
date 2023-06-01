@@ -1,29 +1,27 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import Rating from "../rating/Rating";
-import { CartContext, ProductsContext } from "../../AppContext";
+import { CartContext } from "../../AppContext";
 import "./Product.css";
 
 function ProductCard({ product }) {
-    const { getProductFeedbacks } = useContext(ProductsContext);
     const { addToCart } = useContext(CartContext);
-
-    const [productFeedbacks, setProductFeedbacks] = useState([]);
-    const [averageRating, setAverageRating] = useState(0);
-
-    useEffect(() => {
-        // Fetch product feedbacks and average rating when the component mounts or product prop changes
-        const fetchFeedbacks = async () => {
-            const feedbackData = await getProductFeedbacks(product);
-            setProductFeedbacks(feedbackData.feedbacks);
-            setAverageRating(feedbackData.averageRating);
-        };
-        fetchFeedbacks();
-    }, [getProductFeedbacks, product]);
 
     const handleAddToCart = () => {
         // Add product to the cart
         addToCart(product);
+    };
+
+    const calculateAverageRating = () => {
+        if (product && product.feedback) {
+            const totalRating = product.feedback.reduce(
+                (total, feedback) => total + feedback.rating,
+                0
+            );
+            return totalRating / product.feedback.length;
+        } else {
+            return 0;
+        }
     };
 
     return (
@@ -35,9 +33,9 @@ function ProductCard({ product }) {
                 <p className="product-name">{product.name}</p>
                 <p className="product-desc">{product.description}</p>
                 <div className="product-rating">
-                    <Rating rate={averageRating} />
+                    <Rating rate={calculateAverageRating()} />
                     <Link to={`/product/${product.name}/feedbacks`}>
-                        ({productFeedbacks.length})
+                        ({product?.feedback?.length ?? 0})
                     </Link>
                 </div>
                 <p className="product-price">$ {(product.price).toFixed(2)}</p>
