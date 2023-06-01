@@ -10,84 +10,81 @@ import axios from "axios";
 function ProductPage() {
     const { products, setProducts, getProductFeedbacks } = useContext(
         ProductsContext
-    ); // Access the "products", "setProducts", and "getProductFeedbacks" functions from the "ProductsContext"
-    const { addToCart } = useContext(CartContext); // Access the "addToCart" function from the "CartContext"
-    const { loggedIn, user } = useContext(UserContext); // Access the "loggedIn" and "user" values from the "UserContext"
+    );
+    const { addToCart } = useContext(CartContext);
+    const { loggedIn, user } = useContext(UserContext);
 
-    const { productName } = useParams(); // Access the "productName" parameter from the URL
+    const { productName } = useParams();
 
     const storedProduct = JSON.parse(sessionStorage.getItem("product"));
     const product = storedProduct && storedProduct.name === productName
         ? storedProduct
-        : products.find((product) => product.name === productName); // Find the product object that matches the "productName"
+        : products.find((product) => product.name === productName);
 
-    const productId = product.id; // Get the ID of the product
-    const [editedProduct, setEditedProduct] = useState({ ...product }); // Define state variable "editedProduct" and its setter function
-    const [inEditMode, setInEditMode] = useState(false); // Define state variable "inEditMode" and its setter function
-    const [initialLoad, setInitialLoad] = useState(true); // Define state variable "initialLoad" and its setter function
-    const [leaveFeedback, setLeaveFeedback] = useState(false); // Define state variable "leaveFeedback" and its setter function
-    const [hasLeftFeedback, setHasLeftFeedback] = useState(false); // Define state variable "hasLeftFeedback" and its setter function
-    const [rating, setRating] = useState(0); // Define state variable "rating" and its setter function
-    const [feedbackMessage, setFeedbackMessage] = useState(""); // Define state variable "feedbackMessage" and its setter function
-    const [productFeedbacks, setProductFeedbacks] = useState([]); // Define state variable "productFeedbacks" and its setter function
-    const [averageRating, setAverageRating] = useState(0); // Define state variable "averageRating" and its setter function
+    const productId = product.id;
+    const [editedProduct, setEditedProduct] = useState({ ...product });
+    const [inEditMode, setInEditMode] = useState(false);
+    const [initialLoad, setInitialLoad] = useState(true);
+    const [leaveFeedback, setLeaveFeedback] = useState(false);
+    const [hasLeftFeedback, setHasLeftFeedback] = useState(false);
+    const [rating, setRating] = useState(0);
+    const [feedbackMessage, setFeedbackMessage] = useState("");
+    const [productFeedbacks, setProductFeedbacks] = useState([]);
+    const [averageRating, setAverageRating] = useState(0);
 
-    const navigate = useNavigate(); // Access the navigation function from the "react-router-dom" package
+    const navigate = useNavigate();
 
     useEffect(() => {
-        // This effect runs when the component mounts and whenever "product" changes
         const fetchFeedbacks = async () => {
-            const feedbackData = await getProductFeedbacks(product); // Fetch feedbacks for the selected product
-            setProductFeedbacks(feedbackData.feedbacks); // Update the "productFeedbacks" state with the fetched feedbacks
-            setAverageRating(feedbackData.averageRating); // Update the "averageRating" state with the fetched average rating
+            const feedbackData = await getProductFeedbacks(product);
+            setProductFeedbacks(feedbackData.feedbacks);
+            setAverageRating(feedbackData.averageRating);
         };
-        fetchFeedbacks(); // Call the fetchFeedbacks function
+        fetchFeedbacks();
     }, [getProductFeedbacks, product]);
 
     useEffect(() => {
-        // This effect runs when "initialLoad" changes
         if (initialLoad) {
-            sessionStorage.setItem("product", JSON.stringify(product)); // Store the product object in the session storage
-            setInEditMode(false); // Reset the "inEditMode" state to false
-            setInitialLoad(false); // Reset the "initialLoad" state to false
+            sessionStorage.setItem("product", JSON.stringify(product));
+            setInEditMode(false);
+            setInitialLoad(false);
         }
     }, [initialLoad, product]);
 
     useEffect(() => {
-        // This effect runs when "productFeedbacks", "productId", or "user" changes
         if (user) {
             const userFeedback = productFeedbacks.find(
                 (feedback) =>
                     feedback.productId === productId && feedback.userId === user.id
-            ); // Find the feedback left by the current user for the selected product
-            setHasLeftFeedback(!!userFeedback); // Update the "hasLeftFeedback" state based on whether the user left feedback or not
+            );
+            setHasLeftFeedback(!!userFeedback);
         }
     }, [productFeedbacks, productId, user]);
 
     const handleAddToCart = () => {
-        addToCart(product); // Add the product to the cart
+        addToCart(product);
     };
 
     const handleInputChange = (event) => {
         setEditedProduct({
             ...editedProduct,
             [event.target.name]: event.target.value,
-        }); // Update the "editedProduct" state with the changed input value
+        });
     };
 
     const handleDelete = async () => {
         try {
-            const response = await axios.delete(`https://localhost:7269/products/${productId}`); // Send a delete request to remove the product
+            const response = await axios.delete(`https://localhost:7269/products/${productId}`);
 
             if (response.status !== 204) {
                 throw new Error("Request failed");
             } else {
                 const updatedProducts = products.filter(
                     (product) => product.id !== productId
-                ); // Remove the deleted product from the "products" array
+                );
 
-                setProducts(updatedProducts); // Update the "products" state with the updated array
-                navigate("/"); // Navigate to the home page
+                setProducts(updatedProducts);
+                navigate("/");
             }
         } catch (error) {
             console.error(error);
@@ -96,17 +93,16 @@ function ProductPage() {
 
     const handleSave = async () => {
         try {
-            const response = await axios.put(`https://localhost:7269/products/${productId}`, editedProduct); // Send a put request to update the product
+            const response = await axios.put(`https://localhost:7269/products/${productId}`, editedProduct);
 
             if (response.status !== 204) {
                 throw new Error("Request failed");
             } else {
                 const updatedProducts = products.map((product) =>
                     product.id === productId ? editedProduct : product
-                ); // Update the product in the "products" array
-
-                setProducts(updatedProducts); // Update the "products" state with the updated array
-                navigate("/"); // Navigate to the home page
+                );
+                setProducts(updatedProducts);
+                navigate("/");
             }
         } catch (error) {
             console.error(error);
@@ -114,15 +110,15 @@ function ProductPage() {
     };
 
     const handleFeedbackCheckboxChange = () => {
-        setLeaveFeedback(!leaveFeedback); // Toggle the "leaveFeedback" state
+        setLeaveFeedback(!leaveFeedback);
     };
 
     const handleRatingChange = (event) => {
-        setRating(parseInt(event.target.value)); // Update the "rating" state with the selected value
+        setRating(parseInt(event.target.value));
     };
 
     const handleFeedbackMessageChange = (event) => {
-        setFeedbackMessage(event.target.value); // Update the "feedbackMessage" state with the changed value
+        setFeedbackMessage(event.target.value);
     };
 
     const handleLeaveReview = async () => {
@@ -134,22 +130,21 @@ function ProductPage() {
                 productId: productId,
                 message: feedbackMessage,
                 feedbackDate: new Date().toISOString(),
-            }; // Create an object with the feedback data
+            };
 
             const response = await axios.post(
                 "https://localhost:7269/feedback",
                 feedbackData
-            ); // Send a post request to submit the feedback
+            );
 
             if (response.status !== 201) {
                 throw new Error("Request failed");
             } else {
-                const updatedFeedbacks = [...productFeedbacks, feedbackData]; // Add the new feedback to the existing feedbacks array
-
-                setProductFeedbacks(updatedFeedbacks); // Update the "productFeedbacks" state with the updated array
-                setLeaveFeedback(false); // Reset the "leaveFeedback" state
-                setRating(0); // Reset the "rating" state
-                setFeedbackMessage(""); // Reset the "feedbackMessage" state
+                const updatedFeedbacks = [...productFeedbacks, feedbackData];
+                setProductFeedbacks(updatedFeedbacks);
+                setLeaveFeedback(false);
+                setRating(0);
+                setFeedbackMessage("");
             }
         } catch (error) {
             console.error(error);
@@ -276,37 +271,45 @@ function ProductPage() {
                                     <summary>Description</summary>
                                     <p>{product.longDescription}</p>
                                 </details>
-                                <details>
+                                <details open>
                                     <summary>Ingredients</summary>
                                     <p>{product.ingredients}</p>
                                 </details>
+                                {leaveFeedback && (
+                                    <div className="feedback-fields">
+                                        <div className="field-container">
+                                            <label>Rating:</label>
+                                            <input
+                                                type="number"
+                                                name="rating"
+                                                value={rating}
+                                                onChange={handleRatingChange}
+                                                min="1"
+                                                max="5"
+                                                required
+                                            />
+                                        </div>
+                                        <div className="field-container">
+                                            <label>Feedback Message:</label>
+                                            <textarea
+                                                name="feedbackMessage"
+                                                value={feedbackMessage}
+                                                onChange={handleFeedbackMessageChange}
+                                            />
+                                        </div>
+                                        <button
+                                            className="primary-button"
+                                            onClick={handleLeaveReview}
+                                        >
+                                            Save
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         )}
                     </div>
                 </div>
             </div>
-            {loggedIn && leaveFeedback && (
-                <div className="feedback-form-container">
-                    <h2>Leave Feedback</h2>
-                    <div className="feedback-form">
-                        <div className="rating-container">
-                            <label>Rating:</label>
-                            <Rating rate={rating} onChange={handleRatingChange} />
-                        </div>
-                        <div className="message-container">
-                            <label>Message:</label>
-                            <textarea
-                                name="feedbackMessage"
-                                value={feedbackMessage}
-                                onChange={handleFeedbackMessageChange}
-                            />
-                        </div>
-                        <button className="primary-button" onClick={handleLeaveReview}>
-                            Submit Feedback
-                        </button>
-                    </div>
-                </div>
-            )}
         </div>
     );
 }
