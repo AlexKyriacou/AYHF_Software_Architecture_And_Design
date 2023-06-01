@@ -197,7 +197,7 @@ public class FeedbackRepository : RepositoryBase, IFeedbackRepository
     protected override void CreateTables()
     {
         var createTableQuery =
-            "CREATE TABLE IF NOT EXISTS Feedbacks (UserId INT, FeedbackId INTEGER PRIMARY KEY AUTOINCREMENT, ProductId INT, Rating INT, Message TEXT, FeedbackDate TEXT)";
+            "CREATE TABLE IF NOT EXISTS Feedback (UserId INT, FeedbackId INTEGER PRIMARY KEY AUTOINCREMENT, ProductId INT, Rating INT, Message TEXT, FeedbackDate TEXT)";
         using var createTableCommand = new SqliteCommand(createTableQuery, Connection);
         createTableCommand.ExecuteNonQuery();
     }
