@@ -8,9 +8,11 @@ import "./Product.css";
 import axios from "axios";
 
 function ProductPage() {
-    const { products, setProducts, getProductFeedbacks } = useContext(
+    const { products, setProducts, feedback } = useContext(
         ProductsContext
     );
+    const [productFeedback, setProductFeedback] = useState([]);
+
     const { addToCart } = useContext(CartContext);
     const { loggedIn, user } = useContext(UserContext);
 
@@ -21,6 +23,34 @@ function ProductPage() {
         ? storedProduct
         : products.find((product) => product.name === productName);
 
+    const addFeedbackToProduct = (localFeedback) => {
+        if (products && localFeedback.length > 0) {
+            const filteredFeedback = localFeedback.filter((f) => f.productId === product.id);
+            if (filteredFeedback) {
+                setProductFeedback(filteredFeedback)
+            }
+        } else {
+            setProductFeedback([]);
+        }
+    };
+
+    useEffect(() => {
+        addFeedbackToProduct(feedback);
+    }, []);
+
+
+    const calculateAverageRating = () => {
+        if (productFeedback) {
+            const totalRating = productFeedback.reduce(
+                (total, feedback) => total + feedback.rating,
+                0
+            );
+            return totalRating / productFeedback.length;
+        } else {
+            return 0;
+        }
+    };
+
     const productId = product.id;
     const [editedProduct, setEditedProduct] = useState({ ...product });
     const [inEditMode, setInEditMode] = useState(false);
@@ -29,19 +59,8 @@ function ProductPage() {
     const [hasLeftFeedback, setHasLeftFeedback] = useState(false);
     const [rating, setRating] = useState(0);
     const [feedbackMessage, setFeedbackMessage] = useState("");
-    const [productFeedbacks, setProductFeedbacks] = useState([]);
-    const [averageRating, setAverageRating] = useState(0);
 
     const navigate = useNavigate();
-
-    useEffect(() => {
-        const fetchFeedbacks = async () => {
-            const feedbackData = await getProductFeedbacks(product);
-            setProductFeedbacks(feedbackData.feedbacks);
-            setAverageRating(feedbackData.averageRating);
-        };
-        fetchFeedbacks();
-    }, [getProductFeedbacks, product]);
 
     useEffect(() => {
         if (initialLoad) {
@@ -53,13 +72,13 @@ function ProductPage() {
 
     useEffect(() => {
         if (user) {
-            const userFeedback = productFeedbacks.find(
-                (feedback) =>
-                    feedback.productId === productId && feedback.userId === user.id
+            const userFeedback = productFeedback.find(
+                (f) =>
+                    f.productId === productId && f.userId === user.id
             );
             setHasLeftFeedback(!!userFeedback);
         }
-    }, [productFeedbacks, productId, user]);
+    }, [productFeedback, productId, user]);
 
     const handleAddToCart = () => {
         addToCart(product);
@@ -140,11 +159,11 @@ function ProductPage() {
             if (response.status !== 201) {
                 throw new Error("Request failed");
             } else {
-                const updatedFeedbacks = [...productFeedbacks, feedbackData];
-                setProductFeedbacks(updatedFeedbacks);
                 setLeaveFeedback(false);
                 setRating(0);
                 setFeedbackMessage("");
+                const updatedProductFeedback = [...productFeedback, feedbackData];
+                addFeedbackToProduct(updatedProductFeedback);
             }
         } catch (error) {
             console.error(error);
@@ -241,9 +260,9 @@ function ProductPage() {
                                     <p>{product.description}</p>
                                 </div>
                                 <div className="product-rating">
-                                    <Rating rate={averageRating} />
+                                    <Rating rate={calculateAverageRating()} />
                                     <Link to={`/product/${product.name}/feedbacks`}>
-                                        ({productFeedbacks.length})
+                                        ({productFeedback.length})
                                     </Link>
                                 </div>
                                 {loggedIn && !hasLeftFeedback && (
