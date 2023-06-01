@@ -50,3 +50,29 @@
 .password-container svg {
     padding: 0 5px 0 5px;
 }
+
+.password-info-container {
+    position: relative;
+}
+  
+.password-policy {
+    position: absolute;
+    z-index: 10;
+    border: 1px solid var(--light-shade);
+    border-radius: 5px;
+    background-color: white;
+    padding: 10px;
+    width: max-content;
+    text-align: justify;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.password-policy h3 {
+    margin: 0 0 5px 0;
+}
+
+.password-policy ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
